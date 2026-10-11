@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "test -f planning/droid-development-contract.md",
+      "exit_code": 0,
+      "output": "",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.002610833000000007
+    },
+    {
+      "command": "test -f planning/verification/fixtures/probe/defaults-observed.json",
+      "exit_code": 0,
+      "output": "",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.002285416999999998
+    }
+  ],
+  "reason": null,
+  "commit": "266f5c88ebfea577128bc20fc3b4fd50ca04de05",
+  "target_head": "266f5c88ebfea577128bc20fc3b4fd50ca04de05",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:25:20.476373+00:00"
+}

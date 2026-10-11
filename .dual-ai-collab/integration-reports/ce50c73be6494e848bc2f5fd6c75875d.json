@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "test -f planning/verification/version.md",
+      "exit_code": 0,
+      "output": "",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.0029689170000000015
+    },
+    {
+      "command": "test -d planning/verification/fixtures",
+      "exit_code": 0,
+      "output": "",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.0025707499999999966
+    }
+  ],
+  "reason": null,
+  "commit": "9f572db65495d684e84bba1444acf60f20dc6e06",
+  "target_head": "9f572db65495d684e84bba1444acf60f20dc6e06",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:09:11.219103+00:00"
+}

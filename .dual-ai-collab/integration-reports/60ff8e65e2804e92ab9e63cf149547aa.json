@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml draft",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-a4ec0b6bf01c84dc)\n\nrunning 5 tests\ntest config::merge::tests::merge_disabled_removes_only_managed_and_keeps_draft ... ok\ntest config::pipeline::tests::fingerprint_merge_apply_rechecks_external_changes_and_preserves_draft ... ok\ntest workspace::tests::provider_draft_survives_restart_and_stale_save_rejected ... ok\ntest workspace::draft_tests::draft_discard_restores_applied_catalog_without_touching_target ... ok\ntest config::pipeline::recovery_tests::atomic_write_recovers_database_after_file_commit_and_keeps_draft ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 50 filtered out; finished in 0.03s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-5503915012d1d6fb)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.23130687499999997
+    }
+  ],
+  "reason": null,
+  "commit": "29521eab4b8814484df1c00907859161cc8785bd",
+  "target_head": "29521eab4b8814484df1c00907859161cc8785bd",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:56:24.187110+00:00"
+}

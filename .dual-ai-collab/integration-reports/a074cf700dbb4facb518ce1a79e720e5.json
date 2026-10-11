@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml switch",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-a4ec0b6bf01c84dc)\n\nrunning 5 tests\ntest import::ccswitch::local_smoke::ccswitch_read_local_database_without_printing_credentials ... ignored, requires the developer's real CC Switch database\ntest switch::scheme::tests::dangling_default_cannot_be_deleted_or_disabled ... ok\ntest switch::scheme::tests::source_scheme_switch_roundtrip_preserves_both_plans_and_explicit_overrides ... ok\ntest switch::catalog::tests::switch_catalog_uses_observed_selectors_and_capabilities ... ok\ntest import::ccswitch::tests::ccswitch_read_reads_wal_and_rejects_unknown_schema_without_writing ... ok\n\ntest result: ok. 4 passed; 0 failed; 1 ignored; 0 measured; 50 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-5503915012d1d6fb)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.302977167
+    }
+  ],
+  "reason": null,
+  "commit": "5fd32ad67f9baca9bb526c5ebf185e1f25afd9c8",
+  "target_head": "5fd32ad67f9baca9bb526c5ebf185e1f25afd9c8",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T07:18:27.094670+00:00"
+}

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml fs",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-eef1b07a128f4426)\n\nrunning 7 tests\ntest fs::tests::fs_rejects_invalid_utf8_and_directories ... ok\ntest fs::tests::fs_partial_write_failure_removes_temp_and_preserves_target ... ok\ntest fs::tests::fs_permissions_and_symlink_protection ... ok\ntest fs::tests::fs_failed_write_preserves_original ... ok\ntest fs::tests::fs_hash_detects_equal_length_edits ... ok\ntest commands::tests::fs_command_rejects_stale_and_missing_expectations ... ok\ntest fs::tests::fs_replaces_existing_without_leaving_temp_files ... ok\n\ntest result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 9 filtered out; finished in 0.03s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-77e33bffb26f7105)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.23088579199999998
+    },
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml net",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-eef1b07a128f4426)\n\nrunning 4 tests\ntest net::tests::net_rejects_oversize_and_bad_urls_without_leaking_values ... ok\ntest net::tests::net_does_not_follow_redirects ... ok\ntest net::tests::net_preserves_headers_and_http_error_status ... ok\ntest net::tests::net_timeout_is_bounded_and_classified ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.03s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-77e33bffb26f7105)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.24007575000000003
+    }
+  ],
+  "reason": null,
+  "commit": "a16501bdcf6742e105c59efdd2fba1115e68b029",
+  "target_head": "a16501bdcf6742e105c59efdd2fba1115e68b029",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:17:52.206574+00:00"
+}

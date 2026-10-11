@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cd <PROJECT_ROOT> && npm install",
+      "exit_code": 0,
+      "output": "\nup to date, audited 24 packages in 1s\n\n6 packages are looking for funding\n  run `npm fund` for details\n\nfound 0 vulnerabilities\nnpm warn install-scripts 2 packages have install scripts not yet covered by allowScripts:\nnpm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)\nnpm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))\nnpm warn install-scripts\nnpm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 1.2649987500000002
+    },
+    {
+      "command": "cd <PROJECT_ROOT> && npm run build",
+      "exit_code": 0,
+      "output": "\n> droid-switch@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v7.3.6 building client environment for production...\ntransforming...\n✓ 30 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.37 kB │ gzip:  0.27 kB\ndist/assets/index-Bt2ZQWaQ.css    1.84 kB │ gzip:  0.83 kB\ndist/assets/index-Dmhfqs8o.js   195.81 kB │ gzip: 61.92 kB\n✓ built in 349ms\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.988893292
+    },
+    {
+      "command": "cargo build --manifest-path src-tauri/Cargo.toml",
+      "exit_code": 0,
+      "output": "    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.31s\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.4064333750000002
+    }
+  ],
+  "reason": null,
+  "commit": "805ea40a678f97a2ced2ac35115e224debaa198f",
+  "target_head": "805ea40a678f97a2ced2ac35115e224debaa198f",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:09:14.157580+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "phase": "developing",
+  "updated_at": "2026-10-11T15:51:18Z",
+  "spec_file": "planning/specs/20261011-provider-model-management.md",
+  "task_file": "planning/tasks.json",
+  "current_task": "060",
+  "total_tasks": "60",
+  "completed_tasks": "37"
+}

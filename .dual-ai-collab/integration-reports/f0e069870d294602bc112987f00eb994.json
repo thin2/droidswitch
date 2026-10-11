@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml adapter",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-42cf6ab454819436)\n\nrunning 2 tests\ntest adapter::tests::adapter_custom_models_only_contains_supported_fields ... ok\ntest adapter::fixture_tests::adapter_maps_all_protocols_from_observed_cli_input ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-322c3f57e4df64ce)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.17768266600000004
+    }
+  ],
+  "reason": null,
+  "commit": "660997139699f9e732536f6310bb95db38791a6f",
+  "target_head": "660997139699f9e732536f6310bb95db38791a6f",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:31:23.242689+00:00"
+}

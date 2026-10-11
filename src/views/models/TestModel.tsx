@@ -1,0 +1,85 @@
+import { useState } from "react";
+import { request, errorText } from "../../lib/api";
+import type { ModelEntry } from "../../lib/types";
+interface TestResult {
+  success: boolean;
+  message: string;
+  elapsedMs: number;
+  testedAt: number;
+}
+export function TestModel({
+  model,
+  onClose,
+}: {
+  model: ModelEntry;
+  onClose: () => void;
+}) {
+  const [consent, setConsent] = useState(false),
+    [busy, setBusy] = useState(false),
+    [result, setResult] = useState<TestResult | null>(null),
+    [error, setError] = useState("");
+  return (
+    <div className="modal-backdrop">
+      <section
+        className="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="test-title"
+      >
+        <h2 id="test-title">测试 {model.displayName}</h2>
+        <p>
+          将发送一条「Reply OK.」请求，最多生成 32 个输出
+          Token，不携带项目代码。可能消耗供应商额度，部分模型不支持此限制时会返回错误。
+        </p>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+          />
+          我确认执行本次付费调用测试
+        </label>
+        {error && <p role="alert">{error}</p>}
+        {result && (
+          <div role="status">
+            <p>
+              {result.success ? "响应通过" : "测试失败"} · {result.message}
+            </p>
+            <p>
+              完整请求耗时 {result.elapsedMs} ms ·{" "}
+              {new Date(result.testedAt * 1000).toLocaleString()}
+            </p>
+          </div>
+        )}
+        <footer>
+          <button disabled={busy} onClick={onClose}>
+            关闭
+          </button>
+          <button
+            disabled={!consent || busy}
+            onClick={async () => {
+              setBusy(true);
+              setError("");
+              setResult(null);
+              try {
+                setResult(
+                  await request<TestResult>("test_model", {
+                    id: model.id,
+                    consent,
+                  }),
+                );
+              } catch (e) {
+                setError(errorText(e));
+              } finally {
+                setBusy(false);
+                setConsent(false);
+              }
+            }}
+          >
+            {busy ? "正在测试…" : "执行一次测试"}
+          </button>
+        </footer>
+      </section>
+    </div>
+  );
+}

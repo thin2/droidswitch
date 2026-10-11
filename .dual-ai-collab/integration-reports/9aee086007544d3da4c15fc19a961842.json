@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml db",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-eef1b07a128f4426)\n\nrunning 5 tests\ntest db::tests::db_future_schema_is_rejected_without_changes ... ok\ntest db::tests::db_failure_rolls_back_partial_ddl_and_version ... ok\ntest db::tests::db_foreign_keys_and_model_constraints ... ok\ntest db::tests::db_migrations_create_all_tables_idempotently_and_rollback ... ok\ntest db::tests::db_persistence_unknown_tokens_and_deduplication ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.01s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-77e33bffb26f7105)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.185859208
+    }
+  ],
+  "reason": null,
+  "commit": "ad7d600a496b79a834fc3eb047c2a522e098403e",
+  "target_head": "ad7d600a496b79a834fc3eb047c2a522e098403e",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:17:52.529587+00:00"
+}

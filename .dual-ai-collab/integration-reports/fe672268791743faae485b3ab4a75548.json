@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml credential",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.16s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-a4ec0b6bf01c84dc)\n\nrunning 3 tests\ntest import::ccswitch::local_smoke::ccswitch_read_local_database_without_printing_credentials ... ignored, requires the developer's real CC Switch database\ntest provider::tests::provider_same_site_distinct_ids_and_credential_redaction ... ok\ntest config::redact::preview_tests::preview_credential_changes_redact_echoed_values_in_both_sides ... ok\n\ntest result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 52 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-5503915012d1d6fb)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.238059291
+    }
+  ],
+  "reason": null,
+  "commit": "daf75a363dff77224dd3ad971413fae41086f71b",
+  "target_head": "daf75a363dff77224dd3ad971413fae41086f71b",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:56:19.760911+00:00"
+}

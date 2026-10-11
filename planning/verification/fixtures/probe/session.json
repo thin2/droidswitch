@@ -1,0 +1,28 @@
+{
+  "customModels": [
+    {
+      "model": "probe/shared",
+      "displayName": "Probe A",
+      "provider": "anthropic",
+      "baseUrl": "http://127.0.0.1:1",
+      "apiKey": "probe-only"
+    },
+    {
+      "model": "probe/shared",
+      "displayName": "Probe B",
+      "provider": "openai",
+      "baseUrl": "http://127.0.0.1:2/v1",
+      "apiKey": "probe-only"
+    },
+    {
+      "model": "probe.space:1",
+      "displayName": "Probe C",
+      "provider": "generic-chat-completion-api",
+      "baseUrl": "http://127.0.0.1:3/v1",
+      "apiKey": "probe-only"
+    }
+  ],
+  "sessionDefaultSettings": {
+    "model": "custom:Probe-B-0"
+  }
+}

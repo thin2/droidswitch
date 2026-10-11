@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml provider",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-42cf6ab454819436)\n\nrunning 4 tests\ntest model::entry::tests::model_identity_survives_rename_and_same_remote_id_across_providers ... ok\ntest provider::tests::provider_validation_keeps_base_url_and_rejects_invalid_env ... ok\ntest provider::tests::provider_same_site_distinct_ids_and_credential_redaction ... ok\ntest workspace::tests::provider_draft_survives_restart_and_stale_save_rejected ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-322c3f57e4df64ce)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.180788708
+    }
+  ],
+  "reason": null,
+  "commit": "8bc062eb620177215b99970a419cd0a855328029",
+  "target_head": "8bc062eb620177215b99970a419cd0a855328029",
+  "target": "<PROJECT_ROOT>",
+  "verified_at": "2026-10-11T06:31:23.561053+00:00"
+}
