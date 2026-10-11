@@ -232,7 +232,7 @@
 ## 任务 #010: 初始化 Tauri 2 + React + TS 骨架 (S-01)
 
 **优先级**: P1
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: 无

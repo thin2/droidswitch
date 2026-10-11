@@ -425,7 +425,7 @@
       "id": "010",
       "title": "初始化 Tauri 2 + React + TS 骨架 (S-01)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "无",
@@ -485,6 +485,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "fa83721337ccb43c02e027ff8ec3893bc64db2419ca5da8876ccfa9a743354cc"
+      },
+      "integration": {
+        "commit": "805ea40a678f97a2ced2ac35115e224debaa198f",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "桌面骨架及锁文件已提交，重新执行 npm 与 Rust 构建验收。",
+        "run_id": null,
+        "task_fingerprint": "fa83721337ccb43c02e027ff8ec3893bc64db2419ca5da8876ccfa9a743354cc",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/9a9ec2419f9940528faf4b325be430a5.json",
+        "recorded_at": "2026-10-11T06:09:14.159820+00:00"
       }
     },
     {
