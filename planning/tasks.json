@@ -1849,7 +1849,7 @@
       "id": "034",
       "title": "官方页:模型选择/刷新/前往登录/状态待确认 (SW-03)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#033",
@@ -1891,6 +1891,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "312713aec789f1c94d79df94521e52dd5abb8de8e7911af2025e1c5e4874fc9e"
+      },
+      "integration": {
+        "commit": "025bd1bdf51080d96558a8d7e59ac5cf0b0dbde9",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "312713aec789f1c94d79df94521e52dd5abb8de8e7911af2025e1c5e4874fc9e",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/97a583b2014e4ac7b4c51dc0230fa382.json",
+        "recorded_at": "2026-10-11T07:18:26.607732+00:00"
       }
     },
     {
