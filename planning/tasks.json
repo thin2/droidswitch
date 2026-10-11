@@ -1674,7 +1674,7 @@
       "id": "031",
       "title": "底部变更条 + 草稿语义(\"保存修改\"=次要=草稿)(UI-06/07)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#019, #030",
@@ -1707,13 +1707,22 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过；证据见 planning/progress-reports/20261011-ui-packaging.md。原生实机与真实日志兼容未宣称通过。",
+        "recorded_at": "2026-10-11T07:18:04.682797+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "b27bdeb1c301bc8a22fe68f88b4fe00cc776427021bb0a18769e0aa27730023d"
+      }
     },
     {
       "id": "032",
       "title": "视觉基线 + 字体 + 响应式 + 可访问性 (UI-08~UI-11) [epic]",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#030",
@@ -1750,7 +1759,16 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过；证据见 planning/progress-reports/20261011-ui-packaging.md。原生实机与真实日志兼容未宣称通过。",
+        "recorded_at": "2026-10-11T07:18:06.858274+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "1440133cc9cacd0e24bf0f8dd4aaec3c600adc4b20f89f281bab4078443610c6"
+      }
     },
     {
       "id": "033",
@@ -2156,7 +2174,7 @@
       "id": "041",
       "title": "用量页 UI + 筛选 + 趋势/分布 + 明细切换 + CSV + 保留策略 (U-01/02/09/10/11) [epic]",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#040",
@@ -2189,7 +2207,16 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过；证据见 planning/progress-reports/20261011-ui-packaging.md。原生实机与真实日志兼容未宣称通过。",
+        "recorded_at": "2026-10-11T07:18:09.051221+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "a1cf5be4a4721731bb4739628f6a7a1093ba82fe5f63fd64244a1799a7d4a34f"
+      }
     },
     {
       "id": "042",
