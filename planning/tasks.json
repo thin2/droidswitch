@@ -1912,7 +1912,7 @@
       "id": "037",
       "title": "导入向导 + 来源选择 + 字段映射 + 重复项 + 脱敏 (I-01/04/05/06/08) [epic]",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#036, #026",
@@ -1954,6 +1954,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "f7a534a9f6fa98cd2b5cdf7f58f609acf533c5cc787bf04297b063556f6a81e9"
+      },
+      "integration": {
+        "commit": "3d559842a842382b9c1ac03729afecf67f8649b2",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "f7a534a9f6fa98cd2b5cdf7f58f609acf533c5cc787bf04297b063556f6a81e9",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4bd7b9f2fdc64016805ed2e074c36427.json",
+        "recorded_at": "2026-10-11T06:56:26.018896+00:00"
       }
     },
     {
