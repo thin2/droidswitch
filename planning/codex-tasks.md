@@ -1172,6 +1172,9 @@ planning/specs/20261011-chatgpt-local-router.md
 ### 源码调研与路线修订
 2026-10-11 已静态审查 CLIProxyAPI、CC Switch、Sub2API 的固定提交，见 planning/specs/20261011-proxy-implementation-review.md。未运行代理或登录。优先验证外接 CLIProxyAPI，再选择受管进程集成；独立 SIWC 是不同授权路线。验收须包含真实 Droid 多轮工具闭环与中途失败；未通过前不确定复用工期。#051–#058 暂为自建路线参考，选定路线后先重写再实施，均保持 OPEN。
 
+### 用户讨论断点
+2026-10-11 用户希望首版仅集成 Codex 代理，重点控制包体与运行开销；先记录，晚上继续讨论，不启动开发。构思为完整 CPA 验证后再评估 Codex 精简构建/可选模块；尚未测量体积或确定裁剪方案。恢复笔记：planning/specs/20261011-codex-proxy-scope-notes.md。
+
 ---
 
 ## 任务 #051: 官方 OAuth/OIDC 与账号注册
