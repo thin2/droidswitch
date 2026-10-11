@@ -1180,7 +1180,7 @@
       "id": "025",
       "title": "获取模型多选窗口(搜索/全选/批量/已添加/不覆盖/消失只提示)(P-03/04/05)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",
@@ -1222,6 +1222,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "0b03e48051d313993fb119e91cc5b0a8870e59a02d09656abeb1767965a60016"
+      },
+      "integration": {
+        "commit": "da16e2f4393f8a56a17ec6533ec7948f432d12f6",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
+        "run_id": null,
+        "task_fingerprint": "0b03e48051d313993fb119e91cc5b0a8870e59a02d09656abeb1767965a60016",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/68d14a26d64541baa11d7c0e0d4cd46f.json",
+        "recorded_at": "2026-10-11T06:39:47.763863+00:00"
       }
     },
     {
