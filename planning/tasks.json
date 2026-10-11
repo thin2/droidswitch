@@ -1237,7 +1237,7 @@
       "id": "026",
       "title": "模型字段编辑 + 显示名建议 + 手动输入 ID (P-06/07/11)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",
@@ -1279,6 +1279,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "bae240b17d2e77f4e77ce9269949e766888a8d92eac3ecb8e2d813fdff79017f"
+      },
+      "integration": {
+        "commit": "e806c80df27e1f48f65bfabed9618735d2bdb01b",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
+        "run_id": null,
+        "task_fingerprint": "bae240b17d2e77f4e77ce9269949e766888a8d92eac3ecb8e2d813fdff79017f",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4239f9e523eb4daba9403115608be9f8.json",
+        "recorded_at": "2026-10-11T06:39:48.800246+00:00"
       }
     },
     {
