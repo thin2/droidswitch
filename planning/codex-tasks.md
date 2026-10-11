@@ -299,7 +299,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #012: SQLite schema + 迁移 (S-03)
 
 **优先级**: P1
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: #010

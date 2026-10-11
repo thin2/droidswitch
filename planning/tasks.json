@@ -566,7 +566,7 @@
       "id": "012",
       "title": "SQLite schema + 迁移 (S-03)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#010",
@@ -612,6 +612,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "a1dd0f33e5c6c6ce9dabd662383a208aa1a1e9cb667f6e846fcfd206fb0a5929"
+      },
+      "integration": {
+        "commit": "ad7d600a496b79a834fc3eb047c2a522e098403e",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "SQLite schema 及迁移已提交；重新验收确认。",
+        "run_id": null,
+        "task_fingerprint": "a1dd0f33e5c6c6ce9dabd662383a208aa1a1e9cb667f6e846fcfd206fb0a5929",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/9aee086007544d3da4c15fc19a961842.json",
+        "recorded_at": "2026-10-11T06:17:52.531754+00:00"
       }
     },
     {
