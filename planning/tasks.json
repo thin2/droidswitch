@@ -2095,7 +2095,7 @@
       "id": "040",
       "title": "Token 口径归一 + 费用估算 + 手动单价/币种 (U-05/06/07/08)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#049, #012",
@@ -2141,6 +2141,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "0ae391b9e0dc57a1ef5a339182c2898a0e39637ded793e2e0716655eeb3db035"
+      },
+      "integration": {
+        "commit": "1614f5b499e6e85cec518baa58f634d7c6822e29",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "0ae391b9e0dc57a1ef5a339182c2898a0e39637ded793e2e0716655eeb3db035",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/158c8ea78d254de5b18e8fb41392a819.json",
+        "recorded_at": "2026-10-11T07:18:02.373363+00:00"
       }
     },
     {
