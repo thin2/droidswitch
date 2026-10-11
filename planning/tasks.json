@@ -1969,7 +1969,7 @@
       "id": "038",
       "title": "导入边界:无模型/读取失败/结果汇总/不导历史 (I-07/09/10/11)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#037",
@@ -2011,6 +2011,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "a7ddbdfffc35a5c71bd8f1a424c485dd81fb97ae2815c8911c90ce84d989da47"
+      },
+      "integration": {
+        "commit": "b88b9a9e1ca6ca262446f73e4db6b97501ebb589",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "a7ddbdfffc35a5c71bd8f1a424c485dd81fb97ae2815c8911c90ce84d989da47",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4245abbd29e24025a21cab6bbb7c71ef.json",
+        "recorded_at": "2026-10-11T06:56:26.969871+00:00"
       }
     },
     {
