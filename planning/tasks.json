@@ -689,7 +689,7 @@
       "id": "014",
       "title": "配置适配器层骨架(版本化、字段映射)(S-05)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#049, #011, #013",
@@ -739,6 +739,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "1057719dcc725da33c2af22d1c189bd9144db43474e77f472121c8ad7f1f5dac"
+      },
+      "integration": {
+        "commit": "660997139699f9e732536f6310bb95db38791a6f",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "实现已提交，自动验收重跑通过，Windows 终验保留。",
+        "run_id": null,
+        "task_fingerprint": "1057719dcc725da33c2af22d1c189bd9144db43474e77f472121c8ad7f1f5dac",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/f0e069870d294602bc112987f00eb994.json",
+        "recorded_at": "2026-10-11T06:31:23.244765+00:00"
       }
     },
     {
