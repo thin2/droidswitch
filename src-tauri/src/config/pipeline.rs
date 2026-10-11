@@ -105,7 +105,8 @@ pub fn reload_configuration(
 ) -> Result<Workspace, String> {
     store.edit(revision, |w| {
         let baseline = read(Path::new(&w.target_path))?;
-        // Preserve draft and ownership. Changed managed records must be reconciled explicitly.
+        // Adopt only uniquely matched, newly added Droid metadata; preserve all drafts.
+        super::merge::refresh_metadata_bindings(&baseline.document, &mut w.bindings);
         w.baseline = Some(baseline);
         Ok(())
     })

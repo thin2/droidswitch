@@ -31,6 +31,47 @@ const FIELDS: &[&str] = &[
     "extraArgs",
     "extraHeaders",
 ];
+// Droid can add bookkeeping fields when it saves a custom model. Only accept
+// newly added, well-typed metadata; changes to existing fields remain conflicts.
+fn matches_original(current: &Value, original: &Value) -> bool {
+    if current == original {
+        return true;
+    }
+    let (Some(now), Some(before)) = (current.as_object(), original.as_object()) else {
+        return false;
+    };
+    let mut normalized = now.clone();
+    for key in ["id", "index"] {
+        if !before.contains_key(key) {
+            if let Some(value) = normalized.get(key) {
+                let valid = if key == "id" {
+                    value.as_str().is_some_and(|s| !s.is_empty())
+                } else {
+                    value.as_u64().is_some()
+                };
+                if !valid {
+                    return false;
+                }
+            }
+            normalized.remove(key);
+        }
+    }
+    &Value::Object(normalized) == original
+}
+pub fn refresh_metadata_bindings(disk: &Value, bindings: &mut [Binding]) {
+    let Some(items) = disk.get("customModels").and_then(Value::as_array) else {
+        return;
+    };
+    for binding in bindings {
+        let matches: Vec<_> = items
+            .iter()
+            .filter(|v| matches_original(v, &binding.original))
+            .collect();
+        if matches.len() == 1 {
+            binding.original = matches[0].clone();
+        }
+    }
+}
 pub fn merge(
     disk: &Value,
     owned: &[Binding],
@@ -56,7 +97,7 @@ pub fn merge(
         let matches: Vec<usize> = current
             .iter()
             .enumerate()
-            .filter(|(_, v)| *v == &binding.original)
+            .filter(|(_, v)| matches_original(v, &binding.original))
             .map(|(i, _)| i)
             .collect();
         if matches.len() != 1 || !consumed.insert(matches[0]) {
@@ -67,13 +108,13 @@ pub fn merge(
         if let Some(model) = model.filter(|m| m.enabled) {
             let mapped =
                 adapter::custom_model(model, catalog.provider(model.provider_id)?, version)?;
-            let mut merged = binding.original.clone();
+            let mut merged = current[index].clone();
             let object = merged.as_object_mut().ok_or("管理条目不是对象")?;
             for key in FIELDS {
                 object.remove(*key);
             }
             object.extend(mapped.as_object().unwrap().clone());
-            if merged != binding.original {
+            if merged != current[index] {
                 counts.modified += 1;
             }
             output[index] = merged.clone();
@@ -178,5 +219,46 @@ mod tests {
         first.bindings[0].original = first.document["customModels"][0].clone();
         let next = merge(&first.document, &first.bindings, &c, "0.238.0").unwrap();
         assert_eq!(next.document["customModels"][0]["futureField"], true);
+    }
+    #[test]
+    fn merge_accepts_added_droid_metadata_and_preserves_it() {
+        let c = catalog();
+        let first = merge(&json!({}), &[], &c, "0.238.0").unwrap();
+        let mut disk = first.document.clone();
+        disk["customModels"][0]["id"] = json!("custom:model-0");
+        disk["customModels"][0]["index"] = json!(0);
+        let result = merge(&disk, &first.bindings, &c, "0.238.0").unwrap();
+        assert_eq!(result.document, disk);
+        assert_eq!(result.counts.modified, 0);
+        let mut bindings = first.bindings.clone();
+        refresh_metadata_bindings(&disk, &mut bindings);
+        assert_eq!(bindings[0].original, disk["customModels"][0]);
+    }
+    #[test]
+    fn metadata_reconciliation_rejects_real_changes_and_duplicates() {
+        let c = catalog();
+        let first = merge(&json!({}), &[], &c, "0.238.0").unwrap();
+        for (field, value) in [
+            ("apiKey", json!("different")),
+            ("baseUrl", json!("https://different.example")),
+            ("extra", json!(true)),
+            ("index", json!("invalid")),
+        ] {
+            let mut disk = first.document.clone();
+            disk["customModels"][0]["id"] = json!("custom:model-0");
+            disk["customModels"][0][field] = value;
+            assert!(merge(&disk, &first.bindings, &c, "0.238.0").is_err());
+            let mut bindings = first.bindings.clone();
+            refresh_metadata_bindings(&disk, &mut bindings);
+            assert!(bindings[0].original == first.bindings[0].original);
+        }
+        let original = first.document["customModels"][0].clone();
+        let disk = json!({"customModels":[original.clone(), original]});
+        assert!(merge(&disk, &first.bindings, &c, "0.238.0").is_err());
+        let mut with_id = first.document["customModels"][0].clone();
+        with_id["id"] = json!("old-id");
+        let mut changed = with_id.clone();
+        changed["id"] = json!("new-id");
+        assert!(!matches_original(&changed, &with_id));
     }
 }
