@@ -1039,7 +1039,7 @@
       "id": "020",
       "title": "原子写入(备份→临时→校验 JSON→替换)(C-05)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#011, #017",
@@ -1081,6 +1081,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "e6d96f6d0782941c71564c1835897980f7ea984a5dc7c931e338786031216f55"
+      },
+      "integration": {
+        "commit": "04bcb0d0709dc7754b8cc558de94278062513833",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "代码已集成，专项验收重新通过。",
+        "run_id": null,
+        "task_fingerprint": "e6d96f6d0782941c71564c1835897980f7ea984a5dc7c931e338786031216f55",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a8bc296040a14143a8400f9d379e9281.json",
+        "recorded_at": "2026-10-11T06:44:10.926604+00:00"
       }
     },
     {
