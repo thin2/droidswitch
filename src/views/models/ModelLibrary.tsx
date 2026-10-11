@@ -42,7 +42,7 @@ export function ModelLibrary() {
       <SourcePlans browse={browse} onBrowse={setBrowse} />
       {browse === "api" && (
         <>
-          <div className="page-actions">
+          <div className="page-actions model-actions">
             <p>
               {workspace?.catalog.models.length ?? "—"} 个模型 · 管理你的 API
               配置
