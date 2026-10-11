@@ -1,0 +1,16 @@
+[package]
+name = "droid-switch"
+version = "0.1.0"
+description = "Local model configuration manager for Droid"
+edition = "2021"
+rust-version = "1.90"
+
+[lib]
+name = "droid_switch_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
