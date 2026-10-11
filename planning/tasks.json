@@ -1617,7 +1617,7 @@
       "id": "030",
       "title": "三栏主界面 + 左导航 + 供应商筛选 + API 视图顶部 (UI-01/02/04/05) [epic]",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#013",
@@ -1659,6 +1659,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "5d787d7f6d119562c10440e05acefe96b3ffd84a398e8069be8f4c0ee63c29f1"
+      },
+      "integration": {
+        "commit": "43b0fee2b0fc7609fcf35d4bd8f069364be59adb",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "5d787d7f6d119562c10440e05acefe96b3ffd84a398e8069be8f4c0ee63c29f1",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/5c2a1db30d524d638e5591a2fb80b630.json",
+        "recorded_at": "2026-10-11T07:18:01.445822+00:00"
       }
     },
     {
