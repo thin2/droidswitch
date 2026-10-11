@@ -16,6 +16,7 @@ pub fn run() {
         .setup(|app| {
             let data_dir = app.path().app_data_dir()?;
             let store = workspace::Store::open(&data_dir).map_err(std::io::Error::other)?;
+            let _ = config::pipeline::recover(&store);
             app.manage(store);
             Ok(())
         })
@@ -32,7 +33,19 @@ pub fn run() {
             model::commands::import_models,
             provider::fetch::fetch_models,
             config::path::set_target_path,
-            provider::connection::test_model
+            provider::connection::test_model,
+            config::cli::detect_droid,
+            config::pipeline::reload_configuration,
+            config::pipeline::preview_configuration,
+            config::pipeline::apply_configuration,
+            config::pipeline::discard_draft,
+            config::pipeline::export_draft,
+            config::pipeline::resolve_recovery,
+            config::takeover::takeover_model,
+            config::takeover::release_binding,
+            config::backups::list_backups,
+            config::backups::preview_restore,
+            config::backups::restore_backup
         ])
         .run(tauri::generate_context!())
         .expect("Droid Switch failed to start");

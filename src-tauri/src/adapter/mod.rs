@@ -90,3 +90,28 @@ mod fixture_tests {
         }
     }
 }
+#[cfg(test)]
+mod management_field_tests {
+    #[test]
+    #[allow(non_snake_case)]
+    fn customModels_never_contains_local_fields() {
+        let p = crate::provider::tests::sample();
+        let m = crate::model::entry::ModelEntry::new(
+            p.id,
+            crate::model::ids::ApiModelId::try_from("id".to_owned()).unwrap(),
+            "Name".into(),
+        );
+        let output = super::custom_model(&m, &p, "0.238.0").unwrap();
+        for key in [
+            "id",
+            "providerId",
+            "enabled",
+            "manufacturer",
+            "droidSelectorId",
+            "lastTest",
+            "price",
+        ] {
+            assert!(output.get(key).is_none());
+        }
+    }
+}

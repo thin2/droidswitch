@@ -811,7 +811,7 @@
       "id": "016",
       "title": "首次导入标\"外部配置\" + 接管机制 (C-02)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#015",
@@ -844,13 +844,22 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml takeover"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：配置读写链路和专项测试通过；见 planning/progress-reports/20261011-config-pipeline.md，Windows 终验保留。",
+        "recorded_at": "2026-10-11T06:43:20.917597+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "cf34f61c17563a54cd968c770cbf47dedea5eceab3f5f9f4ca585ce461eec8a2"
+      }
     },
     {
       "id": "017",
       "title": "非破坏式读取合并(保留未知字段/未管理模型)(C-03)",
       "priority": "P1",
-      "status": "IN_PROGRESS",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014",
@@ -883,7 +892,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml merge"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：配置读写链路和专项测试通过；见 planning/progress-reports/20261011-config-pipeline.md，Windows 终验保留。",
+        "recorded_at": "2026-10-11T06:43:21.308809+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "f94f393f753e2b1ddc5d623c66558b7719ce4f463e189fa308ab8ef03ace5f67"
+      }
     },
     {
       "id": "018",

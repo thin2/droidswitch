@@ -14,8 +14,16 @@ use std::{
 #[serde(rename_all = "camelCase")]
 pub struct Workspace {
     pub revision: u64,
+    #[serde(default)]
+    pub recovery_pending: bool,
     pub target_path: String,
     pub catalog: Catalog,
+    #[serde(default)]
+    pub applied_catalog: Catalog,
+    #[serde(default)]
+    pub bindings: Vec<crate::config::merge::Binding>,
+    #[serde(default)]
+    pub baseline: Option<crate::config::pipeline::Baseline>,
 }
 pub struct Store {
     pub db: Mutex<Connection>,
@@ -39,15 +47,35 @@ impl Store {
     }
     pub fn load(&self) -> Result<Workspace, String> {
         let db = self.db.lock().map_err(|_| "数据库繁忙")?;
-        load(&db)
+        let mut w = load(&db)?;
+        w.recovery_pending = self.data_dir.join("pending-apply.json").exists();
+        Ok(w)
     }
     pub fn edit(
         &self,
         expected: u64,
         edit: impl FnOnce(&mut Workspace) -> Result<(), String>,
     ) -> Result<Workspace, String> {
+        self.edit_inner(expected, edit, false)
+    }
+    pub(crate) fn edit_recovery(
+        &self,
+        expected: u64,
+        edit: impl FnOnce(&mut Workspace) -> Result<(), String>,
+    ) -> Result<Workspace, String> {
+        self.edit_inner(expected, edit, true)
+    }
+    fn edit_inner(
+        &self,
+        expected: u64,
+        edit: impl FnOnce(&mut Workspace) -> Result<(), String>,
+        recovering: bool,
+    ) -> Result<Workspace, String> {
         let mut db = self.db.lock().map_err(|_| "数据库繁忙")?;
         let tx = db.transaction().map_err(|_| "数据库事务失败")?;
+        if !recovering && self.data_dir.join("pending-apply.json").exists() {
+            return Err("存在未完成的配置事务，请重启应用恢复后再编辑".into());
+        }
         let mut workspace = load(&tx)?;
         if workspace.revision != expected {
             return Err("草稿已在其他窗口变化，请刷新后重试".into());
@@ -74,8 +102,12 @@ fn load(db: &Connection) -> Result<Workspace, String> {
         }
         None => Ok(Workspace {
             revision: 0,
+            recovery_pending: false,
             target_path: default_target()?.to_string_lossy().into(),
             catalog: Catalog::default(),
+            applied_catalog: Catalog::default(),
+            bindings: vec![],
+            baseline: None,
         }),
     }
 }

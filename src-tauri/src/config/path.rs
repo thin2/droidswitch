@@ -72,6 +72,11 @@ pub fn set_target_path(
         Err(_) => return Err("无法访问目标配置".into()),
     }
     store.edit(revision, |w| {
+        if w.target_path != resolved.to_string_lossy() {
+            w.baseline = None;
+            w.bindings.clear();
+            w.applied_catalog = Default::default();
+        }
         w.target_path = resolved.to_string_lossy().into();
         Ok(())
     })
