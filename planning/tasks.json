@@ -868,7 +868,7 @@
       "id": "017",
       "title": "非破坏式读取合并(保留未知字段/未管理模型)(C-03)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014",
@@ -910,6 +910,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "f94f393f753e2b1ddc5d623c66558b7719ce4f463e189fa308ab8ef03ace5f67"
+      },
+      "integration": {
+        "commit": "5080c59d909008eb6ea428adbcedf28f021d2145",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "配置链路已提交，专项验收重新通过；Windows 实机留待用户终验。",
+        "run_id": null,
+        "task_fingerprint": "f94f393f753e2b1ddc5d623c66558b7719ce4f463e189fa308ab8ef03ace5f67",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/d7ca27e14271490fb4312d0a4c5a8c9e.json",
+        "recorded_at": "2026-10-11T06:44:08.208727+00:00"
       }
     },
     {
