@@ -1674,7 +1674,7 @@
       "id": "031",
       "title": "底部变更条 + 草稿语义(\"保存修改\"=次要=草稿)(UI-06/07)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#019, #030",
@@ -1716,6 +1716,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "b27bdeb1c301bc8a22fe68f88b4fe00cc776427021bb0a18769e0aa27730023d"
+      },
+      "integration": {
+        "commit": "09dde8fa2850cf59c226c9ec4c694e1b0735dbef",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "b27bdeb1c301bc8a22fe68f88b4fe00cc776427021bb0a18769e0aa27730023d",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/c49184ca855e4c16be52979c3aa6dd61.json",
+        "recorded_at": "2026-10-11T07:18:11.249988+00:00"
       }
     },
     {
