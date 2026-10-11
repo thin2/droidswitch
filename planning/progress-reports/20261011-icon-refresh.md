@@ -5,3 +5,5 @@
 从 assets/app-icon.svg 重新生成 Windows ICO、macOS ICNS 及 PNG。已目视检查 512 和 32 像素图标，核验 PNG 尺寸与 ICO/ICNS 格式。npm run package:mac 通过，包含 TypeScript/Vite、Rust release 构建及签名完整性验证。源码包和 macOS DMG 同步更新；Windows 原生显示仍待用户实测。
 
 本次为小范围视觉修订，按 dual-ai-planning 规则记录进展，不新增任务，不更改未完成任务状态。
+
+补充修正：页面左上角旧 D 标识改为引用同一 assets/app-icon.svg，浏览器 favicon 同步引用，去除额外橙色背景。1440/1024 浏览器截图确认一致，3 项 UI 回归及 macOS 重新打包通过。

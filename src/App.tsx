@@ -42,7 +42,12 @@ function Layout() {
       </a>
       <aside className="sidebar">
         <div className="brand">
-          <span className="brand-mark">D</span>
+          <img
+            className="brand-mark"
+            src={new URL("../assets/app-icon.svg", import.meta.url).href}
+            alt=""
+            aria-hidden="true"
+          />
           <strong>Droid Switch</strong>
         </div>
         <p className="eyebrow">本地模型配置管理</p>
