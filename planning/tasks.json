@@ -1538,7 +1538,7 @@
       "id": "029",
       "title": "连接测试:校验/列表/调用/延迟 (T-01~T-04)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",
@@ -1584,6 +1584,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "32a24a87ca9028a0ad5ced993152e04b7f7ac304853e55d7d403058ee63cb3d2"
+      },
+      "integration": {
+        "commit": "b10440a67db38c3a75391b2e2a0012dbf85ace25",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "32a24a87ca9028a0ad5ced993152e04b7f7ac304853e55d7d403058ee63cb3d2",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/06e85bd85c974b45bd037d31a698dc12.json",
+        "recorded_at": "2026-10-11T06:56:20.510242+00:00"
       }
     },
     {
