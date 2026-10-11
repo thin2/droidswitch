@@ -2192,7 +2192,7 @@
       "id": "041",
       "title": "用量页 UI + 筛选 + 趋势/分布 + 明细切换 + CSV + 保留策略 (U-01/02/09/10/11) [epic]",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#040",
@@ -2234,6 +2234,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "a1cf5be4a4721731bb4739628f6a7a1093ba82fe5f63fd64244a1799a7d4a34f"
+      },
+      "integration": {
+        "commit": "de608bc5b79bdeab128739299fa185ade6325a12",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "a1cf5be4a4721731bb4739628f6a7a1093ba82fe5f63fd64244a1799a7d4a34f",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a3d0920fc12e4659b8cf0076d4f2c193.json",
+        "recorded_at": "2026-10-11T07:18:15.457516+00:00"
       }
     },
     {
