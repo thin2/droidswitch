@@ -503,14 +503,71 @@ dd {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+.remote-summary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 10px;
+}
+.remote-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.remote-toolbar input {
+  flex: 1;
+  min-width: 0;
+}
+.remote-toolbar input,
+.remote-toolbar button {
+  height: 38px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.remote-toolbar button {
+  flex-shrink: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 12px;
+}
+.remote-selection {
+  margin: 8px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
 .remote-models {
   max-height: 340px;
   overflow: auto;
-  margin: 12px 0;
+  margin: 8px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 .remote-models label {
-  padding: 9px;
-  border-bottom: 1px solid var(--border, #eee);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin: 0;
+  border-bottom: 1px solid var(--line);
+}
+.remote-models label:last-child {
+  border-bottom: 0;
+}
+.remote-models label:hover {
+  background: #faf8f5;
+}
+.remote-models input {
+  flex-shrink: 0;
+  margin: 0;
+}
+.remote-models small {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.remote-models > p {
+  padding: 12px;
+  margin: 0;
 }
 .remote-models code {
   overflow-wrap: anywhere;

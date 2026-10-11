@@ -46,7 +46,7 @@ test("models-fetch selects new IDs only and requires explicit confirmation", asy
   await user.click(screen.getByRole("button", { name: "获取列表" }));
   await screen.findByText("new/one");
   expect(mock.mock.calls.some(([c]) => c === "import_models")).toBe(false);
-  await user.click(screen.getByRole("button", { name: "选择当前搜索结果" }));
+  await user.click(screen.getByRole("button", { name: "全选结果" }));
   await user.click(screen.getByRole("button", { name: "添加所选 2 项" }));
   await waitFor(() =>
     expect(mock).toHaveBeenCalledWith("import_models", {

@@ -52,6 +52,16 @@ test.beforeEach(async ({ page }) => {
         invoke: async (command: string) => {
           if (command === "load_workspace") return initial;
           if (command === "latest_tests") return {};
+          if (command === "fetch_models")
+            return {
+              ids: [
+                "test/model-v1",
+                "example/fast-model",
+                "example/reasoning-model",
+              ],
+              elapsedMs: 1092,
+              incomplete: false,
+            };
           if (command === "load_usage")
             return { events: [], report: null, truncated: false };
           if (command === "list_backups") return [];
@@ -92,4 +102,27 @@ test("modal keyboard containment and official unknown login", async ({
   await dialog.getByRole("button", { name: "取消" }).click();
   await page.getByRole("button", { name: "官方订阅", exact: true }).click();
   await expect(page.getByText(/登录状态：状态待确认/)).toBeVisible();
+});
+
+test("remote model toolbar spacing and filtered selection", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "获取模型", exact: true }).click();
+  await page.getByRole("button", { name: "获取列表", exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  const search = dialog.getByRole("textbox", { name: "筛选远程模型" });
+  const select = dialog.getByRole("button", { name: "全选结果" });
+  await expect(select).toBeVisible();
+  const a = (await search.boundingBox())!;
+  const b = (await select.boundingBox())!;
+  expect(b.x - (a.x + a.width)).toBeGreaterThanOrEqual(7);
+  expect(a.height).toBe(b.height);
+  await search.fill("fast");
+  await select.click();
+  await expect(dialog.getByRole("status")).toContainText("已选 1 项");
+  await expect(select).toBeDisabled();
+  await search.fill("");
+  await page.screenshot({ path: "/tmp/droid-switch-fetch-toolbar.png" });
 });
