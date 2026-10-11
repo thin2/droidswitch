@@ -1192,7 +1192,7 @@
       "id": "023",
       "title": "备份恢复(先备份当前 + 展示影响)(C-08)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#020",
@@ -1234,6 +1234,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "aa516739a3d427b930670247cb92a67ec913ef03346c264d9033aa3740902fb7"
+      },
+      "integration": {
+        "commit": "a77f2c6e08b8e8fc2e8c6d7647a87f49d3eaadc2",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "aa516739a3d427b930670247cb92a67ec913ef03346c264d9033aa3740902fb7",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/394511defa604e7d978e8c7b8005e088.json",
+        "recorded_at": "2026-10-11T06:56:19.386679+00:00"
       }
     },
     {
