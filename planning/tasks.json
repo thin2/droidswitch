@@ -1731,7 +1731,7 @@
       "id": "032",
       "title": "视觉基线 + 字体 + 响应式 + 可访问性 (UI-08~UI-11) [epic]",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#030",
@@ -1777,6 +1777,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "1440133cc9cacd0e24bf0f8dd4aaec3c600adc4b20f89f281bab4078443610c6"
+      },
+      "integration": {
+        "commit": "7e7a475c035534549fd11414174655d1ad06fb92",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "1440133cc9cacd0e24bf0f8dd4aaec3c600adc4b20f89f281bab4078443610c6",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/04ce7f9bd4a644348a337832c6890a22.json",
+        "recorded_at": "2026-10-11T07:18:13.369645+00:00"
       }
     },
     {
