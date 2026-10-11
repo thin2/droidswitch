@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml takeover",
+      "exit_code": 0,
+      "output": "   Compiling droid-switch v0.1.0 (/Users/hanning/Desktop/droidswitch/src-tauri)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.96s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-42cf6ab454819436)\n\nrunning 1 test\ntest config::takeover::tests::takeover_requires_plaintext_consent_and_preserves_unknown ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 44 filtered out; finished in 0.01s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-322c3f57e4df64ce)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 7.4990565
+    }
+  ],
+  "reason": null,
+  "commit": "2621abfee9d7147a8a150ea533908b856691c9f7",
+  "target_head": "2621abfee9d7147a8a150ea533908b856691c9f7",
+  "target": "/Users/hanning/Desktop/droidswitch",
+  "verified_at": "2026-10-11T06:44:07.519212+00:00"
+}

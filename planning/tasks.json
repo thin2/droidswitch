@@ -811,7 +811,7 @@
       "id": "016",
       "title": "首次导入标\"外部配置\" + 接管机制 (C-02)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#015",
@@ -853,6 +853,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "cf34f61c17563a54cd968c770cbf47dedea5eceab3f5f9f4ca585ce461eec8a2"
+      },
+      "integration": {
+        "commit": "2621abfee9d7147a8a150ea533908b856691c9f7",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "配置链路已提交，专项验收重新通过；Windows 实机留待用户终验。",
+        "run_id": null,
+        "task_fingerprint": "cf34f61c17563a54cd968c770cbf47dedea5eceab3f5f9f4ca585ce461eec8a2",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/7dc74ab6b23a41899cf34203e64047ea.json",
+        "recorded_at": "2026-10-11T06:44:07.523987+00:00"
       }
     },
     {
