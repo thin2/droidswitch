@@ -1792,7 +1792,7 @@
       "id": "033",
       "title": "顶部分段控件 + 两套方案保存 (SW-01/02, UI-03)",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014, #031",
@@ -1825,7 +1825,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml source_scheme"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过；证据见 planning/progress-reports/20261011-ui-packaging.md。原生实机与真实日志兼容未宣称通过。",
+        "recorded_at": "2026-10-11T07:18:16.356514+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "294a5c0a6f0171684e638f3f6808ee94169b083f1102af1c547f339036be1cca"
+      }
     },
     {
       "id": "034",
@@ -2249,7 +2258,7 @@
       "id": "042",
       "title": "辅助页面与空/错/载入状态 + 配置备份页 (§6 辅助页面)",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#032",
@@ -2282,7 +2291,16 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过；证据见 planning/progress-reports/20261011-ui-packaging.md。原生实机与真实日志兼容未宣称通过。",
+        "recorded_at": "2026-10-11T07:18:18.673827+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "7b6bbba745fc9f9710267291e5360376bec5bc1fce7cf46a577814ad4ece3574"
+      }
     },
     {
       "id": "043",
