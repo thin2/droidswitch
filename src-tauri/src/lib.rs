@@ -1,6 +1,7 @@
 mod commands;
 pub mod db;
 pub mod fs;
+pub mod model;
 pub mod net;
 pub mod permissions;
 

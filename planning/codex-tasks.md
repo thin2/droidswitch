@@ -324,7 +324,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #013: 三类 ID 分离的核心数据模型 (S-04)
 
 **优先级**: P1
-**状态**: OPEN
+**状态**: AWAITING_INTEGRATION
 **分配给**: Codex
 **预计工时**: 2 小时
 **依赖任务**: #012
@@ -336,10 +336,14 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 验收标准
 - [ ] `cargo test --manifest-path src-tauri/Cargo.toml model`
 - [ ] 类型层面三类 ID 不可互相误用(编译期区分)
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --doc model`
 
 ### 相关文件
 - `src-tauri/src/model/ids.rs`
 - `src-tauri/src/model/entry.rs`
+
+### 实现与验收（2026-10-11）
+三类 ID newtype 与 ModelEntry 已实现；20 项全量单元测试及 3 项 compile_fail 文档测试通过，clippy 无警告。详见 planning/progress-reports/20261011-model-identities.md。选择器真实值仍待阶段 0 实测。
 
 ---
 

@@ -627,7 +627,7 @@
       "id": "013",
       "title": "三类 ID 分离的核心数据模型 (S-04)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#012",
@@ -651,16 +651,30 @@
         },
         {
           "heading": "验收标准",
-          "body": "- [ ] `cargo test --manifest-path src-tauri/Cargo.toml model`\n- [ ] 类型层面三类 ID 不可互相误用(编译期区分)"
+          "body": "- [ ] `cargo test --manifest-path src-tauri/Cargo.toml model`\n- [ ] 类型层面三类 ID 不可互相误用(编译期区分)\n- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --doc model`"
         },
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/model/ids.rs`\n- `src-tauri/src/model/entry.rs`"
+        },
+        {
+          "heading": "实现与验收（2026-10-11）",
+          "body": "三类 ID newtype 与 ModelEntry 已实现；20 项全量单元测试及 3 项 compile_fail 文档测试通过，clippy 无警告。详见 planning/progress-reports/20261011-model-identities.md。选择器真实值仍待阶段 0 实测。"
         }
       ],
       "acceptance_commands": [
-        "cargo test --manifest-path src-tauri/Cargo.toml model"
-      ]
+        "cargo test --manifest-path src-tauri/Cargo.toml model",
+        "cargo test --manifest-path src-tauri/Cargo.toml --doc model"
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：三类 ID 相互赋值均被编译器拒绝；模型与 ID 单测和显式 doc 验收通过；API 原值保持，未生成选择器前缀。证据 planning/progress-reports/20261011-model-identities.md。",
+        "recorded_at": "2026-10-11T06:20:32.505299+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "d3b22957e5b0ae67aacf44e30f08fa57aa80fe3a74f51350af8421ccbff4d811"
+      }
     },
     {
       "id": "014",
