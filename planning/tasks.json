@@ -2,7 +2,7 @@
   "version": 1,
   "markdown_path": "planning/codex-tasks.md",
   "json_path": "planning/tasks.json",
-  "header": "# Codex 任务板 - Droid Switch\n\n**创建时间**: 2026-10-11 11:02:24\n**规范文档**: planning/specs/20261011-110224-droid-switch.md\n**总任务数**: 58\n**预计总工时**: 首版(P1+P2)约 139 小时;含 P3 约 155 小时(理想专注工时,不含等待实测环境与真机验收往返)\n\n> 优先级映射:P1=首版内核/前置,P2=首版紧随增量,P3=后续迭代。与文档 P0/P1/P2 的对应见规格文档 §0.3。\n> 近期(M0–M2)已拆到 1–3h;标注\"epic\"的任务为较粗粒度,待阶段 0 实测结果出来后再细化为 1–3h 子任务。\n\n---\n\n> 新增待评审方案：planning/specs/20261011-chatgpt-local-router.md；#050–#058 仅规划，增量估算 13–23 个有效开发日，不计入上述旧版工时。原 #039/#043 和 Windows 实测未完成项继续保留。",
+  "header": "# Codex 任务板 - Droid Switch\n\n**创建时间**: 2026-10-11 11:02:24\n**规范文档**: planning/specs/20261011-110224-droid-switch.md\n**总任务数**: 60\n**预计总工时**: 首版(P1+P2)约 139 小时;含 P3 约 155 小时(理想专注工时,不含等待实测环境与真机验收往返)\n\n> 优先级映射:P1=首版内核/前置,P2=首版紧随增量,P3=后续迭代。与文档 P0/P1/P2 的对应见规格文档 §0.3。\n> 近期(M0–M2)已拆到 1–3h;标注\"epic\"的任务为较粗粒度,待阶段 0 实测结果出来后再细化为 1–3h 子任务。\n\n---\n\n> 新增待评审方案：planning/specs/20261011-chatgpt-local-router.md；#050–#058 仅规划，增量估算 13–23 个有效开发日，不计入上述旧版工时。原 #039/#043 和 Windows 实测未完成项继续保留。",
   "tasks": [
     {
       "id": "001",
@@ -3003,6 +3003,91 @@
       "acceptance_commands": [
         "test -s planning/progress-reports/router-platform-validation.md"
       ]
+    },
+    {
+      "id": "059",
+      "title": "供应商模型入口、批量手动添加与供应商标签",
+      "priority": "P2",
+      "status": "AWAITING_INTEGRATION",
+      "status_explicit": true,
+      "assigned_to": "Codex",
+      "dependencies": "无",
+      "execution_level": "normal",
+      "stall_threshold_minutes": "",
+      "field_order": [
+        "priority",
+        "status",
+        "assigned_to",
+        "dependencies",
+        "execution_level"
+      ],
+      "extra_fields": {},
+      "sections": [
+        {
+          "heading": "任务描述",
+          "body": "见 planning/specs/20261011-provider-model-management.md。保留现有未提交 UI 改动，不写真实 Droid 配置。"
+        },
+        {
+          "heading": "验收标准",
+          "body": "- [ ] `npm run build`\n- [ ] `npm test`\n- [ ] `npm run test:ui`"
+        }
+      ],
+      "acceptance_commands": [
+        "npm run build",
+        "npm test",
+        "npm run test:ui"
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：构建、8项单测、5项浏览器测试通过；截图已检查。见 planning/progress-reports/20261011-provider-model-management.md。保留既有工作区改动，待集成。",
+        "recorded_at": "2026-10-11T15:45:37.784851+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "a1e3097277ecaf6c21e0ac816460f4aa49c8d1e0a5473fb2c0c69e1e585a7be1"
+      }
+    },
+    {
+      "id": "060",
+      "title": "供应商增量与配置冲突回归验收",
+      "priority": "P2",
+      "status": "AWAITING_INTEGRATION",
+      "status_explicit": true,
+      "assigned_to": "Codex",
+      "dependencies": "无",
+      "execution_level": "normal",
+      "stall_threshold_minutes": "",
+      "field_order": [
+        "priority",
+        "status",
+        "assigned_to",
+        "dependencies",
+        "execution_level"
+      ],
+      "extra_fields": {},
+      "sections": [
+        {
+          "heading": "任务描述",
+          "body": "见 planning/specs/20261011-provider-model-management.md。保留现有未提交 UI 改动，不写真实 Droid 配置。"
+        },
+        {
+          "heading": "验收标准",
+          "body": "- [ ] `PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --manifest-path src-tauri/Cargo.toml model_batch`\n- [ ] `PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --manifest-path src-tauri/Cargo.toml config::merge::tests`"
+        }
+      ],
+      "acceptance_commands": [
+        "PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --manifest-path src-tauri/Cargo.toml model_batch",
+        "PATH=\"$HOME/.cargo/bin:$PATH\" cargo test --manifest-path src-tauri/Cargo.toml config::merge::tests"
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：批量导入1项、配置合并6项Rust测试通过；未修改真实配置。见本轮验收报告，Windows真机仍待办。",
+        "recorded_at": "2026-10-11T15:45:37.913232+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "b6cb25f94a39fd0b5ab733d2352bfd151de8775dbfa44b2eb341d61cbe1bf8e5"
+      }
     }
   ]
 }

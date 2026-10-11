@@ -6,10 +6,18 @@ interface Result {
   elapsedMs: number;
   incomplete: boolean;
 }
-export function FetchModels({ onClose }: { onClose: () => void }) {
+export function FetchModels({
+  onClose,
+  providerId,
+  onManual,
+}: {
+  onClose: () => void;
+  providerId?: string;
+  onManual?: () => void;
+}) {
   const { workspace, mutate, busy } = useWorkspace();
   const [provider, setProvider] = useState(
-      workspace?.catalog.providers[0]?.id ?? "",
+      providerId ?? workspace?.catalog.providers[0]?.id ?? "",
     ),
     [result, setResult] = useState<Result | null>(null),
     [selected, setSelected] = useState<string[]>([]),
@@ -52,7 +60,7 @@ export function FetchModels({ onClose }: { onClose: () => void }) {
         <label>
           供应商
           <select
-            disabled={loading}
+            disabled={loading || busy || !!providerId}
             value={provider}
             onChange={(e) => {
               setProvider(e.target.value);
@@ -144,6 +152,11 @@ export function FetchModels({ onClose }: { onClose: () => void }) {
           </>
         )}
         <footer>
+          {onManual && (
+            <button disabled={loading || busy} onClick={onManual}>
+              手动添加模型
+            </button>
+          )}
           <button disabled={loading} onClick={onClose}>
             关闭
           </button>

@@ -928,3 +928,10 @@ th {
 .sidebar-note {
   margin-top: 12px;
 }
+
+.provider-model-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }
+.provider-model-actions .button, .provider-model-actions button { font-size: 13px; padding: 8px 10px; }
+.batch-preview > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+.batch-preview code { overflow-wrap: anywhere; min-width: 0; }
+.batch-preview .badge { flex-shrink: 0; }
+.supplier-badge { max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }

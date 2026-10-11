@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from "react";
 import { useWorkspace } from "../../lib/workspace";
 import { protocols, type Provider, type Protocol } from "../../lib/types";
+import { FetchModels } from "../models/FetchModels";
+import { BatchModels } from "../models/BatchModels";
 const blank = (): Provider => ({
   id: crypto.randomUUID(),
   name: "",
@@ -12,6 +14,8 @@ const blank = (): Provider => ({
 });
 export function ProviderView() {
   const { workspace, busy, mutate } = useWorkspace();
+  const [fetching, setFetching] = useState<string | null>(null);
+  const [adding, setAdding] = useState<string | null>(null);
   const [edit, setEdit] = useState<Provider | null>(null),
     [headers, setHeaders] = useState("{}"),
     [confirmed, setConfirmed] = useState(false),
@@ -82,6 +86,11 @@ export function ProviderView() {
               个模型 ·{" "}
               {p.credential.mode === "environment" ? "环境变量" : "兼容模式"}
             </p>
+            <div className="provider-model-actions">
+              <button disabled={busy} onClick={() => setFetching(p.id)}>获取模型</button>
+              <button disabled={busy} onClick={() => setAdding(p.id)}>手动添加模型</button>
+              <a className="button" href={`#/models?provider=${encodeURIComponent(p.id)}`}>查看模型（{workspace.catalog.models.filter(m => m.providerId === p.id).length}）</a>
+            </div>
             <div className="row-actions">
               <button onClick={() => select(p)} disabled={busy}>
                 编辑
@@ -111,6 +120,8 @@ export function ProviderView() {
           <button onClick={() => select(blank())}>添加供应商</button>
         </div>
       )}
+      {fetching && <FetchModels providerId={fetching} onClose={() => setFetching(null)} onManual={() => { setAdding(fetching); setFetching(null); }} />}
+      {adding && <BatchModels providerId={adding} onClose={() => setAdding(null)} />}
       {edit && (
         <div className="modal-backdrop">
           <section

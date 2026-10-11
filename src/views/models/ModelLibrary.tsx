@@ -7,6 +7,7 @@ import { TestModel } from "./TestModel";
 import { ModelEditor } from "./ModelEditor";
 import { FetchModels } from "./FetchModels";
 import { protocols, type ModelEntry } from "../../lib/types";
+function providerFromHash() { return new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("provider") ?? ""; }
 export function ModelLibrary() {
   const { workspace, busy, mutate } = useWorkspace();
   const [importing, setImporting] = useState(false);
@@ -16,7 +17,7 @@ export function ModelLibrary() {
     [fetching, setFetching] = useState(false),
     [deleting, setDeleting] = useState<ModelEntry | null>(null);
   const [query, setQuery] = useState(""),
-    [provider, setProvider] = useState(""),
+    [provider, setProvider] = useState(providerFromHash),
     [selected, setSelected] = useState("");
   const [tests, setTests] = useState<
       Record<string, { success: boolean; elapsedMs: number; testedAt: number }>
@@ -28,6 +29,11 @@ export function ModelLibrary() {
         .then(setTests)
         .catch(() => {});
   }, [workspace?.revision, testRefresh]);
+  useEffect(() => {
+    const sync = () => { setProvider(providerFromHash()); setSelected(""); };
+    window.addEventListener("hashchange", sync);
+    return () => window.removeEventListener("hashchange", sync);
+  }, []);
   const models =
     workspace?.catalog.models.filter(
       (m) =>
@@ -91,7 +97,7 @@ export function ModelLibrary() {
             <select
               aria-label="筛选供应商"
               value={provider}
-              onChange={(e) => setProvider(e.target.value)}
+              onChange={(e) => { window.location.hash = e.target.value ? `#/models?provider=${encodeURIComponent(e.target.value)}` : "#/models"; }}
             >
               <option value="">全部供应商</option>
               {workspace?.catalog.providers.map((p) => (
@@ -115,11 +121,11 @@ export function ModelLibrary() {
                       <code>{m.apiModelId}</code>
                     </span>
                     <span>
-                      {
+                      <span className="badge supplier-badge">{
                         workspace?.catalog.providers.find(
                           (p) => p.id === m.providerId,
                         )?.name
-                      }
+                      }</span>
                       <small>
                         {
                           protocols[

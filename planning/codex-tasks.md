@@ -2,7 +2,7 @@
 
 **创建时间**: 2026-10-11 11:02:24
 **规范文档**: planning/specs/20261011-110224-droid-switch.md
-**总任务数**: 58
+**总任务数**: 60
 **预计总工时**: 首版(P1+P2)约 139 小时;含 P3 约 155 小时(理想专注工时,不含等待实测环境与真机验收往返)
 
 > 优先级映射:P1=首版内核/前置,P2=首版紧随增量,P3=后续迭代。与文档 P0/P1/P2 的对应见规格文档 §0.3。
@@ -1358,5 +1358,40 @@ macOS/Windows 安装、启动、登录、重启、续期、工具执行、取消
 
 ### 相关文件
 planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #059: 供应商模型入口、批量手动添加与供应商标签
+
+**优先级**: P2
+**状态**: AWAITING_INTEGRATION
+**分配给**: Codex
+**依赖任务**: 无
+**执行级别**: normal
+
+### 任务描述
+见 planning/specs/20261011-provider-model-management.md。保留现有未提交 UI 改动，不写真实 Droid 配置。
+
+### 验收标准
+- [ ] `npm run build`
+- [ ] `npm test`
+- [ ] `npm run test:ui`
+
+---
+
+## 任务 #060: 供应商增量与配置冲突回归验收
+
+**优先级**: P2
+**状态**: AWAITING_INTEGRATION
+**分配给**: Codex
+**依赖任务**: 无
+**执行级别**: normal
+
+### 任务描述
+见 planning/specs/20261011-provider-model-management.md。保留现有未提交 UI 改动，不写真实 Droid 配置。
+
+### 验收标准
+- [ ] `PATH="$HOME/.cargo/bin:$PATH" cargo test --manifest-path src-tauri/Cargo.toml model_batch`
+- [ ] `PATH="$HOME/.cargo/bin:$PATH" cargo test --manifest-path src-tauri/Cargo.toml config::merge::tests`
 
 ---

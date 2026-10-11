@@ -17,7 +17,7 @@ const pages = {
 } as const;
 export type Page = keyof typeof pages;
 function currentPage(): Page {
-  const v = window.location.hash.replace(/^#\/?/, "");
+  const v = window.location.hash.replace(/^#\/?/, "").split("?")[0];
   return Object.hasOwn(pages, v) ? (v as Page) : "models";
 }
 function Layout() {
