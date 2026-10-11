@@ -754,7 +754,7 @@
       "id": "015",
       "title": "默认目标路径解析 + 可配置路径 (C-01)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014",
@@ -796,6 +796,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "3de0f624e86ae0b393d5d636c1f3d33301cfdef7abdde22b897387b1626c2943"
+      },
+      "integration": {
+        "commit": "6e02f230b3d954a6c1f966bf6afa4cf425f56536",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
+        "run_id": null,
+        "task_fingerprint": "3de0f624e86ae0b393d5d636c1f3d33301cfdef7abdde22b897387b1626c2943",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/0ed09f9424354e86a918d502614b9fb6.json",
+        "recorded_at": "2026-10-11T06:39:46.809646+00:00"
       }
     },
     {
