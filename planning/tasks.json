@@ -1153,7 +1153,7 @@
       "id": "022",
       "title": "重新载入不丢草稿(导出/取消)(C-07)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#021",
@@ -1195,6 +1195,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "019671d8fcec03369c12887ee7f7e7462b5c342518f6003d3517844ea2960052"
+      },
+      "integration": {
+        "commit": "29521eab4b8814484df1c00907859161cc8785bd",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "019671d8fcec03369c12887ee7f7e7462b5c342518f6003d3517844ea2960052",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/60ff8e65e2804e92ab9e63cf149547aa.json",
+        "recorded_at": "2026-10-11T06:56:24.189959+00:00"
       }
     },
     {
