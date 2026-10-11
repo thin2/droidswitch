@@ -2,13 +2,15 @@
 
 **创建时间**: 2026-10-11 11:02:24
 **规范文档**: planning/specs/20261011-110224-droid-switch.md
-**总任务数**: 49
+**总任务数**: 58
 **预计总工时**: 首版(P1+P2)约 139 小时;含 P3 约 155 小时(理想专注工时,不含等待实测环境与真机验收往返)
 
 > 优先级映射:P1=首版内核/前置,P2=首版紧随增量,P3=后续迭代。与文档 P0/P1/P2 的对应见规格文档 §0.3。
 > 近期(M0–M2)已拆到 1–3h;标注"epic"的任务为较粗粒度,待阶段 0 实测结果出来后再细化为 1–3h 子任务。
 
 ---
+
+> 新增待评审方案：planning/specs/20261011-chatgpt-local-router.md；#050–#058 仅规划，增量估算 13–23 个有效开发日，不计入上述旧版工时。原 #039/#043 和 Windows 实测未完成项继续保留。
 
 ## 任务 #001: 搭建阶段 0 实测环境与版本记录基线
 
@@ -1143,5 +1145,212 @@ Factory Analytics API 作为有权限账号补充来源(UTC、截至昨日);成�
 - [ ] `test -f planning/droid-development-contract.md`
 - [ ] `test -f planning/verification/fixtures/probe/defaults-observed.json`
 - [ ] 契约区分观察、文档依据和未验证项
+
+---
+
+## 任务 #050: 官方订阅接入资格与 Droid 路由可行性验证
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: 无
+**执行级别**: heavy
+
+### 任务描述
+确认应用分发接入条件，取得官方授权、文本流及一次工具结果往返证据；记录实测 Droid 版本和不兼容字段。失败提供替代范围，不伪造通过。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `test -s planning/progress-reports/router-feasibility.md`
+- [ ] 必须人工核验真实账号与合成 Droid 会话证据；文件存在不是通过依据。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #051: 官方 OAuth/OIDC 与账号注册
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 2–3 日
+**依赖任务**: #050
+**执行级别**: heavy
+
+### 任务描述
+PKCE/state/nonce、JWT 验证、正式 client ID/host ID、账号隔离、权限与登录分离；未验证账号不得覆盖活动账号。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_oauth`
+- [ ] 覆盖回调重放、错误身份、无推理权限和用户取消。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #052: 系统凭据存储、令牌刷新与退出
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: #051
+**执行级别**: heavy
+
+### 任务描述
+Keychain/Credential Manager、注册级刷新锁、替换凭据、撤销失败处理；上游令牌不进入普通草稿。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_credentials`
+- [ ] 假存储回归后还需 macOS/Windows 真实存储、锁屏与刷新检查。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #053: 本机路由服务与生命周期
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: #050
+**执行级别**: heavy
+
+### 任务描述
+127.0.0.1、独立 Bearer、Host/Origin 校验、固定上游、端口持久化、限并发/背压/取消/关闭。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_server`
+- [ ] 错误密钥、恶意 Origin、端口冲突与中断不会留下请求或监听器。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #054: Responses 流式、多轮与工具协议适配
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 3–5 日
+**依赖任务**: #051, #052, #053
+**执行级别**: heavy
+
+### 任务描述
+建立 Droid 字段兼容矩阵；解析 SSE 增量、工具参数及 call ID；历史绑定账号；不支持能力明确失败；流后失败不重放。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_protocol`
+- [ ] 先合成帧/多轮用例，再真实 Droid 工具调用闭环；纯文本成功不足以通过。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #055: 受管模型、供应商与配置接入
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: #054
+**执行级别**: heavy
+
+### 任务描述
+专用模型目录解析；本机供应商和来源标签；复用预览、备份与原子写；不把 ChatGPT 订阅标为 Factory 订阅。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_config`
+- [ ] 旧工作区迁移、恢复、默认模型、端口稳定、预览导出无上游令牌。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #056: 账号与本地路由页面
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: #052, #053, #055
+**执行级别**: heavy
+
+### 任务描述
+账号注册/选择、授权不足、启停、模型选择、添加到 Droid；说明软件需运行；官方登录样式按文档。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `npm exec vitest run src/views/accounts/router.test.tsx`
+- [ ] 覆盖错误和恢复状态、取消授权不替换账号；npm run build 以及两种窗口宽度人工检查。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #057: 路由用量与脱敏诊断
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 1–2 日
+**依赖任务**: #054, #056
+**执行级别**: heavy
+
+### 任务描述
+按请求记录 token/状态并去重；ChatGPT 订阅独立分类、不估算未知余额；不保存正文与工具参数。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml --test router_usage`
+- [ ] 流中失败、重复完成事件、未知用量及脱敏检查；不依赖原生 Droid 日志适配。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
+
+---
+
+## 任务 #058: 路由跨平台验收与交付
+
+**优先级**: P2
+**状态**: OPEN
+**分配给**: Codex
+**预计工时**: 2–3 日
+**依赖任务**: #055, #056, #057
+**执行级别**: heavy
+
+### 任务描述
+macOS/Windows 安装、启动、登录、重启、续期、工具执行、取消、端口占用、撤销；更新用户指南与包。
+仅规划，未启动实现。进入开发后按本方案与验收依赖执行。
+
+### 验收标准
+- [ ] `test -s planning/progress-reports/router-platform-validation.md`
+- [ ] 报告须分别列 macOS/Windows 真实结果；开发时补充平台构建命令，不能用报告存在替代实测。
+上述命令是后续实现验收入口，当前测试目标/报告尚未创建，未执行。
+
+### 相关文件
+planning/specs/20261011-chatgpt-local-router.md
 
 ---
