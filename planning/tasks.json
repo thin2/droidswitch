@@ -689,7 +689,7 @@
       "id": "014",
       "title": "配置适配器层骨架(版本化、字段映射)(S-05)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#049, #011, #013",
@@ -730,7 +730,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml adapter"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过，后端及相关前端测试、构建通过。证据 planning/progress-reports/20261011-provider-adapter.md；Windows 实测后置。",
+        "recorded_at": "2026-10-11T06:31:22.513563+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "1057719dcc725da33c2af22d1c189bd9144db43474e77f472121c8ad7f1f5dac"
+      }
     },
     {
       "id": "015",
@@ -1087,7 +1096,7 @@
       "id": "024",
       "title": "供应商连接 CRUD + 同站多连接 + 协议/厂商分存 (P-01/P-02)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#013",
@@ -1120,7 +1129,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml provider"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过，后端及相关前端测试、构建通过。证据 planning/progress-reports/20261011-provider-adapter.md；Windows 实测后置。",
+        "recorded_at": "2026-10-11T06:31:22.879540+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "780affb0e5a1443dbbffb592002f02d8f7421ed446baa35bcfa1ccd52ed3c5e7"
+      }
     },
     {
       "id": "025",
@@ -1329,7 +1347,7 @@
       "id": "030",
       "title": "三栏主界面 + 左导航 + 供应商筛选 + API 视图顶部 (UI-01/02/04/05) [epic]",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#013",

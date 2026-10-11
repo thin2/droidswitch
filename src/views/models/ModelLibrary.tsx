@@ -1,0 +1,10 @@
+import { useState } from 'react';
+import { useWorkspace } from '../../lib/workspace';
+import { protocols } from '../../lib/types';
+export function ModelLibrary(){
+ const {workspace}=useWorkspace();const [query,setQuery]=useState(''),[provider,setProvider]=useState(''),[selected,setSelected]=useState('');
+ const models=workspace?.catalog.models.filter(m=>(!provider||m.providerId===provider)&&`${m.displayName} ${m.apiModelId}`.toLowerCase().includes(query.toLowerCase()))??[];
+ const detail=models.find(m=>m.id===selected);
+ return <><div className="page-actions"><p>{workspace?.catalog.models.length??'—'} 个模型 · 管理你的 API 配置</p><a className="button" href="#/providers">管理供应商</a></div><div className="filters"><input aria-label="搜索模型" placeholder="搜索模型名称或 ID…" value={query} onChange={e=>setQuery(e.target.value)}/><select aria-label="筛选供应商" value={provider} onChange={e=>setProvider(e.target.value)}><option value="">全部供应商</option>{workspace?.catalog.providers.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
+ <div className="model-layout"><section className="model-list">{models.map(m=><button className={`model-row ${selected===m.id?'selected':''}`} key={m.id} onClick={()=>setSelected(m.id)}><span><strong>{m.displayName}</strong><code>{m.apiModelId}</code></span><span>{workspace?.catalog.providers.find(p=>p.id===m.providerId)?.name}<small>{protocols[m.protocolOverride??workspace!.catalog.providers.find(p=>p.id===m.providerId)!.protocol]}</small></span><span className="badge">{m.enabled?'已启用':'已停用'}</span></button>)}{!models.length&&<div className="empty"><span className="empty-symbol">◇</span><h2>{query?'没有匹配的模型':'模型库准备就绪'}</h2><p>先添加供应商，再添加或获取模型。</p><a href="#/providers" className="button">前往供应商</a></div>}</section><aside className="detail-panel">{detail?<><h2>{detail.displayName}</h2><code>{detail.apiModelId}</code><p>模型参数编辑将在模型管理模块接入。</p></>:<div className="empty"><span className="empty-symbol">↖</span><h2>模型详情</h2><p>选择模型查看配置。</p></div>}</aside></div></>;
+}
