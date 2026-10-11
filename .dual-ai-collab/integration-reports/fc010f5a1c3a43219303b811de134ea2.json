@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml model",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-42cf6ab454819436)\n\nrunning 5 tests\ntest model::entry::tests::model_identity_survives_rename_and_same_remote_id_across_providers ... ok\ntest model::ids::tests::model_api_id_roundtrip_is_exact ... ok\ntest model::ids::tests::model_id_deserialization_validates_all_types ... ok\ntest model::entry::tests::model_token_limit_is_optional_positive_and_protocol_is_explicit ... ok\ntest db::tests::db_foreign_keys_and_model_constraints ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 15 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-322c3f57e4df64ce)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.17858158300000002
+    },
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml --doc model",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s\n   Doc-tests droid_switch_lib\n\nrunning 3 tests\ntest src/model/ids.rs - model::ids::DroidSelectorId (line 45) - compile fail ... ok\ntest src/model/ids.rs - model::ids::ApiModelId (line 34) - compile fail ... ok\ntest src/model/ids.rs - model::ids::InternalId (line 6) - compile fail ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.388154083
+    }
+  ],
+  "reason": null,
+  "commit": "94b09c98b6bdfdc434acb99a0676efb9e7854431",
+  "target_head": "94b09c98b6bdfdc434acb99a0676efb9e7854431",
+  "target": "/Users/hanning/Desktop/droidswitch",
+  "verified_at": "2026-10-11T06:20:33.279292+00:00"
+}

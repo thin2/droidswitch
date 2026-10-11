@@ -627,7 +627,7 @@
       "id": "013",
       "title": "三类 ID 分离的核心数据模型 (S-04)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#012",
@@ -674,6 +674,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "d3b22957e5b0ae67aacf44e30f08fa57aa80fe3a74f51350af8421ccbff4d811"
+      },
+      "integration": {
+        "commit": "94b09c98b6bdfdc434acb99a0676efb9e7854431",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "核心模型类型已提交；单测与 compile_fail 文档测试重新验收。",
+        "run_id": null,
+        "task_fingerprint": "d3b22957e5b0ae67aacf44e30f08fa57aa80fe3a74f51350af8421ccbff4d811",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/fc010f5a1c3a43219303b811de134ea2.json",
+        "recorded_at": "2026-10-11T06:20:33.281291+00:00"
       }
     },
     {
