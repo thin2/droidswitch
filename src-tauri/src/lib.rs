@@ -1,3 +1,4 @@
+pub mod config;
 use tauri::Manager;
 pub mod adapter;
 mod commands;
@@ -25,7 +26,13 @@ pub fn run() {
             workspace::load_workspace,
             workspace::save_provider,
             workspace::copy_provider,
-            workspace::delete_provider
+            workspace::delete_provider,
+            model::commands::save_model,
+            model::commands::delete_model,
+            model::commands::import_models,
+            provider::fetch::fetch_models,
+            config::path::set_target_path,
+            provider::connection::test_model
         ])
         .run(tauri::generate_context!())
         .expect("Droid Switch failed to start");

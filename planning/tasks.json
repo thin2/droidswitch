@@ -754,7 +754,7 @@
       "id": "015",
       "title": "默认目标路径解析 + 可配置路径 (C-01)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014",
@@ -787,7 +787,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml path"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过。实现、自动验收及边界见 planning/progress-reports/20261011-model-management.md；Windows 真机待最终实测。",
+        "recorded_at": "2026-10-11T06:39:29.167102+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "3de0f624e86ae0b393d5d636c1f3d33301cfdef7abdde22b897387b1626c2943"
+      }
     },
     {
       "id": "016",
@@ -832,7 +841,7 @@
       "id": "017",
       "title": "非破坏式读取合并(保留未知字段/未管理模型)(C-03)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014",
@@ -1162,7 +1171,7 @@
       "id": "025",
       "title": "获取模型多选窗口(搜索/全选/批量/已添加/不覆盖/消失只提示)(P-03/04/05)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",
@@ -1195,13 +1204,22 @@
       ],
       "acceptance_commands": [
         "npm run test -- models-fetch"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过。实现、自动验收及边界见 planning/progress-reports/20261011-model-management.md；Windows 真机待最终实测。",
+        "recorded_at": "2026-10-11T06:39:30.399898+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "0b03e48051d313993fb119e91cc5b0a8870e59a02d09656abeb1767965a60016"
+      }
     },
     {
       "id": "026",
       "title": "模型字段编辑 + 显示名建议 + 手动输入 ID (P-06/07/11)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",
@@ -1234,7 +1252,16 @@
       ],
       "acceptance_commands": [
         "npm run test -- model-editor"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过。实现、自动验收及边界见 planning/progress-reports/20261011-model-management.md；Windows 真机待最终实测。",
+        "recorded_at": "2026-10-11T06:39:31.561780+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "bae240b17d2e77f4e77ce9269949e766888a8d92eac3ecb8e2d813fdff79017f"
+      }
     },
     {
       "id": "027",
@@ -1322,7 +1349,7 @@
       "id": "029",
       "title": "连接测试:校验/列表/调用/延迟 (T-01~T-04)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#024",

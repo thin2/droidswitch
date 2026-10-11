@@ -1,3 +1,5 @@
+pub mod connection;
+pub mod fetch;
 use crate::model::{
     entry::{ModelEntry, Protocol},
     ids::InternalId,
