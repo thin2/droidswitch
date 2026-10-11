@@ -1906,7 +1906,7 @@
       "id": "035",
       "title": "切换生成目标支持默认设置 + 预览 + 不覆盖/不回退 (SW-04~08) [epic]",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#049, #033",
@@ -1952,6 +1952,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "e94f7ebdab46d82fc2b4726eca2e93d045659711e3a4f89c15b1c3184d2aa2a8"
+      },
+      "integration": {
+        "commit": "5fd32ad67f9baca9bb526c5ebf185e1f25afd9c8",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "e94f7ebdab46d82fc2b4726eca2e93d045659711e3a4f89c15b1c3184d2aa2a8",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a074cf700dbb4facb518ce1a79e720e5.json",
+        "recorded_at": "2026-10-11T07:18:27.097617+00:00"
       }
     },
     {
