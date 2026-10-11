@@ -17,3 +17,13 @@
 
 ## 状态与限制
 当前会话自审，无独立审查人。任务 #059/#060 保持待集成；工作区存在本轮开始前的未提交 UI 改动，未将这些改动混入提交，未将任务标记 DONE。未更新安装包，现有 releases 文件仍为此前版本；启动开发版本才会看到本轮代码。没有写真实 Droid 配置，没有调用付费模型。Windows 真机验证保持待办。同名模型折叠、Codex 代理均不在本轮实现范围。
+
+
+## 后续集成与发布（2026-10-11）
+以上“待集成、未打包”为前一轮状态，已在本轮完成：
+- 功能提交 33c224d；测试端口隔离提交 c2fad5a。功能已进入 main，其他预存 UI 改动仍留在工作区，未混入提交或安装包。
+- 在同一提交的干净 worktree /tmp/droidswitch-provider-release 独立端口 1421 验收：构建、8 项单元测试、5 项浏览器测试通过；后端批量导入 1 项、配置合并 6 项通过。
+- dual-ai-planning board integrate #059/#060 通过，任务均为 DONE。具体记录见 .dual-ai-collab/integration-reports/。
+- npm run package:mac 成功，codesign --verify --deep --strict 通过。macOS arm64 DMG 已保存 releases/Droid_Switch_0.1.0_arm64-provider-models.dmg；正式包未做 Apple 公证。
+- Windows 供应商增量检查步骤补充至 docs/windows-testing.md；未生成或验证 Windows 安装包。
+- 没有替换已安装的应用、没有重启用户会话或写入真实 Droid 配置。

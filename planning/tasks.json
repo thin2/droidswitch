@@ -3008,7 +3008,7 @@
       "id": "059",
       "title": "供应商模型入口、批量手动添加与供应商标签",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "无",
@@ -3045,13 +3045,22 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "a1e3097277ecaf6c21e0ac816460f4aa49c8d1e0a5473fb2c0c69e1e585a7be1"
+      },
+      "integration": {
+        "commit": "c2fad5a0fafd072cb8d63aaf72555a0037ae983c",
+        "target": "/private/tmp/droidswitch-provider-release",
+        "note": "供应商功能已提交main，在相同提交的干净worktree独立端口验收，保留主工作区其他UI改动。",
+        "run_id": null,
+        "task_fingerprint": "a1e3097277ecaf6c21e0ac816460f4aa49c8d1e0a5473fb2c0c69e1e585a7be1",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/c469f7a1b93245909b6ac7687dec26de.json",
+        "recorded_at": "2026-10-11T15:49:53.857087+00:00"
       }
     },
     {
       "id": "060",
       "title": "供应商增量与配置冲突回归验收",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "无",
@@ -3087,6 +3096,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "b6cb25f94a39fd0b5ab733d2352bfd151de8775dbfa44b2eb341d61cbe1bf8e5"
+      },
+      "integration": {
+        "commit": "c2fad5a0fafd072cb8d63aaf72555a0037ae983c",
+        "target": "/private/tmp/droidswitch-provider-release",
+        "note": "main对应干净worktree重新验证批量导入及配置合并；真实Windows测试不计入完成。",
+        "run_id": null,
+        "task_fingerprint": "b6cb25f94a39fd0b5ab733d2352bfd151de8775dbfa44b2eb341d61cbe1bf8e5",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/81b52d7723dd41f28aee2b431977b385.json",
+        "recorded_at": "2026-10-11T15:50:34.491018+00:00"
       }
     }
   ]

@@ -1364,7 +1364,7 @@ planning/specs/20261011-chatgpt-local-router.md
 ## 任务 #059: 供应商模型入口、批量手动添加与供应商标签
 
 **优先级**: P2
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **分配给**: Codex
 **依赖任务**: 无
 **执行级别**: normal
@@ -1382,7 +1382,7 @@ planning/specs/20261011-chatgpt-local-router.md
 ## 任务 #060: 供应商增量与配置冲突回归验收
 
 **优先级**: P2
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **分配给**: Codex
 **依赖任务**: 无
 **执行级别**: normal
