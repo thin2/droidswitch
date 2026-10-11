@@ -13,3 +13,5 @@
 已通过：53 单元测试、3 文档测试、另行执行的本机 CC Switch 只读测试；5 前端测试；TypeScript/Vite 构建与 clippy -D warnings。后续新增测试另记。
 
 尚需完成：Windows/macOS WebView 视觉与键盘实际回归、打包产物、备份保留设置、Windows 实际日志/模型默认生效验证。当前未执行真实付费请求。
+
+后续修订：用户要求默认带入 CC Switch 现有密钥，已替换上述“环境变量默认”策略；详见 20261011-import-credentials.md。

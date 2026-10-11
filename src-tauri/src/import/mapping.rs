@@ -196,7 +196,7 @@ pub fn import(
             .get(&choice.key)
             .filter(|old| w.catalog.providers.iter().any(|p| p.id == old.provider_id));
         if let Some(old) = old {
-            if old.hash == r.hash && choice.action != "copy" {
+            if old.hash == r.hash && choice.action == "add" {
                 continue;
             }
             if choice.action == "add" {
@@ -321,5 +321,67 @@ mod tests {
                 .unwrap(),
             0
         );
+    }
+    #[test]
+    fn explicit_update_imports_key_even_when_source_is_unchanged() {
+        let d = tempfile::tempdir().unwrap();
+        let s = Store::open(d.path()).unwrap();
+        let r = SourceRecord {
+            id: "a".into(),
+            app: "claude".into(),
+            name: "Name".into(),
+            settings: serde_json::json!({"env":{"ANTHROPIC_BASE_URL":"https://example.com","ANTHROPIC_AUTH_TOKEN":"test-secret"}}),
+            hash: "same-hash".into(),
+            location: "source".into(),
+        };
+        let choice = |action: &str, credential_mode| Choice {
+            key: source_key(&r),
+            hash: r.hash.clone(),
+            action: action.into(),
+            credential_mode,
+            environment: Some("IMPORTED_KEY".into()),
+            base_url: None,
+            protocol: None,
+        };
+        let w = s
+            .edit(0, |w| {
+                import(
+                    w,
+                    std::slice::from_ref(&r),
+                    vec![choice("add", CredentialMode::Environment)],
+                    false,
+                )
+            })
+            .unwrap();
+        let id = w.catalog.providers[0].id;
+        assert!(s
+            .edit(w.revision, |w| import(
+                w,
+                std::slice::from_ref(&r),
+                vec![choice("update", CredentialMode::Direct)],
+                false
+            ))
+            .is_err());
+        assert_eq!(
+            s.load().unwrap().catalog.providers[0].credential.mode,
+            CredentialMode::Environment
+        );
+        let w = s
+            .edit(w.revision, |w| {
+                import(
+                    w,
+                    std::slice::from_ref(&r),
+                    vec![choice("update", CredentialMode::Direct)],
+                    true,
+                )
+            })
+            .unwrap();
+        assert_eq!(w.catalog.providers.len(), 1);
+        assert_eq!(w.catalog.providers[0].id, id);
+        assert_eq!(
+            w.catalog.providers[0].credential.mode,
+            CredentialMode::Direct
+        );
+        assert_eq!(w.catalog.providers[0].credential.value, "test-secret");
     }
 }

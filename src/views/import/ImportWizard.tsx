@@ -31,8 +31,7 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
     [choices, setChoices] = useState<Record<string, Choice>>({}),
     [app, setApp] = useState(""),
     [error, setError] = useState(""),
-    [loading, setLoading] = useState(false),
-    [allow, setAllow] = useState(false);
+    [loading, setLoading] = useState(false);
   const visible = items?.filter((i) => !app || i.app === app) ?? [];
   const chosen = Object.values(choices).filter((c) => c.action !== "skip");
   const needsDirect = chosen.some((c) => c.credentialMode === "direct");
@@ -48,14 +47,14 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
       setLoadedPath(path);
       setChoices(
         Object.fromEntries(
-          result.map((i, index) => [
+          result.map((i) => [
             i.key,
             {
               key: i.key,
               hash: i.hash,
               action: "skip",
-              credentialMode: "environment",
-              environment: `CC_SWITCH_KEY_${index + 1}`,
+              credentialMode: i.hasCredential ? "direct" : "environment",
+              environment: "",
               baseUrl: "",
               protocol: null,
             },
@@ -78,7 +77,8 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
       >
         <h2 id="import-title">从 CC Switch 导入</h2>
         <p>
-          只读供应商数据库，支持 WAL。取消不会修改草稿，也不会导入历史用量。
+          默认同时导入 CC Switch 中已有的 API
+          Key，无需重复填写。源数据库保持不变，不导入历史用量。
         </p>
         <label>
           数据库或数据目录
@@ -118,7 +118,7 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
                       <small>
                         {i.app} ·{" "}
                         {i.duplicate === "same"
-                          ? "已导入且未变化"
+                          ? "源配置未变化，可更新密钥"
                           : i.duplicate === "changed"
                             ? "源配置有变化"
                             : "新记录"}
@@ -167,14 +167,21 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
                               })
                             }
                           >
-                            <option value="environment">
-                              环境变量（推荐）
-                            </option>
                             <option value="direct" disabled={!i.hasCredential}>
-                              兼容模式：导入原 API Key
+                              同时导入 API Key（默认）
+                            </option>
+                            <option value="environment">
+                              仅引用环境变量（自行配置）
                             </option>
                           </select>
                         </label>
+                        <p className="muted">
+                          {c.credentialMode === "direct"
+                            ? "已检测到 API Key，确认后将一并导入，不显示密钥内容。"
+                            : i.hasCredential
+                              ? "此方式不复制 API Key，需要自行配置已有环境变量。"
+                              : "源配置没有 API Key。请填写已配置的环境变量，或导入后在供应商中填写密钥。"}
+                        </p>
                         {c.credentialMode === "environment" && (
                           <label>
                             环境变量名
@@ -228,14 +235,10 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
           </>
         )}
         {needsDirect && (
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={allow}
-              onChange={(e) => setAllow(e.target.checked)}
-            />
-            我确认将所选 API Key 明文保存到私有数据库及配置备份
-          </label>
+          <p className="hint">
+            确认导入将把所选 API Key
+            保存到本机私有数据库；应用配置时也会写入配置文件及相关备份。
+          </p>
         )}
         <footer>
           <button disabled={busy} onClick={onClose}>
@@ -247,7 +250,10 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
               busy ||
               loading ||
               !chosen.length ||
-              (needsDirect && !allow) ||
+              chosen.some(
+                (c) =>
+                  c.credentialMode === "environment" && !c.environment.trim(),
+              ) ||
               path !== loadedPath
             }
             onClick={async () => {
@@ -255,17 +261,17 @@ export function ImportWizard({ onClose }: { onClose: () => void }) {
                 await mutate("import_ccswitch", {
                   path: loadedPath,
                   choices: Object.values(choices),
-                  allowPlaintext: allow,
+                  allowPlaintext: needsDirect,
                 })
               ) {
                 setNotice(
-                  `已处理 ${chosen.length} 项导入选择，相同记录自动跳过。仅保存草稿；无模型的连接请获取列表或手动添加。`,
+                  `已导入 ${chosen.length} 项连接，其中 ${chosen.filter((c) => c.credentialMode === "direct").length} 项已带入 API Key、${chosen.filter((c) => c.credentialMode === "environment").length} 项使用环境变量。仅保存草稿；无模型的连接请获取列表或手动添加。`,
                 );
                 onClose();
               }
             }}
           >
-            确认导入草稿（{chosen.length}）
+            确认导入{needsDirect ? "（含密钥）" : "草稿"} · {chosen.length} 项
           </button>
         </footer>
       </section>
