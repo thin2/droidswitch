@@ -1153,7 +1153,7 @@
       "id": "022",
       "title": "重新载入不丢草稿(导出/取消)(C-07)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#021",
@@ -1186,7 +1186,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml draft"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审，专项测试、构建及导入边界通过；见 planning/progress-reports/20261011-switch-import-usage.md。",
+        "recorded_at": "2026-10-11T06:56:21.471160+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "019671d8fcec03369c12887ee7f7e7462b5c342518f6003d3517844ea2960052"
+      }
     },
     {
       "id": "023",
@@ -1894,7 +1903,7 @@
       "id": "037",
       "title": "导入向导 + 来源选择 + 字段映射 + 重复项 + 脱敏 (I-01/04/05/06/08) [epic]",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#036, #026",
@@ -1927,7 +1936,16 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审，专项测试、构建及导入边界通过；见 planning/progress-reports/20261011-switch-import-usage.md。",
+        "recorded_at": "2026-10-11T06:56:23.764514+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "f7a534a9f6fa98cd2b5cdf7f58f609acf533c5cc787bf04297b063556f6a81e9"
+      }
     },
     {
       "id": "038",
