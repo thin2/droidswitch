@@ -1468,7 +1468,7 @@
       "id": "028",
       "title": "凭据:${VAR} 默认 + 直写兼容 + 检测说明 + 脱敏 (C-09/10/11)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#020",
@@ -1514,6 +1514,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "c80531866c7d0e7fa2390208884dbc0334868c4912da0c0dfe78a0990256bb86"
+      },
+      "integration": {
+        "commit": "daf75a363dff77224dd3ad971413fae41086f71b",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "c80531866c7d0e7fa2390208884dbc0334868c4912da0c0dfe78a0990256bb86",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/fe672268791743faae485b3ab4a75548.json",
+        "recorded_at": "2026-10-11T06:56:19.763180+00:00"
       }
     },
     {
