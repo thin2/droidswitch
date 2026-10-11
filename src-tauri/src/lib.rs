@@ -1,4 +1,7 @@
 pub mod config;
+pub mod import;
+pub mod switch;
+pub mod usage;
 use tauri::Manager;
 pub mod adapter;
 mod commands;
@@ -34,6 +37,8 @@ pub fn run() {
             provider::fetch::fetch_models,
             config::path::set_target_path,
             provider::connection::test_model,
+            provider::connection::latest_tests,
+            provider::connection::validate_workspace,
             config::cli::detect_droid,
             config::pipeline::reload_configuration,
             config::pipeline::preview_configuration,
@@ -45,7 +50,17 @@ pub fn run() {
             config::takeover::release_binding,
             config::backups::list_backups,
             config::backups::preview_restore,
-            config::backups::restore_backup
+            config::backups::restore_backup,
+            switch::catalog::discover_models,
+            switch::scheme::save_scheme,
+            switch::catalog::open_factory_login,
+            import::mapping::preview_ccswitch,
+            import::mapping::import_ccswitch,
+            usage::commands::save_price,
+            usage::commands::save_usage_settings,
+            usage::commands::scan_usage,
+            usage::commands::load_usage,
+            usage::commands::clear_usage
         ])
         .run(tauri::generate_context!())
         .expect("Droid Switch failed to start");

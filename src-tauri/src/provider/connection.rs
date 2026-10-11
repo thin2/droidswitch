@@ -164,3 +164,41 @@ mod tests {
         ));
     }
 }
+#[tauri::command]
+pub fn latest_tests(
+    store: tauri::State<'_, Store>,
+) -> Result<std::collections::BTreeMap<String, TestResult>, String> {
+    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    let mut statement = db
+        .prepare("SELECT source_file,state FROM sync_cursors WHERE file_identity='connection-test'")
+        .map_err(|_| "无法读取测试记录")?;
+    let rows = statement
+        .query_map([], |r| Ok((r.get::<_, String>(0)?, r.get::<_, String>(1)?)))
+        .map_err(|_| "无法读取测试记录")?;
+    let mut out = std::collections::BTreeMap::new();
+    for row in rows {
+        let (k, v) = row.map_err(|_| "测试记录无效")?;
+        if let Some(id) = k.strip_prefix("connection-test:") {
+            out.insert(
+                id.into(),
+                serde_json::from_str(&v).map_err(|_| "测试记录结构未知")?,
+            );
+        }
+    }
+    Ok(out)
+}
+#[tauri::command]
+pub fn validate_workspace(store: tauri::State<'_, Store>) -> Result<String, String> {
+    let w = store.load()?;
+    w.catalog.validate()?;
+    w.scheme.validate(&w.catalog)?;
+    let missing = w
+        .catalog
+        .providers
+        .iter()
+        .filter(|p| p.credential.resolve().is_err())
+        .count();
+    Ok(format!(
+        "字段、JSON 与模型引用校验通过。{missing} 个连接的凭据在当前进程不可用；未发送网络请求。"
+    ))
+}

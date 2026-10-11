@@ -25,6 +25,7 @@ pub struct Preview {
     pub counts: Counts,
     pub credential_changed: bool,
     pub version: String,
+    pub warnings: Vec<String>,
 }
 pub fn read(path: &Path) -> Result<Baseline, String> {
     match fs::read_snapshot(path) {
@@ -46,7 +47,7 @@ pub fn read(path: &Path) -> Result<Baseline, String> {
         Err(_) => Err("无法安全读取配置，请检查权限、文件类型和大小".into()),
     }
 }
-pub(super) fn hash(bytes: &[u8]) -> String {
+pub(crate) fn hash(bytes: &[u8]) -> String {
     Sha256::digest(bytes)
         .iter()
         .map(|b| format!("{b:02x}"))
@@ -58,7 +59,13 @@ fn prepare(w: &Workspace, version: &str) -> Result<(Preview, Value, Vec<Binding>
     if current.fingerprint != baseline.fingerprint {
         return Err("磁盘配置已被外部修改，请重新载入；你的草稿仍保留".into());
     }
-    let merged = merge::merge(&current.document, &w.bindings, &w.catalog, version)?;
+    let mut merged = merge::merge(&current.document, &w.bindings, &w.catalog, version)?;
+    let warnings = if w.scheme.source.is_some() {
+        let observed = crate::switch::catalog::discover(&merged.document)?;
+        crate::switch::scheme::apply_scheme(&mut merged.document, &w.scheme, &w.catalog, &observed)?
+    } else {
+        vec![]
+    };
     let token = hash(
         &serde_json::to_vec(&json!([
             w.revision,
@@ -78,6 +85,7 @@ fn prepare(w: &Workspace, version: &str) -> Result<(Preview, Value, Vec<Binding>
             counts: merged.counts,
             credential_changed,
             version: version.into(),
+            warnings,
         },
         merged.document,
         merged.bindings,
@@ -245,6 +253,7 @@ pub fn apply(
         let mut next = w.clone();
         next.bindings = bindings;
         next.applied_catalog = w.catalog.clone();
+        next.applied_scheme = w.scheme.clone();
         write_with_backup(store, w, &mut next, Some(&bytes))?;
         *w = next;
         w.revision = revision;
@@ -270,6 +279,7 @@ pub async fn apply_configuration(
 pub fn discard_draft(store: tauri::State<'_, Store>, revision: u64) -> Result<Workspace, String> {
     store.edit(revision, |w| {
         w.catalog = w.applied_catalog.clone();
+        w.scheme = w.applied_scheme.clone();
         Ok(())
     })
 }

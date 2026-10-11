@@ -99,7 +99,9 @@ pub fn restore(store: &Store, id: &str, revision: u64, token: &str) -> Result<Wo
             return Err("恢复预览已过期，请重新确认".into());
         }
         let mut next = b.previous;
+        next.usage_settings = w.usage_settings.clone();
         next.catalog = next.applied_catalog.clone();
+        next.scheme = next.applied_scheme.clone();
         pipeline::write_with_backup(store, w, &mut next, b.before.as_deref().map(str::as_bytes))?;
         *w = next;
         w.revision = revision;

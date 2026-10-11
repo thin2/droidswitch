@@ -22,6 +22,9 @@ tauri = { version = "2", features = [] }
 tempfile = "3.27.0"
 uuid = { version = "1.28.0", features = ["v4", "serde"] }
 
+toml = "1.1.8"
+chrono = { version = "0.4", default-features = false, features = ["std"] }
+
 [dev-dependencies]
 tokio = { version = "1.53.2", features = ["macros", "rt-multi-thread"] }
 

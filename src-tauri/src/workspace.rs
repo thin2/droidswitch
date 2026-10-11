@@ -19,6 +19,14 @@ pub struct Workspace {
     pub target_path: String,
     pub catalog: Catalog,
     #[serde(default)]
+    pub usage_settings: crate::usage::commands::UsageSettings,
+    #[serde(default)]
+    pub imports: std::collections::BTreeMap<String, crate::import::mapping::Imported>,
+    #[serde(default)]
+    pub scheme: crate::switch::scheme::Scheme,
+    #[serde(default)]
+    pub applied_scheme: crate::switch::scheme::Scheme,
+    #[serde(default)]
     pub applied_catalog: Catalog,
     #[serde(default)]
     pub bindings: Vec<crate::config::merge::Binding>,
@@ -82,6 +90,7 @@ impl Store {
         }
         edit(&mut workspace)?;
         workspace.catalog.validate()?;
+        workspace.scheme.validate(&workspace.catalog)?;
         workspace.revision += 1;
         let payload = serde_json::to_string(&workspace).map_err(|_| "草稿序列化失败")?;
         tx.execute("INSERT INTO drafts(id,target_path,payload,revision,updated_at) VALUES ('workspace',?1,?2,?3,unixepoch()) ON CONFLICT(id) DO UPDATE SET target_path=excluded.target_path,payload=excluded.payload,revision=excluded.revision,updated_at=excluded.updated_at",rusqlite::params![workspace.target_path,payload,workspace.revision as i64]).map_err(|_|"保存草稿失败")?;
@@ -105,6 +114,10 @@ fn load(db: &Connection) -> Result<Workspace, String> {
             recovery_pending: false,
             target_path: default_target()?.to_string_lossy().into(),
             catalog: Catalog::default(),
+            usage_settings: Default::default(),
+            imports: Default::default(),
+            scheme: Default::default(),
+            applied_scheme: Default::default(),
             applied_catalog: Catalog::default(),
             bindings: vec![],
             baseline: None,
@@ -209,5 +222,36 @@ mod tests {
                 .len(),
             1
         );
+    }
+}
+#[cfg(test)]
+mod draft_tests {
+    use super::*;
+    #[test]
+    fn draft_discard_restores_applied_catalog_without_touching_target() {
+        let d = tempfile::tempdir().unwrap();
+        let s = Store::open(d.path()).unwrap();
+        let p = crate::provider::tests::sample();
+        s.edit(0, |w| {
+            w.catalog.providers.push(p.clone());
+            w.applied_catalog = w.catalog.clone();
+            Ok(())
+        })
+        .unwrap();
+        s.edit(1, |w| {
+            w.catalog.providers[0].name = "Draft name".into();
+            Ok(())
+        })
+        .unwrap();
+        drop(s);
+        let s = Store::open(d.path()).unwrap();
+        assert_eq!(s.load().unwrap().catalog.providers[0].name, "Draft name");
+        let w = s
+            .edit(2, |w| {
+                w.catalog = w.applied_catalog.clone();
+                Ok(())
+            })
+            .unwrap();
+        assert_eq!(w.catalog.providers[0].name, p.name);
     }
 }

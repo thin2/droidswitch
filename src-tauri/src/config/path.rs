@@ -76,6 +76,7 @@ pub fn set_target_path(
             w.baseline = None;
             w.bindings.clear();
             w.applied_catalog = Default::default();
+            w.applied_scheme = Default::default();
         }
         w.target_path = resolved.to_string_lossy().into();
         Ok(())
