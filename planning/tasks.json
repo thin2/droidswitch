@@ -282,7 +282,7 @@
       "id": "007",
       "title": "核对协议映射(以官方 BYOK 文档为准)(V-07)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Claude",
       "dependencies": "无",
@@ -328,6 +328,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "4a515dda6314d748f70fae3ad225fab692c1b4cd361ca8f9be9e0cbb11b1fdbd"
+      },
+      "integration": {
+        "commit": "f708e6299e04a9a8dc728a8f8492e79a5eaffb33",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "官方协议映射已提交并重新验收。",
+        "run_id": null,
+        "task_fingerprint": "4a515dda6314d748f70fae3ad225fab692c1b4cd361ca8f9be9e0cbb11b1fdbd",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/d3c66d2516ac4ad58944ae9d8f6a8638.json",
+        "recorded_at": "2026-10-11T06:09:11.353851+00:00"
       }
     },
     {
