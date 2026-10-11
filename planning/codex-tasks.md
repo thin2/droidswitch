@@ -1148,7 +1148,7 @@ Factory Analytics API 作为有权限账号补充来源(UTC、截至昨日);成�
 
 ---
 
-## 任务 #050: 官方订阅接入资格与 Droid 路由可行性验证
+## 任务 #050: 官方订阅与现成代理路线对照、Droid 连通性验证
 
 **优先级**: P2
 **状态**: OPEN
@@ -1168,6 +1168,9 @@ Factory Analytics API 作为有权限账号补充来源(UTC、截至昨日);成�
 
 ### 相关文件
 planning/specs/20261011-chatgpt-local-router.md
+
+### 源码调研与路线修订
+2026-10-11 已静态审查 CLIProxyAPI、CC Switch、Sub2API 的固定提交，见 planning/specs/20261011-proxy-implementation-review.md。未运行代理或登录。优先验证外接 CLIProxyAPI，再选择受管进程集成；独立 SIWC 是不同授权路线。验收须包含真实 Droid 多轮工具闭环与中途失败；未通过前不确定复用工期。#051–#058 暂为自建路线参考，选定路线后先重写再实施，均保持 OPEN。
 
 ---
 
