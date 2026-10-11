@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml source_scheme",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.20s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-a4ec0b6bf01c84dc)\n\nrunning 1 test\ntest switch::scheme::tests::source_scheme_switch_roundtrip_preserves_both_plans_and_explicit_overrides ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 54 filtered out; finished in 0.00s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-5503915012d1d6fb)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.29177733299999997
+    }
+  ],
+  "reason": null,
+  "commit": "7a9f79301e4b71253be491244191d0cb17ac3e31",
+  "target_head": "7a9f79301e4b71253be491244191d0cb17ac3e31",
+  "target": "/Users/hanning/Desktop/droidswitch",
+  "verified_at": "2026-10-11T07:18:19.139681+00:00"
+}

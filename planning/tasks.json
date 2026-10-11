@@ -1792,7 +1792,7 @@
       "id": "033",
       "title": "顶部分段控件 + 两套方案保存 (SW-01/02, UI-03)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014, #031",
@@ -1834,6 +1834,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "294a5c0a6f0171684e638f3f6808ee94169b083f1102af1c547f339036be1cca"
+      },
+      "integration": {
+        "commit": "7a9f79301e4b71253be491244191d0cb17ac3e31",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "294a5c0a6f0171684e638f3f6808ee94169b083f1102af1c547f339036be1cca",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/ba71e5c181f64f6ba169ff3291f159e7.json",
+        "recorded_at": "2026-10-11T07:18:19.142580+00:00"
       }
     },
     {
