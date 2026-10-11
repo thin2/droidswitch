@@ -925,7 +925,7 @@
       "id": "018",
       "title": "不写管理字段进 customModels (C-12)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#017",
@@ -958,13 +958,22 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml customModels"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：专项测试通过，45 单元测试及 3 文档测试通过；配置写入/备份/中断恢复均使用临时目录测试。证据见 planning/progress-reports/20261011-config-pipeline.md。",
+        "recorded_at": "2026-10-11T06:44:08.700471+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "2f4add0eef616c58880aa6715673dbe16d554aa582ace9bd9749bd3659ffaaa8"
+      }
     },
     {
       "id": "019",
       "title": "变更预览(新增/修改/停用/删除 + 脱敏差异)(C-04)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#017",
@@ -997,13 +1006,22 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml preview"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：专项测试通过，45 单元测试及 3 文档测试通过；配置写入/备份/中断恢复均使用临时目录测试。证据见 planning/progress-reports/20261011-config-pipeline.md。",
+        "recorded_at": "2026-10-11T06:44:09.175241+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "f9a9170a8801611bc65075e495a6d0e271f03252c04d6d45ca18010c5067834d"
+      }
     },
     {
       "id": "020",
       "title": "原子写入(备份→临时→校验 JSON→替换)(C-05)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#011, #017",
@@ -1036,7 +1054,16 @@
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml atomic_write"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审：专项测试通过，45 单元测试及 3 文档测试通过；配置写入/备份/中断恢复均使用临时目录测试。证据见 planning/progress-reports/20261011-config-pipeline.md。",
+        "recorded_at": "2026-10-11T06:44:09.739538+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "e6d96f6d0782941c71564c1835897980f7ea984a5dc7c931e338786031216f55"
+      }
     },
     {
       "id": "021",
