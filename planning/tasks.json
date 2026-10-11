@@ -2267,7 +2267,7 @@
       "id": "042",
       "title": "辅助页面与空/错/载入状态 + 配置备份页 (§6 辅助页面)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#032",
@@ -2309,6 +2309,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "7b6bbba745fc9f9710267291e5360376bec5bc1fce7cf46a577814ad4ece3574"
+      },
+      "integration": {
+        "commit": "53563f3c3fe2614f812ad5542b42a90e7821dc3c",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
+        "run_id": null,
+        "task_fingerprint": "7b6bbba745fc9f9710267291e5360376bec5bc1fce7cf46a577814ad4ece3574",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/100346743d2c4ea6b87c2b8f24f61fee.json",
+        "recorded_at": "2026-10-11T07:18:21.369624+00:00"
       }
     },
     {
