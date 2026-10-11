@@ -10,3 +10,5 @@ src-tauri/gen/
 *.lock.tmp
 planning/tasks.json.lock
 .dual-ai-collab/logs/
+
+.dual-ai-collab/runs/*.lock
