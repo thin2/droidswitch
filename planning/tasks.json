@@ -500,7 +500,7 @@
       "id": "011",
       "title": "Rust 基础能力:文件读写/原子替换/文件指纹/网络 (S-02)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#010",
@@ -551,6 +551,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "80cab798f4a7c3254cf65e6636942eba368cd67cc312c65470c49a97550ca1bb"
+      },
+      "integration": {
+        "commit": "a16501bdcf6742e105c59efdd2fba1115e68b029",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "基础文件及网络模块已提交；重新验收通过后解锁依赖。",
+        "run_id": null,
+        "task_fingerprint": "80cab798f4a7c3254cf65e6636942eba368cd67cc312c65470c49a97550ca1bb",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/f17879cbc852422785e76bae632493ee.json",
+        "recorded_at": "2026-10-11T06:17:52.208715+00:00"
       }
     },
     {
