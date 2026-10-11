@@ -8,7 +8,7 @@
       "id": "001",
       "title": "搭建阶段 0 实测环境与版本记录基线",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Claude",
       "dependencies": "无",
@@ -59,6 +59,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "3a943dd3681ff0e282fb54b02752635f77496a6365da6384381c3262b638d755"
+      },
+      "integration": {
+        "commit": "9f572db65495d684e84bba1444acf60f20dc6e06",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "环境基线已入库并重新验收；忽略工具运行期间临时锁文件。",
+        "run_id": null,
+        "task_fingerprint": "3a943dd3681ff0e282fb54b02752635f77496a6365da6384381c3262b638d755",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/ce50c73be6494e848bc2f5fd6c75875d.json",
+        "recorded_at": "2026-10-11T06:09:11.221037+00:00"
       }
     },
     {
