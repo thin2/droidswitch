@@ -15,3 +15,7 @@ Windows NSIS 图标/配置、WebView2 引导安装、PowerShell 本地构建脚�
 #043 保持进行中，Windows 实际安装产物留待 Windows 环境构建与验证。
 
 收尾验证：6 项前端测试、3 项浏览器回归通过；损坏 JSON 的备份恢复新增回归通过，clippy -D warnings 通过。恢复预览不显示损坏文件原文。原生启动 smoke 已完成并正常结束测试进程。
+
+最终本地验证：54 Rust 单元测试、3 compile-fail 文档测试、6 前端测试、3 浏览器回归通过；真实 CC Switch 只读 smoke 另行通过。Windows 权限模块（含数据目录继承 ACL）交叉编译通过，未替代 Windows 运行时验证。最新 macOS .app/DMG 已重建，签名完整性与 DMG 校验通过。源码与 Windows 构建步骤将放入 releases 交付目录。
+
+任务板收尾：35 项 DONE，#039/#043 仍 IN_PROGRESS；原阶段 0 未实测项和 #044 保持 OPEN，P3 四项保持后续范围。没有将真实日志兼容、Windows 安装或实机会话生效写成通过。
