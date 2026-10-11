@@ -982,7 +982,7 @@
       "id": "019",
       "title": "变更预览(新增/修改/停用/删除 + 脱敏差异)(C-04)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#017",
@@ -1024,6 +1024,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "f9a9170a8801611bc65075e495a6d0e271f03252c04d6d45ca18010c5067834d"
+      },
+      "integration": {
+        "commit": "9ca6313e6fdc60c1ca5a62694699acf8db4f91f2",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "代码已集成，专项验收重新通过。",
+        "run_id": null,
+        "task_fingerprint": "f9a9170a8801611bc65075e495a6d0e271f03252c04d6d45ca18010c5067834d",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/155abc0ed1324bd1875174ae52535339.json",
+        "recorded_at": "2026-10-11T06:44:10.518538+00:00"
       }
     },
     {
