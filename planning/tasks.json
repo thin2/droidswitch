@@ -1420,7 +1420,7 @@
       "id": "027",
       "title": "停用/删除供应商 + 悬空引用检测 (P-08/09/10)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#026",
@@ -1462,6 +1462,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "174d02a9f72dd98030788bbd06daedef37875f13bff492edd71e06243c661575"
+      },
+      "integration": {
+        "commit": "c97bcdb7ae5d2c06c8b0d0a9adf8f0e78dc7f777",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "174d02a9f72dd98030788bbd06daedef37875f13bff492edd71e06243c661575",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/953cb293b283421e960917404cedd349.json",
+        "recorded_at": "2026-10-11T06:56:20.109204+00:00"
       }
     },
     {
