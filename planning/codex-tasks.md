@@ -353,7 +353,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 **状态**: OPEN
 **分配给**: Codex
 **预计工时**: 3 小时
-**依赖任务**: #009, #011, #013
+**依赖任务**: #049, #011, #013
 **执行级别**: normal
 
 ### 任务描述
@@ -370,6 +370,9 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 相关文件
 - `src-tauri/src/adapter/mod.rs`
 - `src-tauri/src/adapter/versions.rs`
+
+### Windows 验收后置
+用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。
 
 ---
 
@@ -813,7 +816,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 **状态**: OPEN
 **分配给**: Codex
 **预计工时**: 5 小时
-**依赖任务**: #003, #033
+**依赖任务**: #049, #033
 **执行级别**: heavy
 
 ### 任务描述
@@ -825,6 +828,9 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 
 ### 相关文件
 - `src-tauri/src/switch/apply.rs`
+
+### Windows 验收后置
+用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。
 
 ---
 
@@ -898,7 +904,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 **状态**: OPEN
 **分配给**: Codex
 **预计工时**: 6 小时
-**依赖任务**: #006
+**依赖任务**: #049, #012
 **执行级别**: heavy
 
 ### 任务描述
@@ -911,6 +917,9 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 相关文件
 - `src-tauri/src/usage/scanner.rs`
 - `src-tauri/src/usage/dedup.rs`
+
+### Windows 验收后置
+用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。
 
 ---
 
@@ -1102,5 +1111,22 @@ Factory Analytics API 作为有权限账号补充来源(UTC、截至昨日);成�
 
 ### 相关文件
 - `src-tauri/src/usage/proxy.rs`
+
+---
+
+## 任务 #049: 开发期兼容契约与后置 Windows 实测边界
+
+**状态**: AWAITING_INTEGRATION
+**优先级**: P1
+**分配给**: Codex
+**依赖任务**: #001, #007
+
+### 任务描述
+按用户最新安排分离开发契约与最终实测，保留原会话验收任务。参见 planning/specs/20261011-windows-validation.md。
+
+### 验收标准
+- [ ] `test -f planning/droid-development-contract.md`
+- [ ] `test -f planning/verification/fixtures/probe/defaults-observed.json`
+- [ ] 契约区分观察、文档依据和未验证项
 
 ---

@@ -692,7 +692,7 @@
       "status": "OPEN",
       "status_explicit": true,
       "assigned_to": "Codex",
-      "dependencies": "#009, #011, #013",
+      "dependencies": "#049, #011, #013",
       "execution_level": "normal",
       "stall_threshold_minutes": "",
       "field_order": [
@@ -722,6 +722,10 @@
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/adapter/mod.rs`\n- `src-tauri/src/adapter/versions.rs`"
+        },
+        {
+          "heading": "Windows 验收后置",
+          "body": "用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。"
         }
       ],
       "acceptance_commands": [
@@ -1523,7 +1527,7 @@
       "status": "OPEN",
       "status_explicit": true,
       "assigned_to": "Codex",
-      "dependencies": "#003, #033",
+      "dependencies": "#049, #033",
       "execution_level": "heavy",
       "stall_threshold_minutes": "",
       "field_order": [
@@ -1549,6 +1553,10 @@
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/switch/apply.rs`"
+        },
+        {
+          "heading": "Windows 验收后置",
+          "body": "用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。"
         }
       ],
       "acceptance_commands": [
@@ -1679,7 +1687,7 @@
       "status": "OPEN",
       "status_explicit": true,
       "assigned_to": "Codex",
-      "dependencies": "#006",
+      "dependencies": "#049, #012",
       "execution_level": "heavy",
       "stall_threshold_minutes": "",
       "field_order": [
@@ -1705,6 +1713,10 @@
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/usage/scanner.rs`\n- `src-tauri/src/usage/dedup.rs`"
+        },
+        {
+          "heading": "Windows 验收后置",
+          "body": "用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。"
         }
       ],
       "acceptance_commands": [
@@ -2061,6 +2073,44 @@
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml proxy"
       ]
+    },
+    {
+      "id": "049",
+      "title": "开发期兼容契约与后置 Windows 实测边界",
+      "priority": "P1",
+      "status": "AWAITING_INTEGRATION",
+      "status_explicit": true,
+      "assigned_to": "Codex",
+      "dependencies": "#001, #007",
+      "sections": [
+        {
+          "heading": "任务描述",
+          "body": "按用户最新安排分离开发契约与最终实测，保留原会话验收任务。参见 planning/specs/20261011-windows-validation.md。"
+        },
+        {
+          "heading": "验收标准",
+          "body": "- [ ] `test -f planning/droid-development-contract.md`\n- [ ] `test -f planning/verification/fixtures/probe/defaults-observed.json`\n- [ ] 契约区分观察、文档依据和未验证项"
+        }
+      ],
+      "execution_level": "",
+      "stall_threshold_minutes": "",
+      "field_order": [
+        "status"
+      ],
+      "extra_fields": {},
+      "acceptance_commands": [
+        "test -f planning/droid-development-contract.md",
+        "test -f planning/verification/fixtures/probe/defaults-observed.json"
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "自审：两项验收通过；契约区分实际 catalog、官方字段依据、未验证默认行为和日志口径。保留 Windows 最终验收。",
+        "recorded_at": "2026-10-11T06:25:20.334434+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "027f8a6375d27207da9f77ffa05f3fc51e62e689e013dc1d55f53b47eebb9742"
+      }
     }
   ]
 }
