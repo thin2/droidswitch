@@ -2078,7 +2078,7 @@
       "id": "049",
       "title": "开发期兼容契约与后置 Windows 实测边界",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#001, #007",
@@ -2110,6 +2110,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "027f8a6375d27207da9f77ffa05f3fc51e62e689e013dc1d55f53b47eebb9742"
+      },
+      "integration": {
+        "commit": "266f5c88ebfea577128bc20fc3b4fd50ca04de05",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "用户授权先开发后 Windows 实测，开发契约单独集成，不替代真实会话验收。",
+        "run_id": null,
+        "task_fingerprint": "027f8a6375d27207da9f77ffa05f3fc51e62e689e013dc1d55f53b47eebb9742",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4d4a1cd307c34535ac9cae69d2cf020c.json",
+        "recorded_at": "2026-10-11T06:25:20.478362+00:00"
       }
     }
   ]

@@ -1116,7 +1116,7 @@ Factory Analytics API 作为有权限账号补充来源(UTC、截至昨日);成�
 
 ## 任务 #049: 开发期兼容契约与后置 Windows 实测边界
 
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **优先级**: P1
 **分配给**: Codex
 **依赖任务**: #001, #007
