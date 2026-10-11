@@ -500,7 +500,7 @@
       "id": "011",
       "title": "Rust 基础能力:文件读写/原子替换/文件指纹/网络 (S-02)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#010",
@@ -528,22 +528,36 @@
         },
         {
           "heading": "验收标准",
-          "body": "- [ ] `cargo test --manifest-path src-tauri/Cargo.toml fs`\n- [ ] 原子替换与指纹有单测覆盖"
+          "body": "- [ ] `cargo test --manifest-path src-tauri/Cargo.toml fs`\n- [ ] 原子替换与指纹有单测覆盖\n- [ ] `cargo test --manifest-path src-tauri/Cargo.toml net`"
         },
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/fs.rs`\n- `src-tauri/src/net.rs`"
+        },
+        {
+          "heading": "实现记录（2026-10-11）",
+          "body": "实现及测试见 planning/progress-reports/20261011-storage-foundations.md。当前会话直接实现和自审；本机 macOS 测试及 Windows 权限代码交叉编译通过，Windows 实机未验证。"
         }
       ],
       "acceptance_commands": [
-        "cargo test --manifest-path src-tauri/Cargo.toml fs"
-      ]
+        "cargo test --manifest-path src-tauri/Cargo.toml fs",
+        "cargo test --manifest-path src-tauri/Cargo.toml net"
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过：fs 7 项与 net 4 项测试通过，clippy 无警告；Windows ACL 源码交叉编译通过，未冒充实机。完整 apply/外部竞争窗口仍待后续任务。证据 planning/progress-reports/20261011-storage-foundations.md。",
+        "recorded_at": "2026-10-11T06:17:51.461974+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "80cab798f4a7c3254cf65e6636942eba368cd67cc312c65470c49a97550ca1bb"
+      }
     },
     {
       "id": "012",
       "title": "SQLite schema + 迁移 (S-03)",
       "priority": "P1",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#010",
@@ -572,11 +586,24 @@
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/db/schema.rs`\n- `src-tauri/src/db/migrations/`"
+        },
+        {
+          "heading": "实现记录（2026-10-11）",
+          "body": "实现及测试见 planning/progress-reports/20261011-storage-foundations.md。当前会话直接实现和自审；本机 macOS 测试及 Windows 权限代码交叉编译通过，Windows 实机未验证。"
         }
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml db"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过：7 表 STRICT schema，5 项迁移/回滚/外键/持久化测试通过，clippy 无警告。证据 planning/progress-reports/20261011-storage-foundations.md。",
+        "recorded_at": "2026-10-11T06:17:51.559869+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "a1dd0f33e5c6c6ce9dabd662383a208aa1a1e9cb667f6e846fcfd206fb0a5929"
+      }
     },
     {
       "id": "013",

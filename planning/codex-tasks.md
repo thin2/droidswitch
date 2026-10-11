@@ -269,7 +269,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #011: Rust 基础能力:文件读写/原子替换/文件指纹/网络 (S-02)
 
 **优先级**: P1
-**状态**: OPEN
+**状态**: AWAITING_INTEGRATION
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: #010
@@ -285,17 +285,21 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 验收标准
 - [ ] `cargo test --manifest-path src-tauri/Cargo.toml fs`
 - [ ] 原子替换与指纹有单测覆盖
+- [ ] `cargo test --manifest-path src-tauri/Cargo.toml net`
 
 ### 相关文件
 - `src-tauri/src/fs.rs`
 - `src-tauri/src/net.rs`
+
+### 实现记录（2026-10-11）
+实现及测试见 planning/progress-reports/20261011-storage-foundations.md。当前会话直接实现和自审；本机 macOS 测试及 Windows 权限代码交叉编译通过，Windows 实机未验证。
 
 ---
 
 ## 任务 #012: SQLite schema + 迁移 (S-03)
 
 **优先级**: P1
-**状态**: OPEN
+**状态**: AWAITING_INTEGRATION
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: #010
@@ -311,6 +315,9 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 相关文件
 - `src-tauri/src/db/schema.rs`
 - `src-tauri/src/db/migrations/`
+
+### 实现记录（2026-10-11）
+实现及测试见 planning/progress-reports/20261011-storage-foundations.md。当前会话直接实现和自审；本机 macOS 测试及 Windows 权限代码交叉编译通过，Windows 实机未验证。
 
 ---
 

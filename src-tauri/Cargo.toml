@@ -13,4 +13,16 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+reqwest = { version = "0.13.5", default-features = false, features = ["rustls", "json"] }
+rusqlite = { version = "0.40.2", features = ["bundled"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.152"
+sha2 = "0.11.0"
 tauri = { version = "2", features = [] }
+tempfile = "3.27.0"
+
+[dev-dependencies]
+tokio = { version = "1.53.2", features = ["macros", "rt-multi-thread"] }
+
+[target."cfg(windows)".dependencies]
+windows-sys = { version = "0.61", features = ["Win32_Foundation", "Win32_Security", "Win32_Security_Authorization"] }
