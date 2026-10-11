@@ -837,7 +837,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #036: 定位数据目录 + 只读 WAL 读 cc-switch.db (I-02/I-03)
 
 **优先级**: P2
-**状态**: AWAITING_INTEGRATION
+**状态**: DONE
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: #011

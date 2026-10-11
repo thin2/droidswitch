@@ -1837,7 +1837,7 @@
       "id": "036",
       "title": "定位数据目录 + 只读 WAL 读 cc-switch.db (I-02/I-03)",
       "priority": "P2",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#011",
@@ -1879,6 +1879,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "ae16beffff65e26f4cb63e735b4395bbfb9c688bf18ee4c68d8a2398b380b143"
+      },
+      "integration": {
+        "commit": "ec43151f45fbe5e6c9e11b5b312d04823c10d05a",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "ae16beffff65e26f4cb63e735b4395bbfb9c688bf18ee4c68d8a2398b380b143",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/05171004f8a24f14835b23f5cee0698c.json",
+        "recorded_at": "2026-10-11T06:56:20.904578+00:00"
       }
     },
     {
