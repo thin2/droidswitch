@@ -1105,7 +1105,7 @@
       "id": "024",
       "title": "供应商连接 CRUD + 同站多连接 + 协议/厂商分存 (P-01/P-02)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#013",
@@ -1147,6 +1147,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "780affb0e5a1443dbbffb592002f02d8f7421ed446baa35bcfa1ccd52ed3c5e7"
+      },
+      "integration": {
+        "commit": "8bc062eb620177215b99970a419cd0a855328029",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "实现已提交，自动验收重跑通过，Windows 终验保留。",
+        "run_id": null,
+        "task_fingerprint": "780affb0e5a1443dbbffb592002f02d8f7421ed446baa35bcfa1ccd52ed3c5e7",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/41b48307b09445249da78c1db3332b5f.json",
+        "recorded_at": "2026-10-11T06:31:23.563142+00:00"
       }
     },
     {
