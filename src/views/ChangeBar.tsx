@@ -1,10 +1,202 @@
-import {useState} from 'react';
-import {useWorkspace} from '../lib/workspace';
-import {request,errorText} from '../lib/api';
-interface Preview{token:string;before:unknown;after:unknown;counts:{added:number;modified:number;disabled:number;deleted:number};credentialChanged:boolean;version:string;warnings:string[]}
-export function ChangeBar(){const{workspace,busy,mutate,setNotice}=useWorkspace();const[preview,setPreview]=useState<Preview|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState(''),[discard,setDiscard]=useState(false),[recovery,setRecovery]=useState(false);const changed=workspace&&(JSON.stringify(workspace.catalog)!==JSON.stringify(workspace.appliedCatalog??{providers:[],models:[]})||JSON.stringify(workspace.scheme)!==JSON.stringify(workspace.appliedScheme));
- if(!workspace)return null;
- return <>{workspace.recoveryPending&&<div className="error-banner" role="alert">上次配置事务尚未完成。草稿编辑已暂停，备份仍保留。<button onClick={()=>setRecovery(true)}>处理恢复冲突</button></div>}<div className="change-bar"><span><strong>{changed?'有待应用的草稿':'草稿与上次应用一致'}</strong><small>{workspace.baseline?'已读取目标文件':'尚未读取目标文件'}</small></span><button disabled={busy||loading} onClick={()=>void mutate('reload_configuration')}>重新载入配置</button><button disabled={busy||loading||!changed} onClick={()=>setDiscard(true)}>放弃草稿</button><button className="primary" disabled={busy||loading||!workspace.baseline} onClick={async()=>{setLoading(true);setError('');try{setPreview(await request<Preview>('preview_configuration'));}catch(e){setError(errorText(e));}finally{setLoading(false);}}}>{loading?'正在检查…':'预览并应用'}</button></div>{error&&<div className="error-banner" role="alert">{error}<button onClick={()=>setError('')}>关闭</button></div>}
- {preview&&<div className="modal-backdrop"><section className="modal wide-modal" role="dialog" aria-modal="true" aria-labelledby="preview-title"><h2 id="preview-title">确认配置变更</h2><p>新增 {preview.counts.added} · 修改 {preview.counts.modified} · 停用 {preview.counts.disabled} · 删除 {preview.counts.deleted}</p>{preview.credentialChanged&&<p>凭据发生变化，具体内容已隐藏。</p>}<p>将先备份原配置，再写入。目标：<code>{workspace.targetPath}</code></p><div className="diff"><section><h3>当前磁盘（脱敏）</h3><pre>{JSON.stringify(preview.before,null,2)}</pre></section><section><h3>应用后（脱敏）</h3><pre>{JSON.stringify(preview.after,null,2)}</pre></section></div>{preview.warnings?.map((warning,i)=><p key={i} role="status">{warning}</p>)}<p>Droid {preview.version} · 应用后需新建会话，并用 /model 核对生效模型。</p><footer><button disabled={busy} onClick={()=>setPreview(null)}>取消</button><button className="primary" disabled={busy} onClick={async()=>{if(await mutate('apply_configuration',{token:preview.token})){setPreview(null);setNotice('配置已备份并写入，请重启 Droid 或开启新会话确认生效。');}}}>确认应用</button></footer></section></div>}
- {recovery&&<div className="modal-backdrop"><section className="modal" role="dialog" aria-modal="true" aria-label="恢复冲突"><h2>保留当前磁盘配置？</h2><p>将归档中断记录，保留当前磁盘文件与现有草稿，解除编辑锁。后续应用仍需重新预览；有变化的接管关系需人工核对。</p><footer><button onClick={()=>setRecovery(false)}>取消</button><button disabled={busy} onClick={async()=>{if(await mutate('resolve_recovery',{preserveCurrent:true}))setRecovery(false);}}>保留当前文件并解除恢复锁</button></footer></section></div>}{discard&&<div className="modal-backdrop"><section className="modal" role="dialog" aria-modal="true" aria-label="放弃草稿"><h2>放弃所有未应用修改？</h2><p>恢复上次应用的管理数据。磁盘配置保持当前内容。</p><footer><button onClick={()=>setDiscard(false)}>取消</button><button disabled={busy} onClick={async()=>{if(await mutate('discard_draft'))setDiscard(false);}}>确认放弃</button></footer></section></div>}</>;
+import { useState } from "react";
+import { useWorkspace } from "../lib/workspace";
+import { request, errorText } from "../lib/api";
+interface Preview {
+  token: string;
+  before: unknown;
+  after: unknown;
+  counts: {
+    added: number;
+    modified: number;
+    disabled: number;
+    deleted: number;
+  };
+  credentialChanged: boolean;
+  version: string;
+  warnings: string[];
+}
+export function ChangeBar() {
+  const { workspace, busy, mutate, setNotice } = useWorkspace();
+  const [preview, setPreview] = useState<Preview | null>(null),
+    [loading, setLoading] = useState(false),
+    [error, setError] = useState(""),
+    [discard, setDiscard] = useState(false),
+    [recovery, setRecovery] = useState(false);
+  const changed =
+    workspace &&
+    (JSON.stringify(workspace.catalog) !==
+      JSON.stringify(
+        workspace.appliedCatalog ?? { providers: [], models: [] },
+      ) ||
+      JSON.stringify(workspace.scheme) !==
+        JSON.stringify(workspace.appliedScheme));
+  if (!workspace) return null;
+  return (
+    <>
+      {workspace.recoveryPending && (
+        <div className="error-banner" role="alert">
+          上次配置事务尚未完成。草稿编辑已暂停，备份仍保留。
+          <button onClick={() => setRecovery(true)}>处理恢复冲突</button>
+        </div>
+      )}
+      <div className="change-bar">
+        <span>
+          <strong>{changed ? "有待应用的草稿" : "草稿与上次应用一致"}</strong>
+          <small>
+            {workspace.baseline ? "已读取目标文件" : "尚未读取目标文件"}
+          </small>
+        </span>
+        <button
+          disabled={busy || loading}
+          onClick={() => void mutate("reload_configuration")}
+        >
+          重新载入配置
+        </button>
+        <button
+          disabled={busy || loading || !changed}
+          onClick={() => setDiscard(true)}
+        >
+          放弃草稿
+        </button>
+        <button
+          className="primary"
+          disabled={busy || loading || !workspace.baseline}
+          onClick={async () => {
+            setLoading(true);
+            setError("");
+            try {
+              setPreview(await request<Preview>("preview_configuration"));
+            } catch (e) {
+              setError(errorText(e));
+            } finally {
+              setLoading(false);
+            }
+          }}
+        >
+          {loading ? "正在检查…" : "预览并应用"}
+        </button>
+      </div>
+      {error && (
+        <div className="error-banner" role="alert">
+          {error}
+          <button onClick={() => setError("")}>关闭</button>
+        </div>
+      )}
+      {preview && (
+        <div className="modal-backdrop">
+          <section
+            className="modal wide-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="preview-title"
+          >
+            <h2 id="preview-title">确认配置变更</h2>
+            <p>
+              新增 {preview.counts.added} · 修改 {preview.counts.modified} ·
+              停用 {preview.counts.disabled} · 删除 {preview.counts.deleted}
+            </p>
+            {preview.credentialChanged && <p>凭据发生变化，具体内容已隐藏。</p>}
+            <p>
+              将先备份原配置，再写入。目标：<code>{workspace.targetPath}</code>
+            </p>
+            <div className="diff">
+              <section>
+                <h3>当前磁盘（脱敏）</h3>
+                <pre>{JSON.stringify(preview.before, null, 2)}</pre>
+              </section>
+              <section>
+                <h3>应用后（脱敏）</h3>
+                <pre>{JSON.stringify(preview.after, null, 2)}</pre>
+              </section>
+            </div>
+            {preview.warnings?.map((warning, i) => (
+              <p key={i} role="status">
+                {warning}
+              </p>
+            ))}
+            <p>
+              Droid {preview.version} · 应用后需新建会话，并用 /model
+              核对生效模型。
+            </p>
+            <footer>
+              <button disabled={busy} onClick={() => setPreview(null)}>
+                取消
+              </button>
+              <button
+                className="primary"
+                disabled={busy}
+                onClick={async () => {
+                  if (
+                    await mutate("apply_configuration", {
+                      token: preview.token,
+                    })
+                  ) {
+                    setPreview(null);
+                    setNotice(
+                      "配置已备份并写入，请重启 Droid 或开启新会话确认生效。",
+                    );
+                  }
+                }}
+              >
+                确认应用
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
+      {recovery && (
+        <div className="modal-backdrop">
+          <section
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="恢复冲突"
+          >
+            <h2>保留当前磁盘配置？</h2>
+            <p>
+              将归档中断记录，保留当前磁盘文件与现有草稿，解除编辑锁。后续应用仍需重新预览；有变化的接管关系需人工核对。
+            </p>
+            <footer>
+              <button onClick={() => setRecovery(false)}>取消</button>
+              <button
+                disabled={busy}
+                onClick={async () => {
+                  if (
+                    await mutate("resolve_recovery", { preserveCurrent: true })
+                  )
+                    setRecovery(false);
+                }}
+              >
+                保留当前文件并解除恢复锁
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
+      {discard && (
+        <div className="modal-backdrop">
+          <section
+            className="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-label="放弃草稿"
+          >
+            <h2>放弃所有未应用修改？</h2>
+            <p>恢复上次应用的管理数据。磁盘配置保持当前内容。</p>
+            <footer>
+              <button onClick={() => setDiscard(false)}>取消</button>
+              <button
+                disabled={busy}
+                onClick={async () => {
+                  if (await mutate("discard_draft")) setDiscard(false);
+                }}
+              >
+                确认放弃
+              </button>
+            </footer>
+          </section>
+        </div>
+      )}
+    </>
+  );
 }

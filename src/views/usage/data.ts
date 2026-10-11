@@ -1,7 +1,110 @@
-export interface UsageEvent{id:string;session:string;occurredAt:number;source:string;provider:string|null;model:string|null;input:number|null;cacheRead:number|null;cacheWrite:number|null;output:number|null;credits:number|null;cost:string|null;currency:string|null;kind:string}
-export interface Report{files:number;imported:number;duplicates:number;unsupported:number;malformed:number;unreadable:number;skippedStreams:number;updatedAt:number}
-export interface UsageData{events:UsageEvent[];report:Report|null;truncated:boolean}
-export function total(rows:UsageEvent[],key:'input'|'cacheRead'|'cacheWrite'|'output'|'credits'){const known=rows.map(r=>r[key]).filter((v):v is number=>v!==null);return known.length?`${known.reduce((a,b)=>a+b,0).toLocaleString()}${known.length<rows.length?'（部分缺失）':''}`:'未知';}
-export function costs(rows:UsageEvent[]){const sums=new Map<string,bigint>();for(const row of rows){if(row.cost===null||!row.currency)continue;const [whole,fraction='']=row.cost.split('.');const amount=BigInt(whole)*10n**12n+BigInt(fraction.padEnd(12,'0'));sums.set(row.currency,(sums.get(row.currency)??0n)+amount);}return [...sums].map(([currency,value])=>`${currency} ${value/10n**12n}.${(value%10n**12n).toString().padStart(12,'0')}`.replace(/0+$/,'').replace(/\.$/,'' )).join(' · ')||'未定价';}
-export function csv(rows:UsageEvent[]){const cell=(value:unknown)=>{let s=value===null||value===undefined?'未知':String(value);if(/^[\s]*[=+\-@]/.test(s)||/^[\t\r]/.test(s))s="'"+s;return '"'+s.replaceAll('"','""')+'"';};const fields=['时间','来源','供应商','模型','普通输入','缓存读','缓存写','输出','官方积分','估算费用','币种','记录类型'];return '\ufeff'+[fields,...rows.map(r=>[new Date(r.occurredAt*1000).toISOString(),r.source,r.provider,r.model,r.input,r.cacheRead,r.cacheWrite,r.output,r.credits,r.cost,r.currency,r.kind])].map(row=>row.map(cell).join(',')).join('\r\n');}
-export function download(text:string,name:string,type:string){const url=URL.createObjectURL(new Blob([text],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+export interface UsageEvent {
+  id: string;
+  session: string;
+  occurredAt: number;
+  source: string;
+  provider: string | null;
+  model: string | null;
+  input: number | null;
+  cacheRead: number | null;
+  cacheWrite: number | null;
+  output: number | null;
+  credits: number | null;
+  cost: string | null;
+  currency: string | null;
+  kind: string;
+}
+export interface Report {
+  files: number;
+  imported: number;
+  duplicates: number;
+  unsupported: number;
+  malformed: number;
+  unreadable: number;
+  skippedStreams: number;
+  updatedAt: number;
+}
+export interface UsageData {
+  events: UsageEvent[];
+  report: Report | null;
+  truncated: boolean;
+}
+export function total(
+  rows: UsageEvent[],
+  key: "input" | "cacheRead" | "cacheWrite" | "output" | "credits",
+) {
+  const known = rows.map((r) => r[key]).filter((v): v is number => v !== null);
+  return known.length
+    ? `${known.reduce((a, b) => a + b, 0).toLocaleString()}${known.length < rows.length ? "（部分缺失）" : ""}`
+    : "未知";
+}
+export function costs(rows: UsageEvent[]) {
+  const sums = new Map<string, bigint>();
+  for (const row of rows) {
+    if (row.cost === null || !row.currency) continue;
+    const [whole, fraction = ""] = row.cost.split(".");
+    const amount =
+      BigInt(whole) * 10n ** 12n + BigInt(fraction.padEnd(12, "0"));
+    sums.set(row.currency, (sums.get(row.currency) ?? 0n) + amount);
+  }
+  return (
+    [...sums]
+      .map(([currency, value]) =>
+        `${currency} ${value / 10n ** 12n}.${(value % 10n ** 12n).toString().padStart(12, "0")}`
+          .replace(/0+$/, "")
+          .replace(/\.$/, ""),
+      )
+      .join(" · ") || "未定价"
+  );
+}
+export function csv(rows: UsageEvent[]) {
+  const cell = (value: unknown) => {
+    let s = value === null || value === undefined ? "未知" : String(value);
+    if (/^[\s]*[=+\-@]/.test(s) || /^[\t\r]/.test(s)) s = "'" + s;
+    return '"' + s.replaceAll('"', '""') + '"';
+  };
+  const fields = [
+    "时间",
+    "来源",
+    "供应商",
+    "模型",
+    "普通输入",
+    "缓存读",
+    "缓存写",
+    "输出",
+    "官方积分",
+    "估算费用",
+    "币种",
+    "记录类型",
+  ];
+  return (
+    "\ufeff" +
+    [
+      fields,
+      ...rows.map((r) => [
+        new Date(r.occurredAt * 1000).toISOString(),
+        r.source,
+        r.provider,
+        r.model,
+        r.input,
+        r.cacheRead,
+        r.cacheWrite,
+        r.output,
+        r.credits,
+        r.cost,
+        r.currency,
+        r.kind,
+      ]),
+    ]
+      .map((row) => row.map(cell).join(","))
+      .join("\r\n")
+  );
+}
+export function download(text: string, name: string, type: string) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}

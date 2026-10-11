@@ -18,6 +18,8 @@ pub struct Workspace {
     pub recovery_pending: bool,
     pub target_path: String,
     pub catalog: Catalog,
+    #[serde(default = "default_backup_retention")]
+    pub backup_retention_days: u32,
     #[serde(default)]
     pub usage_settings: crate::usage::commands::UsageSettings,
     #[serde(default)]
@@ -40,12 +42,8 @@ pub struct Store {
 impl Store {
     pub fn open(data_dir: &Path) -> Result<Self, String> {
         std::fs::create_dir_all(data_dir).map_err(|_| "无法创建应用数据目录")?;
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::PermissionsExt;
-            std::fs::set_permissions(data_dir, std::fs::Permissions::from_mode(0o700))
-                .map_err(|_| "无法保护应用数据目录")?;
-        }
+        crate::permissions::restrict_directory(data_dir)
+            .map_err(|_| "Cannot protect the application data directory")?;
         let db = db::open(&data_dir.join("droid-switch.db"))
             .map_err(|_| "无法打开管理数据库，请检查权限或数据库版本")?;
         Ok(Self {
@@ -114,6 +112,7 @@ fn load(db: &Connection) -> Result<Workspace, String> {
             recovery_pending: false,
             target_path: default_target()?.to_string_lossy().into(),
             catalog: Catalog::default(),
+            backup_retention_days: default_backup_retention(),
             usage_settings: Default::default(),
             imports: Default::default(),
             scheme: Default::default(),
@@ -254,4 +253,8 @@ mod draft_tests {
             .unwrap();
         assert_eq!(w.catalog.providers[0].name, p.name);
     }
+}
+
+fn default_backup_retention() -> u32 {
+    30
 }

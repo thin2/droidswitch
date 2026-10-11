@@ -4,7 +4,7 @@ pub mod switch;
 pub mod usage;
 use tauri::Manager;
 pub mod adapter;
-mod commands;
+pub mod commands;
 pub mod db;
 pub mod fs;
 pub mod model;
@@ -24,9 +24,6 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            commands::read_text_file,
-            commands::write_text_file,
-            commands::http_request,
             workspace::load_workspace,
             workspace::save_provider,
             workspace::copy_provider,
@@ -51,6 +48,9 @@ pub fn run() {
             config::backups::list_backups,
             config::backups::preview_restore,
             config::backups::restore_backup,
+            config::backups::set_backup_retention,
+            config::backups::prune_backups,
+            config::backups::open_backup_directory,
             switch::catalog::discover_models,
             switch::scheme::save_scheme,
             switch::catalog::open_factory_login,

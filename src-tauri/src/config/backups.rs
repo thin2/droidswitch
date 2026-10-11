@@ -1,5 +1,5 @@
 use super::{
-    pipeline::{self, hash, read, Backup},
+    pipeline::{self, hash, Backup},
     redact::pair,
 };
 use crate::{
@@ -24,6 +24,9 @@ fn load(store: &Store, id: &str) -> Result<Backup, String> {
 }
 #[tauri::command]
 pub fn list_backups(store: tauri::State<'_, Store>) -> Result<Vec<Summary>, String> {
+    summaries(&store)
+}
+fn summaries(store: &Store) -> Result<Vec<Summary>, String> {
     let dir = store.data_dir.join("backups");
     if !dir.exists() {
         return Ok(vec![]);
@@ -38,7 +41,7 @@ pub fn list_backups(store: tauri::State<'_, Store>) -> Result<Vec<Summary>, Stri
                 .and_then(|v| v.to_str())
                 .ok_or("备份名称无效")?
                 .to_owned();
-            let b = load(&store, &id)?;
+            let b = load(store, &id)?;
             items.push(Summary {
                 id: b.id,
                 target_path: b.target_path,
@@ -63,7 +66,7 @@ fn preview(store: &Store, w: &Workspace, id: &str) -> Result<RestorePreview, Str
     if b.target_path != w.target_path {
         return Err("此备份属于其他配置路径，请先切换目标路径".into());
     }
-    let current = read(Path::new(&w.target_path))?;
+    let current = pipeline::read_for_restore(Path::new(&w.target_path))?;
     let after = match &b.before {
         Some(s) => serde_json::from_str(s).map_err(|_| "备份不是有效 JSON")?,
         None => Value::Null,
@@ -94,12 +97,13 @@ pub fn restore(store: &Store, id: &str, revision: u64, token: &str) -> Result<Wo
             return Err("恢复预览已过期，请重新确认".into());
         }
         let b = load(store, id)?;
-        w.baseline = Some(read(Path::new(&w.target_path))?);
+        w.baseline = Some(pipeline::read_for_restore(Path::new(&w.target_path))?);
         if preview(store, w, id)?.token != token {
             return Err("恢复预览已过期，请重新确认".into());
         }
         let mut next = b.previous;
         next.usage_settings = w.usage_settings.clone();
+        next.backup_retention_days = w.backup_retention_days;
         next.catalog = next.applied_catalog.clone();
         next.scheme = next.applied_scheme.clone();
         pipeline::write_with_backup(store, w, &mut next, b.before.as_deref().map(str::as_bytes))?;
@@ -123,6 +127,7 @@ pub fn restore_backup(
 }
 #[cfg(test)]
 mod tests {
+    use super::pipeline::read;
     use super::*;
     #[test]
     fn restore_backup_exact_bytes_and_preserves_current_as_new_backup() {
@@ -157,8 +162,10 @@ mod tests {
             .unwrap()
             .to_string_lossy()
             .to_string();
+        std::fs::write(&target, "{ broken-private-data").unwrap();
         let w = s.load().unwrap();
         let p = preview(&s, &w, &id).unwrap();
+        assert!(!p.before.to_string().contains("broken-private-data"));
         restore(&s, &id, w.revision, &p.token).unwrap();
         assert_eq!(std::fs::read_to_string(&target).unwrap(), original);
         assert_eq!(
@@ -168,4 +175,57 @@ mod tests {
             2
         );
     }
+}
+#[tauri::command]
+pub fn set_backup_retention(
+    store: tauri::State<'_, Store>,
+    days: u32,
+    revision: u64,
+) -> Result<Workspace, String> {
+    if !(1..=3650).contains(&days) {
+        return Err("保留期需为 1 至 3650 天".into());
+    }
+    store.edit(revision, |w| {
+        w.backup_retention_days = days;
+        Ok(())
+    })
+}
+#[tauri::command]
+pub fn prune_backups(store: tauri::State<'_, Store>, confirmed: bool) -> Result<usize, String> {
+    if !confirmed {
+        return Err("清理备份需要确认".into());
+    }
+    if store.data_dir.join("pending-apply.json").exists() {
+        return Err("恢复事务未完成时不能清理备份".into());
+    }
+    let days = store.load()?.backup_retention_days;
+    let cutoff = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs()
+        .saturating_sub(u64::from(days) * 86400);
+    let items = summaries(&store)?;
+    let mut count = 0;
+    for item in items.iter().skip(1).filter(|b| b.created_at < cutoff) {
+        std::fs::remove_file(pipeline::backup_path(&store, &item.id)?)
+            .map_err(|_| "清理部分备份失败，剩余备份保留")?;
+        count += 1;
+    }
+    Ok(count)
+}
+#[tauri::command]
+pub fn open_backup_directory(store: tauri::State<'_, Store>) -> Result<(), String> {
+    let dir = store.data_dir.join("backups");
+    std::fs::create_dir_all(&dir).map_err(|_| "无法创建备份目录")?;
+    #[cfg(target_os = "macos")]
+    let command = "open";
+    #[cfg(target_os = "windows")]
+    let command = "explorer";
+    #[cfg(not(any(target_os = "windows", target_os = "macos")))]
+    let command = "xdg-open";
+    std::process::Command::new(command)
+        .arg(dir)
+        .spawn()
+        .map(|_| ())
+        .map_err(|_| "无法打开备份目录".into())
 }

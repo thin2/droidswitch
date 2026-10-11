@@ -1617,7 +1617,7 @@
       "id": "030",
       "title": "三栏主界面 + 左导航 + 供应商筛选 + API 视图顶部 (UI-01/02/04/05) [epic]",
       "priority": "P1",
-      "status": "IN_PROGRESS",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#013",
@@ -1650,7 +1650,16 @@
       ],
       "acceptance_commands": [
         "npm run build"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过：浏览器 1440/1024 布局与键盘测试、计费/CSV 单元测试通过，证据见 planning/progress-reports/20261011-ui-packaging.md；真实日志及原生终验另行保留。",
+        "recorded_at": "2026-10-11T07:15:17.132722+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "5d787d7f6d119562c10440e05acefe96b3ffd84a398e8069be8f4c0ee63c29f1"
+      }
     },
     {
       "id": "031",
@@ -1724,6 +1733,10 @@
         {
           "heading": "相关文件",
           "body": "- `src/styles/tokens.css`\n- `src/styles/theme.ts`"
+        },
+        {
+          "heading": "开发与实机验收边界",
+          "body": "按用户先完成开发、后在 Windows 实测的安排，本任务开发验收采用 1440/1024 浏览器渲染与键盘回归；Windows/macOS 原生 WebView 回归统一保留在 #044，不将浏览器测试计为原生验证。"
         }
       ],
       "acceptance_commands": [
@@ -2026,7 +2039,7 @@
       "id": "039",
       "title": "只读扫描 Droid 日志 + 稳定事件键去重 + 累计转增量 (U-03/U-04) [epic]",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#049, #012",
@@ -2059,6 +2072,10 @@
         {
           "heading": "Windows 验收后置",
           "body": "用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。"
+        },
+        {
+          "heading": "当前实现与未完成项",
+          "body": "元数据契约/SDK 导出解析、事件去重、累计差额已实现；本机缺真实 Droid 会话用量样本，原生日志格式适配与委派汇总跨源去重仍待真实夹具确认，保持 IN_PROGRESS。详见 planning/droid-usage-contract.md。"
         }
       ],
       "acceptance_commands": [
@@ -2069,10 +2086,10 @@
       "id": "040",
       "title": "Token 口径归一 + 费用估算 + 手动单价/币种 (U-05/06/07/08)",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "AWAITING_INTEGRATION",
       "status_explicit": true,
       "assigned_to": "Codex",
-      "dependencies": "#039",
+      "dependencies": "#049, #012",
       "execution_level": "normal",
       "stall_threshold_minutes": "",
       "field_order": [
@@ -2098,11 +2115,24 @@
         {
           "heading": "相关文件",
           "body": "- `src-tauri/src/usage/cost.rs`"
+        },
+        {
+          "heading": "开发依赖与真实数据边界",
+          "body": "计费核心可按 #049 开发期元数据契约独立验收，避免用户要求的 Windows 后置测试阻塞本地开发。真实日志解析兼容仍由 #039/#006/#044 跟踪，不以费用单元测试替代。"
         }
       ],
       "acceptance_commands": [
         "cargo test --manifest-path src-tauri/Cargo.toml usage_cost"
-      ]
+      ],
+      "review": {
+        "decision": "approved",
+        "note": "当前会话自审通过：浏览器 1440/1024 布局与键盘测试、计费/CSV 单元测试通过，证据见 planning/progress-reports/20261011-ui-packaging.md；真实日志及原生终验另行保留。",
+        "recorded_at": "2026-10-11T07:15:17.807926+00:00",
+        "forced": false,
+        "source_status": null,
+        "run_id": null,
+        "task_fingerprint": "0ae391b9e0dc57a1ef5a339182c2898a0e39637ded793e2e0716655eeb3db035"
+      }
     },
     {
       "id": "041",
@@ -2186,7 +2216,7 @@
       "id": "043",
       "title": "打包:Windows + macOS 安装包 + 设置页",
       "priority": "P2",
-      "status": "OPEN",
+      "status": "IN_PROGRESS",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#014, #028",
@@ -2210,15 +2240,19 @@
         },
         {
           "heading": "验收标准",
-          "body": "- [ ] `cd /Users/hanning/Desktop/droidswitch && npm run tauri build`\n- [ ] Win 与 mac 安装包各自可安装运行"
+          "body": "- [ ] `npm run package:mac`\n- [ ] Windows NSIS 安装产物在 Windows 构建后确认，不能由 macOS 产物替代。"
         },
         {
           "heading": "相关文件",
           "body": "- `src-tauri/tauri.conf.json`\n- `src/views/settings/SettingsView.tsx`"
+        },
+        {
+          "heading": "打包环境记录",
+          "body": "默认 create-dmg 的 Finder 包装在当前桌面环境失败，已提供不依赖 Finder AppleScript 的 macOS 包装脚本；Windows 构建脚本与 CI NSIS 流程完成，但未在 Windows 运行。保持 IN_PROGRESS 直至 Windows 产物验证。"
         }
       ],
       "acceptance_commands": [
-        "cd /Users/hanning/Desktop/droidswitch && npm run tauri build"
+        "npm run package:mac"
       ]
     },
     {
@@ -2254,6 +2288,10 @@
         {
           "heading": "相关文件",
           "body": "- `planning/acceptance-report.md`"
+        },
+        {
+          "heading": "后置实机验收清单",
+          "body": "用户指定首版开发后在 Windows 实测；入口 docs/windows-testing.md。包括原生 WebView、实际默认模型生效、ACL/备份恢复、真实日志适配、Windows 安装产物；这些项目尚未通过。"
         }
       ],
       "acceptance_commands": [

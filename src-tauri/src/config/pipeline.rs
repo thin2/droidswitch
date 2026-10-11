@@ -47,6 +47,13 @@ pub fn read(path: &Path) -> Result<Baseline, String> {
         Err(_) => Err("无法安全读取配置，请检查权限、文件类型和大小".into()),
     }
 }
+pub(super) fn read_for_restore(path: &Path) -> Result<Baseline, String> {
+    match fs::read_snapshot(path){
+ Ok(s)=>Ok(Baseline{document:serde_json::from_str(&s.text).unwrap_or(json!({"invalidJson":true,"notice":"Current bytes will be backed up before replacement"})),fingerprint:Some(s.fingerprint)}),
+ Err(e) if e.kind()==std::io::ErrorKind::NotFound=>Ok(Baseline{document:json!({}),fingerprint:None}),
+ Err(_)=>Err("Cannot safely read the restore target".into()),
+ }
+}
 pub(crate) fn hash(bytes: &[u8]) -> String {
     Sha256::digest(bytes)
         .iter()
@@ -178,7 +185,7 @@ pub(super) fn write_with_backup(
         return Err("有未完成的应用恢复记录，请先重启恢复".into());
     }
     let path = std::path::PathBuf::from(&w.target_path);
-    let current = read(&path)?;
+    let current = read_for_restore(&path)?;
     if Some(&current.fingerprint) != w.baseline.as_ref().map(|b| &b.fingerprint) {
         return Err("磁盘配置已变化，请重新载入".into());
     }
@@ -210,7 +217,7 @@ pub(super) fn write_with_backup(
     fs::atomic_replace(&backup_path(store, &id)?, &metadata).map_err(|_| "备份失败，未写入目标")?;
     let journal = store.data_dir.join("pending-apply.json");
     fs::atomic_replace(&journal, &metadata).map_err(|_| "创建恢复记录失败，未写入目标")?;
-    if read(&path)?.fingerprint != current.fingerprint {
+    if read_for_restore(&path)?.fingerprint != current.fingerprint {
         return Err("写入前配置发生变化，已保留备份与恢复记录".into());
     }
     match bytes {

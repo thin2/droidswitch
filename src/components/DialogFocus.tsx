@@ -1,3 +1,68 @@
-import {useEffect} from 'react';
+import { useWorkspace } from "../lib/workspace";
+import { useEffect, useState } from "react";
 // All dialogs share keyboard focus containment and restore the invoking control.
-export function DialogFocus(){useEffect(()=>{let current:HTMLElement|null=null;let previous:HTMLElement|null=null;const selector='button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]';const sync=()=>{const dialogs=document.querySelectorAll<HTMLElement>('[role="dialog"]');const next=dialogs.item(dialogs.length-1);if(next===current)return;if(!next){previous?.focus();current=null;previous=null;return;}if(!current)previous=document.activeElement as HTMLElement;current=next;(next.querySelector<HTMLElement>(selector)??next).focus();};const observer=new MutationObserver(sync);observer.observe(document.body,{subtree:true,childList:true});sync();const key=(e:KeyboardEvent)=>{if(e.key!=='Tab'||!current)return;const controls=[...current.querySelectorAll<HTMLElement>(selector)].filter(el=>!el.hidden&&el.getAttribute('aria-hidden')!=='true');if(!controls.length){e.preventDefault();return;}const first=controls[0],last=controls[controls.length-1];if(e.shiftKey&&(document.activeElement===first||!current.contains(document.activeElement))){e.preventDefault();last.focus();}else if(!e.shiftKey&&(document.activeElement===last||!current.contains(document.activeElement))){e.preventDefault();first.focus();}};document.addEventListener('keydown',key);return()=>{observer.disconnect();document.removeEventListener('keydown',key);};},[]);return null;}
+export function DialogFocus() {
+  const { error } = useWorkspace();
+  const [hasDialog, setHasDialog] = useState(false);
+  useEffect(() => {
+    let current: HTMLElement | null = null;
+    let previous: HTMLElement | null = null;
+    const selector =
+      'button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href],[tabindex="0"]';
+    const sync = () => {
+      const dialogs = document.querySelectorAll<HTMLElement>('[role="dialog"]');
+      const next = dialogs.item(dialogs.length - 1);
+      setHasDialog(!!next);
+      if (next === current) return;
+      if (!next) {
+        previous?.focus();
+        current = null;
+        previous = null;
+        return;
+      }
+      if (!current) previous = document.activeElement as HTMLElement;
+      current = next;
+      (next.querySelector<HTMLElement>(selector) ?? next).focus();
+    };
+    const observer = new MutationObserver(sync);
+    observer.observe(document.body, { subtree: true, childList: true });
+    sync();
+    const key = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !current) return;
+      const controls = [
+        ...current.querySelectorAll<HTMLElement>(selector),
+      ].filter((el) => !el.hidden && el.getAttribute("aria-hidden") !== "true");
+      if (!controls.length) {
+        e.preventDefault();
+        return;
+      }
+      const first = controls[0],
+        last = controls[controls.length - 1];
+      if (
+        e.shiftKey &&
+        (document.activeElement === first ||
+          !current.contains(document.activeElement))
+      ) {
+        e.preventDefault();
+        last.focus();
+      } else if (
+        !e.shiftKey &&
+        (document.activeElement === last ||
+          !current.contains(document.activeElement))
+      ) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", key);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("keydown", key);
+    };
+  }, []);
+  return hasDialog && error ? (
+    <div role="alert" className="dialog-error">
+      {error}
+    </div>
+  ) : null;
+}

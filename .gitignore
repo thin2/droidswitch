@@ -12,3 +12,8 @@ planning/tasks.json.lock
 .dual-ai-collab/logs/
 
 .dual-ai-collab/runs/*.lock
+
+test-results/
+playwright-report/
+
+releases/

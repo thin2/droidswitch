@@ -704,7 +704,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #030: 三栏主界面 + 左导航 + 供应商筛选 + API 视图顶部 (UI-01/02/04/05) [epic]
 
 **优先级**: P1
-**状态**: IN_PROGRESS
+**状态**: AWAITING_INTEGRATION
 **分配给**: Codex
 **预计工时**: 6 小时
 **依赖任务**: #013
@@ -764,6 +764,9 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### 相关文件
 - `src/styles/tokens.css`
 - `src/styles/theme.ts`
+
+### 开发与实机验收边界
+按用户先完成开发、后在 Windows 实测的安排，本任务开发验收采用 1440/1024 浏览器渲染与键盘回归；Windows/macOS 原生 WebView 回归统一保留在 #044，不将浏览器测试计为原生验证。
 
 ---
 
@@ -901,7 +904,7 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ## 任务 #039: 只读扫描 Droid 日志 + 稳定事件键去重 + 累计转增量 (U-03/U-04) [epic]
 
 **优先级**: P2
-**状态**: OPEN
+**状态**: IN_PROGRESS
 **分配给**: Codex
 **预计工时**: 6 小时
 **依赖任务**: #049, #012
@@ -921,15 +924,18 @@ macOS SDK 已确认可用。npm 联网被权限策略拒绝，提权申请亦被
 ### Windows 验收后置
 用户于 2026-10-11 要求先完成首版开发，再由用户在 Windows 实测。开发依据 #049；原阶段 0 和 #044 会话级验收保留，不能据开发测试替代。
 
+### 当前实现与未完成项
+元数据契约/SDK 导出解析、事件去重、累计差额已实现；本机缺真实 Droid 会话用量样本，原生日志格式适配与委派汇总跨源去重仍待真实夹具确认，保持 IN_PROGRESS。详见 planning/droid-usage-contract.md。
+
 ---
 
 ## 任务 #040: Token 口径归一 + 费用估算 + 手动单价/币种 (U-05/06/07/08)
 
 **优先级**: P2
-**状态**: OPEN
+**状态**: AWAITING_INTEGRATION
 **分配给**: Codex
 **预计工时**: 3 小时
-**依赖任务**: #039
+**依赖任务**: #049, #012
 **执行级别**: normal
 
 ### 任务描述
@@ -941,6 +947,9 @@ Token 归一为互斥的普通输入/缓存读/缓存写/输出,null=未知不�
 
 ### 相关文件
 - `src-tauri/src/usage/cost.rs`
+
+### 开发依赖与真实数据边界
+计费核心可按 #049 开发期元数据契约独立验收，避免用户要求的 Windows 后置测试阻塞本地开发。真实日志解析兼容仍由 #039/#006/#044 跟踪，不以费用单元测试替代。
 
 ---
 
@@ -990,7 +999,7 @@ Token 归一为互斥的普通输入/缓存读/缓存写/输出,null=未知不�
 ## 任务 #043: 打包:Windows + macOS 安装包 + 设置页
 
 **优先级**: P2
-**状态**: OPEN
+**状态**: IN_PROGRESS
 **分配给**: Codex
 **预计工时**: 3 小时
 **依赖任务**: #014, #028
@@ -1000,12 +1009,15 @@ Token 归一为互斥的普通输入/缓存读/缓存写/输出,null=未知不�
 配置 Tauri 打包产出 Windows 与 macOS 安装包;设置页(配置路径、Droid 检测、外观、凭据说明、备份保留策略);Win/mac 各出一个可安装产物。
 
 ### 验收标准
-- [ ] `cd /Users/hanning/Desktop/droidswitch && npm run tauri build`
-- [ ] Win 与 mac 安装包各自可安装运行
+- [ ] `npm run package:mac`
+- [ ] Windows NSIS 安装产物在 Windows 构建后确认，不能由 macOS 产物替代。
 
 ### 相关文件
 - `src-tauri/tauri.conf.json`
 - `src/views/settings/SettingsView.tsx`
+
+### 打包环境记录
+默认 create-dmg 的 Finder 包装在当前桌面环境失败，已提供不依赖 Finder AppleScript 的 macOS 包装脚本；Windows 构建脚本与 CI NSIS 流程完成，但未在 Windows 运行。保持 IN_PROGRESS 直至 Windows 产物验证。
 
 ---
 
@@ -1027,6 +1039,9 @@ Token 归一为互斥的普通输入/缓存读/缓存写/输出,null=未知不�
 
 ### 相关文件
 - `planning/acceptance-report.md`
+
+### 后置实机验收清单
+用户指定首版开发后在 Windows 实测；入口 docs/windows-testing.md。包括原生 WebView、实际默认模型生效、ACL/备份恢复、真实日志适配、Windows 安装产物；这些项目尚未通过。
 
 ---
 

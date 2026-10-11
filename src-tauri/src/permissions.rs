@@ -6,8 +6,22 @@ pub fn restrict_file(path: &Path) -> io::Result<()> {
     std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o600))
 }
 
+#[cfg(unix)]
+pub fn restrict_directory(path: &Path) -> io::Result<()> {
+    use std::os::unix::fs::PermissionsExt;
+    std::fs::set_permissions(path, std::fs::Permissions::from_mode(0o700))
+}
+
 #[cfg(windows)]
 pub fn restrict_file(path: &Path) -> io::Result<()> {
+    restrict_windows(path, false)
+}
+#[cfg(windows)]
+pub fn restrict_directory(path: &Path) -> io::Result<()> {
+    restrict_windows(path, true)
+}
+#[cfg(windows)]
+fn restrict_windows(path: &Path, directory: bool) -> io::Result<()> {
     use std::{os::windows::ffi::OsStrExt, ptr};
     use windows_sys::Win32::{
         Foundation::LocalFree,
@@ -22,7 +36,12 @@ pub fn restrict_file(path: &Path) -> io::Result<()> {
     };
     let name: Vec<u16> = path.as_os_str().encode_wide().chain(Some(0)).collect();
     // Protected ACL: only the file owner receives full access, no inherited broad grants.
-    let sddl: Vec<u16> = "D:P(A;;FA;;;OW)\0".encode_utf16().collect();
+    let descriptor_text = if directory {
+        "D:P(A;OICI;FA;;;OW)\0"
+    } else {
+        "D:P(A;;FA;;;OW)\0"
+    };
+    let sddl: Vec<u16> = descriptor_text.encode_utf16().collect();
     let mut descriptor = ptr::null_mut();
     unsafe {
         if ConvertStringSecurityDescriptorToSecurityDescriptorW(
