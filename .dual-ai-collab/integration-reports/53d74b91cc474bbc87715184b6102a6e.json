@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "commands": [
+    {
+      "command": "cargo test --manifest-path src-tauri/Cargo.toml fingerprint",
+      "exit_code": 0,
+      "output": "    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.56s\n     Running unittests src/lib.rs (src-tauri/target/debug/deps/droid_switch_lib-a4ec0b6bf01c84dc)\n\nrunning 1 test\ntest config::pipeline::tests::fingerprint_merge_apply_rechecks_external_changes_and_preserves_draft ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 54 filtered out; finished in 0.03s\n\n     Running unittests src/main.rs (src-tauri/target/debug/deps/droid_switch-5503915012d1d6fb)\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "output_truncated": false,
+      "timed_out": false,
+      "duration_seconds": 0.7150863749999999
+    }
+  ],
+  "reason": null,
+  "commit": "e5b9a8de10cff4dfe0d935751510126273aa5006",
+  "target_head": "e5b9a8de10cff4dfe0d935751510126273aa5006",
+  "target": "/Users/hanning/Desktop/droidswitch",
+  "verified_at": "2026-10-11T06:56:18.903329+00:00"
+}

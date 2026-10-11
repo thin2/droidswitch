@@ -1096,7 +1096,7 @@
       "id": "021",
       "title": "文件指纹 + 写入前核对 + 冲突中止 (C-06)",
       "priority": "P1",
-      "status": "AWAITING_INTEGRATION",
+      "status": "DONE",
       "status_explicit": true,
       "assigned_to": "Codex",
       "dependencies": "#020",
@@ -1138,6 +1138,15 @@
         "source_status": null,
         "run_id": null,
         "task_fingerprint": "a6ee27b6265850255518b0ad5c6f390ffbbe49cbe0c50ae73113520c720a030b"
+      },
+      "integration": {
+        "commit": "e5b9a8de10cff4dfe0d935751510126273aa5006",
+        "target": "/Users/hanning/Desktop/droidswitch",
+        "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
+        "run_id": null,
+        "task_fingerprint": "a6ee27b6265850255518b0ad5c6f390ffbbe49cbe0c50ae73113520c720a030b",
+        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/53d74b91cc474bbc87715184b6102a6e.json",
+        "recorded_at": "2026-10-11T06:56:18.906110+00:00"
       }
     },
     {
