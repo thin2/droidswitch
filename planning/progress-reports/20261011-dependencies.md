@@ -21,7 +21,7 @@ scripts/setup-deps-macos.sh：检查 Node/macOS SDK，安装 npm 依赖（存在
 
 需要允许网络下载及 Rust 用户目录写入的执行环境，或由用户在正常 macOS 终端运行：
 
-    bash /Users/hanning/Desktop/droidswitch/scripts/setup-deps-macos.sh
+    bash scripts/setup-deps-macos.sh
 
 运行完成后当前会话可重新读取依赖、执行验收并更新状态。Git 元数据权限是另一项尚未解除的限制，本次没有改动 Git 或绕过集成门槛。
 

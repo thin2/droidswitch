@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useWorkspace } from "../lib/workspace";
 import { request, errorText } from "../lib/api";
+import { ApplySuccessGuide } from "../components/ApplySuccessGuide";
 interface Preview {
   token: string;
   before: unknown;
@@ -21,7 +22,8 @@ export function ChangeBar() {
     [loading, setLoading] = useState(false),
     [error, setError] = useState(""),
     [discard, setDiscard] = useState(false),
-    [recovery, setRecovery] = useState(false);
+    [recovery, setRecovery] = useState(false),
+    [showSuccessGuide, setShowSuccessGuide] = useState(false);
   const changed =
     workspace &&
     (JSON.stringify(workspace.catalog) !==
@@ -132,6 +134,7 @@ export function ChangeBar() {
                     })
                   ) {
                     setPreview(null);
+                    setShowSuccessGuide(true);
                     setNotice(
                       "配置已备份并写入，请重启 Droid 或开启新会话确认生效。",
                     );
@@ -196,6 +199,12 @@ export function ChangeBar() {
             </footer>
           </section>
         </div>
+      )}
+      {showSuccessGuide && (
+        <ApplySuccessGuide
+          configPath={workspace.targetPath}
+          onDismiss={() => setShowSuccessGuide(false)}
+        />
       )}
     </>
   );

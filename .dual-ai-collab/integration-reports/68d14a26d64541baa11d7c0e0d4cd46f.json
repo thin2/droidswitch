@@ -4,7 +4,7 @@
     {
       "command": "npm run test -- models-fetch",
       "exit_code": 0,
-      "output": "\n> droid-switch@0.1.0 test\n> vitest run models-fetch\n\n\n RUN  v5.0.3 /Users/hanning/Desktop/droidswitch\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n   Start at  14:39:47\n   Duration  508ms (environment 55%, tests 26%, import 11%, transform 6%)\n\n",
+      "output": "\n> droid-switch@0.1.0 test\n> vitest run models-fetch\n\n\n RUN  v5.0.3 <PROJECT_ROOT>\n\n\n Test Files  1 passed (1)\n      Tests  1 passed (1)\n   Start at  14:39:47\n   Duration  508ms (environment 55%, tests 26%, import 11%, transform 6%)\n\n",
       "output_truncated": false,
       "timed_out": false,
       "duration_seconds": 0.817751083
@@ -13,6 +13,6 @@
   "reason": null,
   "commit": "da16e2f4393f8a56a17ec6533ec7948f432d12f6",
   "target_head": "da16e2f4393f8a56a17ec6533ec7948f432d12f6",
-  "target": "/Users/hanning/Desktop/droidswitch",
+  "target": "<PROJECT_ROOT>",
   "verified_at": "2026-10-11T06:39:47.761533+00:00"
 }

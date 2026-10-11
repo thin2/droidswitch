@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useWorkspace } from "../../lib/workspace";
 import { protocols, type Provider, type Protocol } from "../../lib/types";
+import { CredentialStatusBadge } from "../../components/CredentialStatusBadge";
 import { FetchModels } from "../models/FetchModels";
 import { BatchModels } from "../models/BatchModels";
 const blank = (): Provider => ({
@@ -86,6 +87,14 @@ export function ProviderView() {
               个模型 ·{" "}
               {p.credential.mode === "environment" ? "环境变量" : "兼容模式"}
             </p>
+            {p.credential.mode === "environment" && (
+              <div style={{ marginTop: "8px" }}>
+                <CredentialStatusBadge
+                  status="unchecked"
+                  varName={p.credential.value}
+                />
+              </div>
+            )}
             <div className="provider-model-actions">
               <button disabled={busy} onClick={() => setFetching(p.id)}>获取模型</button>
               <button disabled={busy} onClick={() => setAdding(p.id)}>手动添加模型</button>

@@ -248,8 +248,8 @@
 - 前端目录与 `src-tauri/` Rust 目录就绪
 
 ### 验收标准
-- [ ] `cd /Users/hanning/Desktop/droidswitch && npm install`
-- [ ] `cd /Users/hanning/Desktop/droidswitch && npm run build`
+- [ ] `npm install`
+- [ ] `npm run build`
 - [ ] `cargo build --manifest-path src-tauri/Cargo.toml`
 
 ### 相关文件

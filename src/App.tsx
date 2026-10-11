@@ -8,6 +8,8 @@ import { Backups } from "./views/Backups";
 import { ChangeBar } from "./views/ChangeBar";
 import { Settings } from "./views/Settings";
 import { WorkspacePage } from "./views/WorkspacePage";
+import { DraftReminder } from "./components/DraftReminder";
+import { NavigationBadge } from "./components/NavigationBadge";
 const pages = {
   models: "模型库",
   providers: "供应商",
@@ -23,11 +25,52 @@ function currentPage(): Page {
 function Layout() {
   const [page, setPage] = useState<Page>(currentPage);
   const { workspace, busy, error, notice, reload } = useWorkspace();
+  const [draftDismissed, setDraftDismissed] = useState(() => {
+    try {
+      return localStorage.getItem("draftReminderDismissed") === "true";
+    } catch {
+      return false;
+    }
+  });
+
   useEffect(() => {
     const sync = () => setPage(currentPage());
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, []);
+
+  // Calculate pending changes - check if catalog or scheme differs from applied versions
+  const hasChanges =
+    workspace &&
+    (JSON.stringify(workspace.catalog) !==
+      JSON.stringify(workspace.appliedCatalog ?? { providers: [], models: [] }) ||
+      JSON.stringify(workspace.scheme) !== JSON.stringify(workspace.appliedScheme));
+
+  // Calculate approximate change count for display
+  const draftCount = workspace
+    ? (workspace.catalog.providers.length -
+        (workspace.appliedCatalog?.providers.length ?? 0)) +
+      (workspace.catalog.models.length - (workspace.appliedCatalog?.models.length ?? 0))
+    : 0;
+  const displayCount = Math.abs(draftCount) || (hasChanges ? 1 : 0);
+  const showDraftReminder = hasChanges && !draftDismissed;
+
+  const handleDismissDraft = () => {
+    setDraftDismissed(true);
+    try {
+      localStorage.setItem("draftReminderDismissed", "true");
+    } catch {}
+  };
+
+  // Reset dismissed state when changes are applied or discarded
+  useEffect(() => {
+    if (!hasChanges) {
+      setDraftDismissed(false);
+      try {
+        localStorage.removeItem("draftReminderDismissed");
+      } catch {}
+    }
+  }, [hasChanges]);
   return (
     <div className="workspace">
       <a
@@ -52,18 +95,32 @@ function Layout() {
         </div>
         <p className="eyebrow">本地模型配置管理</p>
         <nav aria-label="主导航">
-          {Object.entries(pages).map(([id, label], i) => (
-            <a
-              key={id}
-              href={`#/${id}`}
-              aria-current={id === page ? "page" : undefined}
-            >
-              <span className="nav-icon" aria-hidden="true">
-                {["◇", "⌘", "▥", "▣", "⚙"][i]}
-              </span>
-              {label}
-            </a>
-          ))}
+          {Object.entries(pages).map(([id, label], i) => {
+            // Calculate badge count for each page
+            let badgeCount = 0;
+            if (id === "providers" && workspace) {
+              // Count providers needing attention (could be expanded)
+              badgeCount = 0;
+            } else if (id === "models" && workspace) {
+              // Count disabled models or models without tests
+              badgeCount = 0;
+            }
+
+            return (
+              <a
+                key={id}
+                href={`#/${id}`}
+                aria-current={id === page ? "page" : undefined}
+                style={{ position: "relative", display: "flex", alignItems: "center", gap: "8px" }}
+              >
+                <span className="nav-icon" aria-hidden="true">
+                  {["◇", "⌘", "▥", "▣", "⚙"][i]}
+                </span>
+                {label}
+                {badgeCount > 0 && <NavigationBadge count={badgeCount} />}
+              </a>
+            );
+          })}
         </nav>
         <div className="sidebar-note">
           <span className="status-dot" /> 本地工作空间
@@ -79,6 +136,29 @@ function Layout() {
           </div>
           <span className="badge">{workspace ? "草稿已连接" : "等待连接"}</span>
         </header>
+        {showDraftReminder && (
+          <div style={{ marginBottom: "16px" }}>
+            <DraftReminder
+              draftCount={displayCount}
+              onView={() => {
+                // Scroll to ChangeBar or focus it
+                document.querySelector(".change-bar")?.scrollIntoView({ behavior: "smooth" });
+              }}
+              onApply={() => {
+                // Trigger apply action - click the preview button in ChangeBar
+                const applyBtn = document.querySelector('.change-bar button.primary') as HTMLButtonElement;
+                applyBtn?.click();
+              }}
+              onDiscard={() => {
+                // Trigger discard action
+                const buttons = Array.from(document.querySelectorAll('.change-bar button'));
+                const discardBtn = buttons.find(btn => btn.textContent?.includes('放弃草稿')) as HTMLButtonElement;
+                discardBtn?.click();
+              }}
+              onDismiss={handleDismissDraft}
+            />
+          </div>
+        )}
         {error && (
           <div className="error-banner" role="alert">
             {error}

@@ -10,6 +10,8 @@ import {
   type UsageEvent,
   type Report,
 } from "./data";
+import { EmptyUsageState } from "./EmptyUsageState";
+import { UsageHeader } from "./UsageHeader";
 function dateString(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
@@ -90,6 +92,12 @@ export function UsageView() {
   }
   return (
     <>
+      {data.report && rows.length > 0 && (
+        <UsageHeader
+          startDate={start}
+          sessionCount={data.report.files}
+        />
+      )}
       <div className="page-actions">
         <p>
           仅本地统计元数据 · 本机时区{" "}
@@ -194,14 +202,17 @@ export function UsageView() {
           " 当前范围超过 5 万条，仅展示及导出前 5 万条，请缩小日期范围。"}
       </p>
       {!rows.length ? (
-        <section className="panel empty">
-          <h2>{loading ? "正在读取统计…" : "当前范围暂无可用用量"}</h2>
-          <p>
-            未识别或缺失的数据不计为零。可选择会话目录或兼容的 SDK
-            元数据导出目录。
-          </p>
-          <button onClick={() => setSettings(true)}>配置采集目录</button>
-        </section>
+        <EmptyUsageState
+          state={
+            loading
+              ? "scanning"
+              : data.report && (data.report.unsupported > 0 || data.report.malformed > 0)
+                ? "parse-error"
+                : "no-data"
+          }
+          onCheckPath={() => setSettings(true)}
+          onViewCompatibility={() => setSettings(true)}
+        />
       ) : (
         <>
           <div className="metric-grid">

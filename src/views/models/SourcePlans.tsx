@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useWorkspace } from "../../lib/workspace";
 import { request, errorText } from "../../lib/api";
 import type { Scheme, ObservedModel } from "../../lib/types";
+import { SwitchConfirmDialog } from "../../components/SwitchConfirmDialog";
 const empty: Scheme = {
   source: null,
   official: { model: null, reasoning: null },
@@ -18,6 +19,7 @@ export function SourcePlans({
   const [catalog, setCatalog] = useState<ObservedModel[]>([]),
     [loading, setLoading] = useState(false),
     [error, setError] = useState("");
+  const [switchConfirm, setSwitchConfirm] = useState<"official" | "api" | null>(null);
   const scheme = workspace?.scheme ?? empty;
   const observed =
     browse === "official"
@@ -49,6 +51,29 @@ export function SourcePlans({
       : source === "api"
         ? "自定义 API"
         : "未设置";
+
+  const handleSetAsActive = () => {
+    // Check if switching source from applied scheme
+    const currentAppliedSource = workspace?.appliedScheme?.source;
+    const isDifferentSource = currentAppliedSource && currentAppliedSource !== browse;
+
+    if (isDifferentSource) {
+      // Show confirmation dialog
+      setSwitchConfirm(browse);
+    } else {
+      // No confirmation needed, apply directly
+      void mutate("save_scheme", {
+        scheme: { ...scheme, source: browse },
+      });
+    }
+  };
+
+  const handleConfirmSwitch = () => {
+    void mutate("save_scheme", {
+      scheme: { ...scheme, source: browse },
+    });
+    setSwitchConfirm(null);
+  };
   return (
     <section className="source-panel">
       <div className="source-segments" role="group" aria-label="浏览模型来源">
@@ -160,11 +185,7 @@ export function SourcePlans({
               ? !scheme.official.model
               : !scheme.api.modelId)
           }
-          onClick={() =>
-            void mutate("save_scheme", {
-              scheme: { ...scheme, source: browse },
-            })
-          }
+          onClick={handleSetAsActive}
         >
           将此方案设为待应用
         </button>
@@ -190,9 +211,17 @@ export function SourcePlans({
         </>
       )}
       <p className="muted">
-        切换浏览不会写入配置。只有底部“确认应用”生效；已有会话、CLI
+        切换浏览不会写入配置。只有底部”确认应用”生效；已有会话、CLI
         显式参数、项目设置及任务级模型可能优先。不会自动回退到另一付费来源。
       </p>
+      {switchConfirm && (
+        <SwitchConfirmDialog
+          targetSource={switchConfirm}
+          customModelCount={workspace?.catalog.models.length ?? 0}
+          onConfirm={handleConfirmSwitch}
+          onCancel={() => setSwitchConfirm(null)}
+        />
+      )}
     </section>
   );
 }

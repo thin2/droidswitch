@@ -17,3 +17,18 @@ test-results/
 playwright-report/
 
 releases/
+
+# Local credentials and runtime data
+*.pem
+*.key
+*.p12
+*.pfx
+*.sqlite
+*.sqlite3
+*.sqlite-*
+*.db
+*.db-*
+/auth.json
+/credentials.json
+/.factory/
+/.cc-switch/

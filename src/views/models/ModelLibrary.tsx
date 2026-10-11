@@ -7,6 +7,7 @@ import { TestModel } from "./TestModel";
 import { ModelEditor } from "./ModelEditor";
 import { FetchModels } from "./FetchModels";
 import { protocols, type ModelEntry } from "../../lib/types";
+import { OnboardingGuide } from "../../components";
 function providerFromHash() { return new URLSearchParams(window.location.hash.split("?")[1] ?? "").get("provider") ?? ""; }
 export function ModelLibrary() {
   const { workspace, busy, mutate } = useWorkspace();
@@ -23,6 +24,13 @@ export function ModelLibrary() {
       Record<string, { success: boolean; elapsedMs: number; testedAt: number }>
     >({}),
     [testRefresh, setTestRefresh] = useState(0);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(() => {
+    try {
+      return localStorage.getItem("onboardingDismissed") === "true";
+    } catch {
+      return false;
+    }
+  });
   useEffect(() => {
     if (workspace)
       void request<typeof tests>("latest_tests")
@@ -43,12 +51,45 @@ export function ModelLibrary() {
           .includes(query.toLowerCase()),
     ) ?? [];
   const detail = models.find((m) => m.id === selected);
+
+  // Show onboarding guide if no providers and not dismissed
+  const showOnboarding =
+    workspace &&
+    browse === "api" &&
+    workspace.catalog.providers.length === 0 &&
+    !onboardingDismissed;
+
+  const handleDismissOnboarding = () => {
+    setOnboardingDismissed(true);
+    try {
+      localStorage.setItem("onboardingDismissed", "true");
+    } catch {}
+  };
+
+  const handleOnboardingStep = (step: "provider" | "fetch" | "apply") => {
+    handleDismissOnboarding();
+    if (step === "provider") {
+      window.location.hash = "#/providers";
+    } else if (step === "fetch") {
+      setFetching(true);
+    } else if (step === "apply") {
+      // Scroll to ChangeBar
+      document.querySelector(".change-bar")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
   return (
     <>
       <SourcePlans browse={browse} onBrowse={setBrowse} />
       {browse === "api" && (
         <>
-          <div className="page-actions model-actions">
+          {showOnboarding ? (
+            <OnboardingGuide
+              onStepClick={handleOnboardingStep}
+              onDismiss={handleDismissOnboarding}
+            />
+          ) : (
+            <>
+              <div className="page-actions model-actions">
             <p>
               {workspace?.catalog.models.length ?? "—"} 个模型 · 管理你的 API
               配置
@@ -220,6 +261,8 @@ export function ModelLibrary() {
               )}
             </aside>
           </div>
+          </>
+          )}
         </>
       )}
       {importing && <ImportWizard onClose={() => setImporting(false)} />}{" "}

@@ -62,11 +62,11 @@
       },
       "integration": {
         "commit": "9f572db65495d684e84bba1444acf60f20dc6e06",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "环境基线已入库并重新验收；忽略工具运行期间临时锁文件。",
         "run_id": null,
         "task_fingerprint": "3a943dd3681ff0e282fb54b02752635f77496a6365da6384381c3262b638d755",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/ce50c73be6494e848bc2f5fd6c75875d.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/ce50c73be6494e848bc2f5fd6c75875d.json",
         "recorded_at": "2026-10-11T06:09:11.221037+00:00"
       }
     },
@@ -331,11 +331,11 @@
       },
       "integration": {
         "commit": "f708e6299e04a9a8dc728a8f8492e79a5eaffb33",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "官方协议映射已提交并重新验收。",
         "run_id": null,
         "task_fingerprint": "4a515dda6314d748f70fae3ad225fab692c1b4cd361ca8f9be9e0cbb11b1fdbd",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/d3c66d2516ac4ad58944ae9d8f6a8638.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/d3c66d2516ac4ad58944ae9d8f6a8638.json",
         "recorded_at": "2026-10-11T06:09:11.353851+00:00"
       }
     },
@@ -453,7 +453,7 @@
         },
         {
           "heading": "验收标准",
-          "body": "- [ ] `cd /Users/hanning/Desktop/droidswitch && npm install`\n- [ ] `cd /Users/hanning/Desktop/droidswitch && npm run build`\n- [ ] `cargo build --manifest-path src-tauri/Cargo.toml`"
+          "body": "- [ ] `npm install`\n- [ ] `npm run build`\n- [ ] `cargo build --manifest-path src-tauri/Cargo.toml`"
         },
         {
           "heading": "相关文件",
@@ -473,8 +473,8 @@
         }
       ],
       "acceptance_commands": [
-        "cd /Users/hanning/Desktop/droidswitch && npm install",
-        "cd /Users/hanning/Desktop/droidswitch && npm run build",
+        "npm install",
+        "npm run build",
         "cargo build --manifest-path src-tauri/Cargo.toml"
       ],
       "review": {
@@ -488,11 +488,11 @@
       },
       "integration": {
         "commit": "805ea40a678f97a2ced2ac35115e224debaa198f",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "桌面骨架及锁文件已提交，重新执行 npm 与 Rust 构建验收。",
         "run_id": null,
         "task_fingerprint": "fa83721337ccb43c02e027ff8ec3893bc64db2419ca5da8876ccfa9a743354cc",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/9a9ec2419f9940528faf4b325be430a5.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/9a9ec2419f9940528faf4b325be430a5.json",
         "recorded_at": "2026-10-11T06:09:14.159820+00:00"
       }
     },
@@ -554,11 +554,11 @@
       },
       "integration": {
         "commit": "a16501bdcf6742e105c59efdd2fba1115e68b029",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "基础文件及网络模块已提交；重新验收通过后解锁依赖。",
         "run_id": null,
         "task_fingerprint": "80cab798f4a7c3254cf65e6636942eba368cd67cc312c65470c49a97550ca1bb",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/f17879cbc852422785e76bae632493ee.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/f17879cbc852422785e76bae632493ee.json",
         "recorded_at": "2026-10-11T06:17:52.208715+00:00"
       }
     },
@@ -615,11 +615,11 @@
       },
       "integration": {
         "commit": "ad7d600a496b79a834fc3eb047c2a522e098403e",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "SQLite schema 及迁移已提交；重新验收确认。",
         "run_id": null,
         "task_fingerprint": "a1dd0f33e5c6c6ce9dabd662383a208aa1a1e9cb667f6e846fcfd206fb0a5929",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/9aee086007544d3da4c15fc19a961842.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/9aee086007544d3da4c15fc19a961842.json",
         "recorded_at": "2026-10-11T06:17:52.531754+00:00"
       }
     },
@@ -677,11 +677,11 @@
       },
       "integration": {
         "commit": "94b09c98b6bdfdc434acb99a0676efb9e7854431",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "核心模型类型已提交；单测与 compile_fail 文档测试重新验收。",
         "run_id": null,
         "task_fingerprint": "d3b22957e5b0ae67aacf44e30f08fa57aa80fe3a74f51350af8421ccbff4d811",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/fc010f5a1c3a43219303b811de134ea2.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/fc010f5a1c3a43219303b811de134ea2.json",
         "recorded_at": "2026-10-11T06:20:33.281291+00:00"
       }
     },
@@ -742,11 +742,11 @@
       },
       "integration": {
         "commit": "660997139699f9e732536f6310bb95db38791a6f",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "实现已提交，自动验收重跑通过，Windows 终验保留。",
         "run_id": null,
         "task_fingerprint": "1057719dcc725da33c2af22d1c189bd9144db43474e77f472121c8ad7f1f5dac",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/f0e069870d294602bc112987f00eb994.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/f0e069870d294602bc112987f00eb994.json",
         "recorded_at": "2026-10-11T06:31:23.244765+00:00"
       }
     },
@@ -799,11 +799,11 @@
       },
       "integration": {
         "commit": "6e02f230b3d954a6c1f966bf6afa4cf425f56536",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
         "run_id": null,
         "task_fingerprint": "3de0f624e86ae0b393d5d636c1f3d33301cfdef7abdde22b897387b1626c2943",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/0ed09f9424354e86a918d502614b9fb6.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/0ed09f9424354e86a918d502614b9fb6.json",
         "recorded_at": "2026-10-11T06:39:46.809646+00:00"
       }
     },
@@ -856,11 +856,11 @@
       },
       "integration": {
         "commit": "2621abfee9d7147a8a150ea533908b856691c9f7",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "配置链路已提交，专项验收重新通过；Windows 实机留待用户终验。",
         "run_id": null,
         "task_fingerprint": "cf34f61c17563a54cd968c770cbf47dedea5eceab3f5f9f4ca585ce461eec8a2",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/7dc74ab6b23a41899cf34203e64047ea.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/7dc74ab6b23a41899cf34203e64047ea.json",
         "recorded_at": "2026-10-11T06:44:07.523987+00:00"
       }
     },
@@ -913,11 +913,11 @@
       },
       "integration": {
         "commit": "5080c59d909008eb6ea428adbcedf28f021d2145",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "配置链路已提交，专项验收重新通过；Windows 实机留待用户终验。",
         "run_id": null,
         "task_fingerprint": "f94f393f753e2b1ddc5d623c66558b7719ce4f463e189fa308ab8ef03ace5f67",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/d7ca27e14271490fb4312d0a4c5a8c9e.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/d7ca27e14271490fb4312d0a4c5a8c9e.json",
         "recorded_at": "2026-10-11T06:44:08.208727+00:00"
       }
     },
@@ -970,11 +970,11 @@
       },
       "integration": {
         "commit": "898af409bbcf929c1538a68886c00d52735abc28",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "代码已集成，专项验收重新通过。",
         "run_id": null,
         "task_fingerprint": "2f4add0eef616c58880aa6715673dbe16d554aa582ace9bd9749bd3659ffaaa8",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/aa54310dfd4d428fa222c3f4445a47c8.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/aa54310dfd4d428fa222c3f4445a47c8.json",
         "recorded_at": "2026-10-11T06:44:10.122255+00:00"
       }
     },
@@ -1027,11 +1027,11 @@
       },
       "integration": {
         "commit": "9ca6313e6fdc60c1ca5a62694699acf8db4f91f2",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "代码已集成，专项验收重新通过。",
         "run_id": null,
         "task_fingerprint": "f9a9170a8801611bc65075e495a6d0e271f03252c04d6d45ca18010c5067834d",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/155abc0ed1324bd1875174ae52535339.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/155abc0ed1324bd1875174ae52535339.json",
         "recorded_at": "2026-10-11T06:44:10.518538+00:00"
       }
     },
@@ -1084,11 +1084,11 @@
       },
       "integration": {
         "commit": "04bcb0d0709dc7754b8cc558de94278062513833",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "代码已集成，专项验收重新通过。",
         "run_id": null,
         "task_fingerprint": "e6d96f6d0782941c71564c1835897980f7ea984a5dc7c931e338786031216f55",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a8bc296040a14143a8400f9d379e9281.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/a8bc296040a14143a8400f9d379e9281.json",
         "recorded_at": "2026-10-11T06:44:10.926604+00:00"
       }
     },
@@ -1141,11 +1141,11 @@
       },
       "integration": {
         "commit": "e5b9a8de10cff4dfe0d935751510126273aa5006",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "a6ee27b6265850255518b0ad5c6f390ffbbe49cbe0c50ae73113520c720a030b",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/53d74b91cc474bbc87715184b6102a6e.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/53d74b91cc474bbc87715184b6102a6e.json",
         "recorded_at": "2026-10-11T06:56:18.906110+00:00"
       }
     },
@@ -1198,11 +1198,11 @@
       },
       "integration": {
         "commit": "29521eab4b8814484df1c00907859161cc8785bd",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "019671d8fcec03369c12887ee7f7e7462b5c342518f6003d3517844ea2960052",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/60ff8e65e2804e92ab9e63cf149547aa.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/60ff8e65e2804e92ab9e63cf149547aa.json",
         "recorded_at": "2026-10-11T06:56:24.189959+00:00"
       }
     },
@@ -1255,11 +1255,11 @@
       },
       "integration": {
         "commit": "a77f2c6e08b8e8fc2e8c6d7647a87f49d3eaadc2",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "aa516739a3d427b930670247cb92a67ec913ef03346c264d9033aa3740902fb7",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/394511defa604e7d978e8c7b8005e088.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/394511defa604e7d978e8c7b8005e088.json",
         "recorded_at": "2026-10-11T06:56:19.386679+00:00"
       }
     },
@@ -1312,11 +1312,11 @@
       },
       "integration": {
         "commit": "8bc062eb620177215b99970a419cd0a855328029",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "实现已提交，自动验收重跑通过，Windows 终验保留。",
         "run_id": null,
         "task_fingerprint": "780affb0e5a1443dbbffb592002f02d8f7421ed446baa35bcfa1ccd52ed3c5e7",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/41b48307b09445249da78c1db3332b5f.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/41b48307b09445249da78c1db3332b5f.json",
         "recorded_at": "2026-10-11T06:31:23.563142+00:00"
       }
     },
@@ -1369,11 +1369,11 @@
       },
       "integration": {
         "commit": "da16e2f4393f8a56a17ec6533ec7948f432d12f6",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
         "run_id": null,
         "task_fingerprint": "0b03e48051d313993fb119e91cc5b0a8870e59a02d09656abeb1767965a60016",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/68d14a26d64541baa11d7c0e0d4cd46f.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/68d14a26d64541baa11d7c0e0d4cd46f.json",
         "recorded_at": "2026-10-11T06:39:47.763863+00:00"
       }
     },
@@ -1426,11 +1426,11 @@
       },
       "integration": {
         "commit": "e806c80df27e1f48f65bfabed9618735d2bdb01b",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "本地提交及重新验收通过，Windows 终验待用户执行。",
         "run_id": null,
         "task_fingerprint": "bae240b17d2e77f4e77ce9269949e766888a8d92eac3ecb8e2d813fdff79017f",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4239f9e523eb4daba9403115608be9f8.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/4239f9e523eb4daba9403115608be9f8.json",
         "recorded_at": "2026-10-11T06:39:48.800246+00:00"
       }
     },
@@ -1483,11 +1483,11 @@
       },
       "integration": {
         "commit": "c97bcdb7ae5d2c06c8b0d0a9adf8f0e78dc7f777",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "174d02a9f72dd98030788bbd06daedef37875f13bff492edd71e06243c661575",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/953cb293b283421e960917404cedd349.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/953cb293b283421e960917404cedd349.json",
         "recorded_at": "2026-10-11T06:56:20.109204+00:00"
       }
     },
@@ -1544,11 +1544,11 @@
       },
       "integration": {
         "commit": "daf75a363dff77224dd3ad971413fae41086f71b",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "c80531866c7d0e7fa2390208884dbc0334868c4912da0c0dfe78a0990256bb86",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/fe672268791743faae485b3ab4a75548.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/fe672268791743faae485b3ab4a75548.json",
         "recorded_at": "2026-10-11T06:56:19.763180+00:00"
       }
     },
@@ -1605,11 +1605,11 @@
       },
       "integration": {
         "commit": "b10440a67db38c3a75391b2e2a0012dbf85ace25",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "32a24a87ca9028a0ad5ced993152e04b7f7ac304853e55d7d403058ee63cb3d2",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/06e85bd85c974b45bd037d31a698dc12.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/06e85bd85c974b45bd037d31a698dc12.json",
         "recorded_at": "2026-10-11T06:56:20.510242+00:00"
       }
     },
@@ -1662,11 +1662,11 @@
       },
       "integration": {
         "commit": "43b0fee2b0fc7609fcf35d4bd8f069364be59adb",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "5d787d7f6d119562c10440e05acefe96b3ffd84a398e8069be8f4c0ee63c29f1",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/5c2a1db30d524d638e5591a2fb80b630.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/5c2a1db30d524d638e5591a2fb80b630.json",
         "recorded_at": "2026-10-11T07:18:01.445822+00:00"
       }
     },
@@ -1719,11 +1719,11 @@
       },
       "integration": {
         "commit": "09dde8fa2850cf59c226c9ec4c694e1b0735dbef",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "b27bdeb1c301bc8a22fe68f88b4fe00cc776427021bb0a18769e0aa27730023d",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/c49184ca855e4c16be52979c3aa6dd61.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/c49184ca855e4c16be52979c3aa6dd61.json",
         "recorded_at": "2026-10-11T07:18:11.249988+00:00"
       }
     },
@@ -1780,11 +1780,11 @@
       },
       "integration": {
         "commit": "7e7a475c035534549fd11414174655d1ad06fb92",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "1440133cc9cacd0e24bf0f8dd4aaec3c600adc4b20f89f281bab4078443610c6",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/04ce7f9bd4a644348a337832c6890a22.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/04ce7f9bd4a644348a337832c6890a22.json",
         "recorded_at": "2026-10-11T07:18:13.369645+00:00"
       }
     },
@@ -1837,11 +1837,11 @@
       },
       "integration": {
         "commit": "7a9f79301e4b71253be491244191d0cb17ac3e31",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "294a5c0a6f0171684e638f3f6808ee94169b083f1102af1c547f339036be1cca",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/ba71e5c181f64f6ba169ff3291f159e7.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/ba71e5c181f64f6ba169ff3291f159e7.json",
         "recorded_at": "2026-10-11T07:18:19.142580+00:00"
       }
     },
@@ -1894,11 +1894,11 @@
       },
       "integration": {
         "commit": "025bd1bdf51080d96558a8d7e59ac5cf0b0dbde9",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "312713aec789f1c94d79df94521e52dd5abb8de8e7911af2025e1c5e4874fc9e",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/97a583b2014e4ac7b4c51dc0230fa382.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/97a583b2014e4ac7b4c51dc0230fa382.json",
         "recorded_at": "2026-10-11T07:18:26.607732+00:00"
       }
     },
@@ -1955,11 +1955,11 @@
       },
       "integration": {
         "commit": "5fd32ad67f9baca9bb526c5ebf185e1f25afd9c8",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "e94f7ebdab46d82fc2b4726eca2e93d045659711e3a4f89c15b1c3184d2aa2a8",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a074cf700dbb4facb518ce1a79e720e5.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/a074cf700dbb4facb518ce1a79e720e5.json",
         "recorded_at": "2026-10-11T07:18:27.097617+00:00"
       }
     },
@@ -2012,11 +2012,11 @@
       },
       "integration": {
         "commit": "ec43151f45fbe5e6c9e11b5b312d04823c10d05a",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "ae16beffff65e26f4cb63e735b4395bbfb9c688bf18ee4c68d8a2398b380b143",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/05171004f8a24f14835b23f5cee0698c.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/05171004f8a24f14835b23f5cee0698c.json",
         "recorded_at": "2026-10-11T06:56:20.904578+00:00"
       }
     },
@@ -2069,11 +2069,11 @@
       },
       "integration": {
         "commit": "3d559842a842382b9c1ac03729afecf67f8649b2",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "f7a534a9f6fa98cd2b5cdf7f58f609acf533c5cc787bf04297b063556f6a81e9",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4bd7b9f2fdc64016805ed2e074c36427.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/4bd7b9f2fdc64016805ed2e074c36427.json",
         "recorded_at": "2026-10-11T06:56:26.018896+00:00"
       }
     },
@@ -2126,11 +2126,11 @@
       },
       "integration": {
         "commit": "b88b9a9e1ca6ca262446f73e4db6b97501ebb589",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "提交与重新验收已确认；Windows 实机最终验证保留。",
         "run_id": null,
         "task_fingerprint": "a7ddbdfffc35a5c71bd8f1a424c485dd81fb97ae2815c8911c90ce84d989da47",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4245abbd29e24025a21cab6bbb7c71ef.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/4245abbd29e24025a21cab6bbb7c71ef.json",
         "recorded_at": "2026-10-11T06:56:26.969871+00:00"
       }
     },
@@ -2234,11 +2234,11 @@
       },
       "integration": {
         "commit": "1614f5b499e6e85cec518baa58f634d7c6822e29",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "0ae391b9e0dc57a1ef5a339182c2898a0e39637ded793e2e0716655eeb3db035",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/158c8ea78d254de5b18e8fb41392a819.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/158c8ea78d254de5b18e8fb41392a819.json",
         "recorded_at": "2026-10-11T07:18:02.373363+00:00"
       }
     },
@@ -2291,11 +2291,11 @@
       },
       "integration": {
         "commit": "de608bc5b79bdeab128739299fa185ade6325a12",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "a1cf5be4a4721731bb4739628f6a7a1093ba82fe5f63fd64244a1799a7d4a34f",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/a3d0920fc12e4659b8cf0076d4f2c193.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/a3d0920fc12e4659b8cf0076d4f2c193.json",
         "recorded_at": "2026-10-11T07:18:15.457516+00:00"
       }
     },
@@ -2348,11 +2348,11 @@
       },
       "integration": {
         "commit": "53563f3c3fe2614f812ad5542b42a90e7821dc3c",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "开发提交与专项验收已确认；Windows/native/log-format 项保留在 #039/#043/#044。",
         "run_id": null,
         "task_fingerprint": "7b6bbba745fc9f9710267291e5360376bec5bc1fce7cf46a577814ad4ece3574",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/100346743d2c4ea6b87c2b8f24f61fee.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/100346743d2c4ea6b87c2b8f24f61fee.json",
         "recorded_at": "2026-10-11T07:18:21.369624+00:00"
       }
     },
@@ -2637,11 +2637,11 @@
       },
       "integration": {
         "commit": "266f5c88ebfea577128bc20fc3b4fd50ca04de05",
-        "target": "/Users/hanning/Desktop/droidswitch",
+        "target": "<PROJECT_ROOT>",
         "note": "用户授权先开发后 Windows 实测，开发契约单独集成，不替代真实会话验收。",
         "run_id": null,
         "task_fingerprint": "027f8a6375d27207da9f77ffa05f3fc51e62e689e013dc1d55f53b47eebb9742",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/4d4a1cd307c34535ac9cae69d2cf020c.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/4d4a1cd307c34535ac9cae69d2cf020c.json",
         "recorded_at": "2026-10-11T06:25:20.478362+00:00"
       }
     },
@@ -3052,7 +3052,7 @@
         "note": "供应商功能已提交main，在相同提交的干净worktree独立端口验收，保留主工作区其他UI改动。",
         "run_id": null,
         "task_fingerprint": "a1e3097277ecaf6c21e0ac816460f4aa49c8d1e0a5473fb2c0c69e1e585a7be1",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/c469f7a1b93245909b6ac7687dec26de.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/c469f7a1b93245909b6ac7687dec26de.json",
         "recorded_at": "2026-10-11T15:49:53.857087+00:00"
       }
     },
@@ -3103,7 +3103,7 @@
         "note": "main对应干净worktree重新验证批量导入及配置合并；真实Windows测试不计入完成。",
         "run_id": null,
         "task_fingerprint": "b6cb25f94a39fd0b5ab733d2352bfd151de8775dbfa44b2eb341d61cbe1bf8e5",
-        "report_file": "/Users/hanning/Desktop/droidswitch/.dual-ai-collab/integration-reports/81b52d7723dd41f28aee2b431977b385.json",
+        "report_file": "<PROJECT_ROOT>/.dual-ai-collab/integration-reports/81b52d7723dd41f28aee2b431977b385.json",
         "recorded_at": "2026-10-11T15:50:34.491018+00:00"
       }
     }
