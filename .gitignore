@@ -8,15 +8,18 @@ src-tauri/gen/
 !.env.example
 *.log
 *.lock.tmp
-planning/tasks.json.lock
-.dual-ai-collab/logs/
-
-.dual-ai-collab/runs/*.lock
 
 test-results/
 playwright-report/
-
 releases/
+
+# Documentation and planning
+*.md
+!README.md
+*.docx
+planning/
+docs/
+.dual-ai-collab/
 
 # Local credentials and runtime data
 *.pem
