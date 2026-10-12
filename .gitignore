@@ -9,6 +9,7 @@ src-tauri/gen/
 *.log
 *.lock.tmp
 
+tests/
 test-results/
 playwright-report/
 releases/
