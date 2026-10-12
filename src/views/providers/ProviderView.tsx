@@ -9,7 +9,7 @@ const blank = (): Provider => ({
   name: "",
   baseUrl: "",
   protocol: "openai",
-  credential: { mode: "environment", value: "" },
+  credential: { mode: "direct", value: "" },
   modelListUrl: null,
   extraHeaders: {},
 });
@@ -203,8 +203,8 @@ export function ProviderView() {
                     setConfirmed(false);
                   }}
                 >
-                  <option value="environment">环境变量引用（默认）</option>
-                  <option value="direct">直接写入 API Key（兼容模式）</option>
+                  <option value="direct">直接写入 API Key（默认）</option>
+                  <option value="environment">环境变量引用</option>
                 </select>
               </label>
               <label>
@@ -219,7 +219,7 @@ export function ProviderView() {
                   placeholder={
                     edit.credential.mode === "environment"
                       ? "PROVIDER_API_KEY"
-                      : ""
+                      : "API Key"
                   }
                   value={edit.credential.value}
                   onChange={(e) =>
