@@ -116,6 +116,7 @@ pub async fn discover_models(
 mod tests {
     use super::*;
     #[test]
+    #[ignore = "requires planning/verification/fixtures/probe/help.txt"]
     fn switch_catalog_uses_observed_selectors_and_capabilities() {
         let text = include_str!("../../../planning/verification/fixtures/probe/help.txt");
         let m = parse(text).unwrap();

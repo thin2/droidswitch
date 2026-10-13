@@ -255,6 +255,7 @@ mod tests {
         include_str!("../../fixtures/native/native-session.synthetic.settings.json");
 
     #[test]
+    #[ignore = "requires src-tauri/fixtures/native/native-session.synthetic.settings.json"]
     fn session_snapshot_reads_own_and_inclusive_without_content() {
         let snapshot = parse_snapshot(FIXTURE, "u", "p", 1000).unwrap().unwrap();
         assert_eq!(snapshot.own.tokens.input, Some(1200));

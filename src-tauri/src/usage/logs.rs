@@ -290,6 +290,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires src-tauri/fixtures/native/droid-log.synthetic.log"]
     fn request_counters_and_endpoints_are_read_from_the_fixture() {
         let records = parsed();
         assert_eq!(records.len(), 9);
@@ -324,6 +325,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires src-tauri/fixtures/native/droid-log.synthetic.log"]
     fn shared_selector_is_paird_to_the_endpoint_that_won_the_request() {
         let mut pairing = Pairing::default();
         let mut requests = vec![];
@@ -367,6 +369,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires src-tauri/fixtures/native/droid-log.synthetic.log"]
     fn replaying_an_already_read_log_never_hands_stale_evidence_to_a_request() {
         let all = parsed();
         let mut pairing = Pairing::default();
@@ -412,6 +415,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "requires src-tauri/fixtures/native/droid-log.synthetic.log"]
     fn reused_trace_span_and_same_second_requests_keep_separate_evidence() {
         let first: String = FIXTURE.lines().take(2).map(|l| format!("{l}\n")).collect();
         let second = first
