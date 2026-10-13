@@ -2,7 +2,7 @@
 
 一个用于管理 **Factory Droid CLI** 模型与供应商配置的本地桌面工具。使用 Tauri 2、React、TypeScript 和 Rust 构建，草稿保存在本机 SQLite 中。
 
-> 当前为 **0.1.0 测试版**。macOS Apple Silicon 已提供安装包；Windows 安装与真实会话行为仍待验证。项目为独立工具，与 Factory、OpenAI 没有官方关联。
+> 当前为 **0.2.0 测试版**。macOS Apple Silicon 已提供安装包；Windows 安装与真实会话行为仍待验证。项目为独立工具，与 Factory、OpenAI 没有官方关联。
 
 [下载测试版](https://github.com/thin2/droidswitch/releases) · [反馈问题](https://github.com/thin2/droidswitch/issues) · [Windows 构建与实测](docs/windows-testing.md)
 
@@ -14,7 +14,8 @@
 - **管理官方/API 方案**：保存模型选择和思考强度配置，浏览不同方案不会立即改写 Droid。
 - **预览后应用**：先保存草稿，再预览配置差异并确认写入；支持冲突检测、备份与恢复。
 - **导入 CC Switch 配置**：只读导入来源数据，不修改 CC Switch；凭据导入需要按界面提示确认。
-- **连接测试与用量界面**：可发起调用测试，查看支持格式的本地用量元数据。
+- **连接测试与用量统计**：可发起调用测试，查看本地用量数据的聚合分析和成本估算。
+- **CPA 配额查询**（v0.2.0+）：登录 Codex 账号后，手动刷新查看订阅速率限制和重置时间。
 
 ![模型管理界面（合成测试数据）](docs/screenshots/models-1440-test-fixture.png)
 
@@ -24,11 +25,12 @@
 
 ### macOS（M 系列芯片）
 
-1. 前往 [Releases](https://github.com/thin2/droidswitch/releases)，下载 `.dmg` 附件。
-2. 打开镜像，将 **Droid Switch** 拖入 **Applications**；替换旧版前先退出应用。
-3. 安装包采用 ad-hoc 签名，尚未经过 Apple 公证。请核对下载来源及 Release 附带的 SHA-256 校验值。
+1. 前往 [Releases](https://github.com/thin2/droidswitch/releases)，下载最新的 `.tar.gz` 附件
+2. 验证校验和（Release 说明中提供 SHA-256）
+3. 解压并拖入 Applications，替换旧版前先退出应用
+4. 首次启动可能提示「来自身份不明的开发者」，在系统偏好设置 → 安全性与隐私中允许
 
-当前附件为供应商模型管理版本；Release 说明会标明它与最新源码的差异。目前未提供 Intel Mac 安装包。
+安装包采用 ad-hoc 签名，尚未经过 Apple 公证。Release 说明会标明版本与最新源码的差异。目前未提供 Intel Mac 安装包。
 
 ### Windows
 
@@ -44,6 +46,31 @@
 6. **在 Droid 中验证**：重新启动 Droid 或开启新会话，在 `/model` 中选择并确认模型。已有会话、CLI 参数和项目级设置可能覆盖默认选择。
 
 Droid Switch 不替代 Factory 登录。配置第三方 API Key 后，Droid 仍可能要求登录 Factory 账号。调用测试会向所选供应商发送请求，可能消耗额度。
+
+### 用量统计（v0.2.0+）
+
+在侧栏"用量"页面查看本地使用数据：
+
+- **多维度追踪**：输入、缓存读取、缓存写入、输出、思考 token
+- **成本估算**：内置 48 个模型参考价（OpenAI、Claude、DeepSeek），支持自定义单价
+- **聚合分析**：按供应商、模型查看用量趋势，支持时间筛选和分页
+- **CSV 导出**：导出详细记录用于外部分析
+
+**采集路径设置**：在设置页配置 Droid 数据目录（默认 `~/.factory`）和日志目录。点击"扫描用量"手动采集，或在页面打开时自动扫描。
+
+**定价管理**：在"定价"标签页查看参考价，添加自定义单价覆盖特定模型。已计价的历史记录不受影响；未计价记录会自动回填。
+
+**支持范围**：当前支持具有稳定 ID 和时间戳的会话快照（`*.settings.json`）和 agent 日志。部分格式仍待完整支持，未识别数据不应视为零用量。
+
+### CPA 配额查询（v0.2.0+）
+
+登录 Codex 账号后，在"Codex 授权"页面查看订阅速率限制：
+
+- 手动点击"刷新配额"查询 wham/usage 端点
+- 查看主窗口和次窗口的剩余百分比、限额和重置时间
+- 切换账号时自动重新加载；刷新失败时标记数据过期
+
+配额数据不会自动轮询，不消耗推理额度。查询需要有效的 CPA 管理令牌。
 
 ### 常见问题
 
@@ -74,8 +101,9 @@ Droid Switch 不替代 Factory 登录。配置第三方 API Key 后，Droid 仍�
 ## 当前限制
 
 - Windows 安装、完整跨平台行为与部分 Droid 配置优先级仍待真实环境验收。
-- 用量采集支持明确的元数据契约及具有稳定 ID/时间的兼容 SDK 导出，**尚未完整支持 Droid 原生会话日志**。未识别的数据不应视为零用量，详见 [支持范围](planning/droid-usage-contract.md)。
-- Codex/ChatGPT 授权登录、本地代理和自动供应商回退尚未实现。
+- 用量采集支持会话快照和 agent 日志，**部分原生日志格式仍待完整支持**。未识别的数据不应视为零用量，详见 [支持范围](planning/droid-usage-contract.md)。
+- CPA 配额查询需要有效的管理令牌；订阅用量估算基于参考价，不代表实际账单。
+- 自动供应商回退尚未实现。
 - 公共仓库从脱敏快照开始；规划记录中的旧本地提交号不一定能在公共历史中找到。
 
 ## 本地开发
