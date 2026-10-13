@@ -1,0 +1,37 @@
+{
+  "allowSubagentsInScripts": false,
+  "assistantActiveTimeMs": 123456,
+  "autonomyLevel": "auto-high",
+  "autonomyMode": "default",
+  "childInclusiveTokenUsageBySessionId": {},
+  "compactionThresholdCheckEnabled": true,
+  "inclusiveTokenUsage": {
+    "cacheCreationTokens": 0,
+    "cacheReadTokens": 4096,
+    "factoryCredits": 0,
+    "inputTokens": 1200,
+    "outputTokens": 400,
+    "thinkingTokens": 300
+  },
+  "interactionMode": "auto",
+  "lastCallTokenUsage": {
+    "cacheReadTokens": 4096,
+    "inputTokens": 1200,
+    "outputTokens": 400
+  },
+  "model": "custom:vendor-model-0",
+  "providerLock": "anthropic",
+  "providerLockTimestamp": 1791691200000,
+  "reasoningEffort": "medium",
+  "tags": [{ "name": "exec", "metadata": {} }],
+  "tokenUsage": {
+    "cacheCreationTokens": 0,
+    "cacheReadTokens": 4096,
+    "factoryCredits": 0,
+    "inputTokens": 1200,
+    "outputTokens": 400,
+    "thinkingTokens": 300
+  },
+  "toolExecutionMode": "default",
+  "toolExecutionModeModelId": "custom:vendor-model-0"
+}

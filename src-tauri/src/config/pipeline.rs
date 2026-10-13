@@ -67,6 +67,7 @@ fn prepare(w: &Workspace, version: &str) -> Result<(Preview, Value, Vec<Binding>
         return Err("磁盘配置已被外部修改，请重新载入；你的草稿仍保留".into());
     }
     let mut merged = merge::merge(&current.document, &w.bindings, &w.catalog, version)?;
+    crate::model::naming::validate_names(&merged.document)?;
     let warnings = if w.scheme.source.is_some() {
         let observed = crate::switch::catalog::discover(&merged.document)?;
         crate::switch::scheme::apply_scheme(&mut merged.document, &w.scheme, &w.catalog, &observed)?
@@ -269,6 +270,55 @@ pub fn apply(
     });
     if result.is_ok() {
         let _ = std::fs::remove_file(store.data_dir.join("pending-apply.json"));
+        // Record the attribution history only after the apply actually succeeded,
+        // so a failed apply can never produce an effective mapping.
+        let target = store.load().map(|w| w.target_path).unwrap_or_default();
+        if !target.is_empty() {
+            let _ = crate::usage::identity::record_after_apply(store, &target);
+        }
+    }
+    result
+}
+/// Explicitly authorized, isolated integration: never apply unrelated pending drafts.
+pub(crate) fn apply_direct(
+    store: &Store,
+    update: impl FnOnce(&mut Workspace) -> Result<(), String>,
+) -> Result<Workspace, String> {
+    let version = super::cli::version()?;
+    apply_direct_version(store, &version, update)
+}
+fn apply_direct_version(
+    store: &Store,
+    version: &str,
+    update: impl FnOnce(&mut Workspace) -> Result<(), String>,
+) -> Result<Workspace, String> {
+    let revision = store.load()?.revision;
+    let result = store.edit(revision, |w| {
+        if w.catalog != w.applied_catalog || w.scheme != w.applied_scheme {
+            return Err(
+                "已登录，但存在其他未应用的草稿。请先应用或放弃这些草稿，再点击接入 Droid".into(),
+            );
+        }
+        let mut before = w.clone();
+        if before.baseline.is_none() {
+            before.baseline = Some(read(Path::new(&before.target_path))?);
+        }
+        let mut next = before.clone();
+        update(&mut next)?;
+        next.catalog.validate()?;
+        let (_, document, bindings) = prepare(&next, version)?;
+        next.bindings = bindings;
+        next.applied_catalog = next.catalog.clone();
+        next.applied_scheme = next.scheme.clone();
+        let bytes = serde_json::to_vec_pretty(&document).map_err(|_| "配置编码失败")?;
+        write_with_backup(store, &before, &mut next, Some(&bytes))?;
+        *w = next;
+        w.revision = revision;
+        Ok(())
+    });
+    if result.is_ok() {
+        let _ = std::fs::remove_file(store.data_dir.join("pending-apply.json"));
+        let _ = crate::usage::identity::record_after_apply(store, &store.load()?.target_path);
     }
     result
 }
@@ -320,6 +370,58 @@ mod tests {
         })
         .unwrap();
         (d, s)
+    }
+    #[test]
+    fn direct_apply_preserves_unrelated_drafts_and_atomically_backs_up() {
+        let (_dir, store) = setup();
+        let original = store.load().unwrap();
+        let disk = std::fs::read(&original.target_path).unwrap();
+        assert!(apply_direct_version(&store, "0.238.0", |_| Ok(()))
+            .err()
+            .unwrap()
+            .contains("草稿"));
+        assert_eq!(std::fs::read(&original.target_path).unwrap(), disk);
+        assert_eq!(store.load().unwrap().revision, original.revision);
+        let preview = prepare(&original, "0.238.0").unwrap().0;
+        apply(&store, original.revision, &preview.token, "0.238.0").unwrap();
+        let updated = apply_direct_version(&store, "0.238.0", |w| {
+            w.catalog.models[0].display_name = "Direct update".into();
+            Ok(())
+        })
+        .unwrap();
+        assert!(updated.catalog == updated.applied_catalog);
+        assert_eq!(
+            read(Path::new(&updated.target_path)).unwrap().document["customModels"][1]
+                ["displayName"],
+            "Direct update"
+        );
+        assert_eq!(
+            std::fs::read_dir(store.data_dir.join("backups"))
+                .unwrap()
+                .count(),
+            2
+        );
+        assert!(!store.data_dir.join("pending-apply.json").exists());
+    }
+    #[test]
+    fn preview_rejects_duplicate_names_without_default_and_accepts_suggestions() {
+        let (_dir, store) = setup();
+        let mut w = store.load().unwrap();
+        let mut provider = w.catalog.providers[0].clone();
+        provider.id = crate::model::ids::InternalId::new();
+        provider.name = "Other".into();
+        let mut model = w.catalog.models[0].clone();
+        model.id = crate::model::ids::InternalId::new();
+        model.provider_id = provider.id;
+        w.catalog.providers.push(provider);
+        w.catalog.models.push(model);
+        assert!(w.scheme.source.is_none());
+        let before = std::fs::read(&w.target_path).unwrap();
+        let error = prepare(&w, "0.238.0").err().unwrap();
+        assert!(error.contains("模型显示名重复"));
+        assert_eq!(std::fs::read(&w.target_path).unwrap(), before);
+        crate::model::naming::apply_suggestions(&mut w).unwrap();
+        assert!(prepare(&w, "0.238.0").is_ok());
     }
     #[test]
     fn fingerprint_merge_apply_rechecks_external_changes_and_preserves_draft() {

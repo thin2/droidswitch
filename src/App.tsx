@@ -1,3 +1,5 @@
+import { CodexView } from "./views/accounts/CodexView";
+import { ModelNameSuggestions } from "./views/models/ModelNameSuggestions";
 import { useEffect, useState } from "react";
 import { WorkspaceProvider, useWorkspace } from "./lib/workspace";
 import { ProviderView } from "./views/providers/ProviderView";
@@ -14,6 +16,7 @@ const pages = {
   models: "模型库",
   providers: "供应商",
   usage: "用量统计",
+  codex: "Codex 授权",
   backups: "配置备份",
   settings: "设置",
 } as const;
@@ -114,7 +117,7 @@ function Layout() {
                 style={{ position: "relative", display: "flex", alignItems: "center", gap: "8px" }}
               >
                 <span className="nav-icon" aria-hidden="true">
-                  {["◇", "⌘", "▥", "▣", "⚙"][i]}
+                  {["◇", "⌘", "▥", "◎", "▣", "⚙"][i]}
                 </span>
                 {label}
                 {badgeCount > 0 && <NavigationBadge count={badgeCount} />}
@@ -173,12 +176,15 @@ function Layout() {
           </p>
         )}
         {busy && !workspace && <p role="status">正在读取本地工作空间…</p>}
+        {(page === "models" || page === "providers") && <ModelNameSuggestions />}
         {page === "providers" ? (
           <ProviderView />
         ) : page === "models" ? (
           <ModelLibrary />
         ) : page === "usage" ? (
           <UsageView />
+        ) : page === "codex" ? (
+          <CodexView />
         ) : page === "backups" ? (
           <Backups />
         ) : page === "settings" ? (
@@ -186,7 +192,7 @@ function Layout() {
         ) : (
           <WorkspacePage page={page} />
         )}
-        <ChangeBar />
+        {page !== "codex" && <ChangeBar />}
       </main>
     </div>
   );

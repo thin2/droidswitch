@@ -1,63 +1,196 @@
-export interface UsageEvent {
+export interface TokenTotals {
+  input: number;
+  cacheRead: number;
+  cacheWrite: number;
+  output: number;
+  thinking: number;
+  unknownInput: number;
+  unknownCacheRead: number;
+  unknownCacheWrite: number;
+  unknownOutput: number;
+  unknownThinking: number;
+}
+
+export interface CurrencyTotal {
+  currency: string;
+  cost: string;
+}
+
+export interface Summary {
+  tokens: TokenTotals;
+  records: number;
+  sessions: number;
+  estimates: CurrencyTotal[];
+  pricedRecords: number;
+  billableRecords: number;
+  partialRecords: number;
+  unknownRecords: number;
+  credits: number;
+  creditsRecords: number;
+  unknownSourceRecords: number;
+}
+
+export interface TrendBucket {
+  start: number;
+  records: number;
+  tokens: TokenTotals;
+  estimates: CurrencyTotal[];
+}
+
+export interface Group {
+  key: string;
+  label: string;
+  tokens: TokenTotals;
+  records: number;
+  estimates: CurrencyTotal[];
+  pricedRecords: number;
+  unpricedRecords: number;
+  unknownRecords: number;
+}
+
+export interface RecordRow {
   id: string;
-  session: string;
   occurredAt: number;
+  session: string;
+  granularity: string;
+  timeConfidence: string;
   source: string;
   provider: string | null;
-  model: string | null;
+  providerLabel: string;
+  selector: string | null;
+  apiModel: string | null;
   input: number | null;
   cacheRead: number | null;
   cacheWrite: number | null;
   output: number | null;
-  credits: number | null;
+  thinking: number | null;
+  requestId: string | null;
+  attempt: number | null;
   cost: string | null;
   currency: string | null;
-  kind: string;
+  complete: boolean;
 }
-export interface Report {
-  files: number;
+
+export interface Coverage {
+  ledgerSessions: number;
+  ledgerTokens: number;
+  ledgerUnknownFields: number;
+  detailTokens: number;
+  unallocatedTokens: number;
+  detailRecords: number;
+  requestRecords: number;
+  baselineTokens: number;
+  windowFrom: number | null;
+  windowTo: number | null;
+  endpointResolvedRecords: number;
+  endpointUnresolvedRecords: number;
+}
+
+export interface StoredPrice {
+  source?: string;
+  id: string;
+  providerId: string;
+
+  apiModelId: string;
+  currency: string;
+  effectiveAt: number;
+  input: string | null;
+  cacheRead: string | null;
+  cacheWrite: string | null;
+  output: string | null;
+  thinking: string | null;
+}
+
+export interface Page {
+  summary: Summary;
+  trends: TrendBucket[];
+  unassigned: CurrencyTotal[];
+  unassignedTokens: TokenTotals;
+  providers: Group[];
+  models: Group[];
+  records: RecordRow[];
+  totalRecords: number;
+  coverage: Coverage;
+  prices: StoredPrice[];
+  providersFilter: (string | null)[];
+  providerLabels: Record<string, string>;
+  modelsFilter: string[];
+}
+
+export interface ScanReport {
+  logFiles: number;
+  logRequests: number;
+  logUnpaired: number;
+  logInconsistent: number;
+  sessionFiles: number;
+  sessions: number;
+  snapshots: number;
+  baselines: number;
+  deltas: number;
   imported: number;
   duplicates: number;
   unsupported: number;
   malformed: number;
   unreadable: number;
-  skippedStreams: number;
+  counterResets: number;
   updatedAt: number;
 }
-export interface UsageData {
-  events: UsageEvent[];
-  report: Report | null;
-  truncated: boolean;
+
+export interface UsageSettings {
+  path: string;
+  logsPath: string;
+  exportsPath: string;
+  retentionDays: number;
+  autoScan: boolean;
 }
-export function total(
-  rows: UsageEvent[],
-  key: "input" | "cacheRead" | "cacheWrite" | "output" | "credits",
-) {
-  const known = rows.map((r) => r[key]).filter((v): v is number => v !== null);
-  return known.length
-    ? `${known.reduce((a, b) => a + b, 0).toLocaleString()}${known.length < rows.length ? "（部分缺失）" : ""}`
-    : "未知";
+
+export interface UsagePayload {
+  settings: UsageSettings;
+  notice: string | null;
+  report: ScanReport | null;
+  page: Page;
+  scanning: boolean;
 }
-export function costs(rows: UsageEvent[]) {
-  const sums = new Map<string, bigint>();
-  for (const row of rows) {
-    if (row.cost === null || !row.currency) continue;
-    const [whole, fraction = ""] = row.cost.split(".");
-    const amount =
-      BigInt(whole) * 10n ** 12n + BigInt(fraction.padEnd(12, "0"));
-    sums.set(row.currency, (sums.get(row.currency) ?? 0n) + amount);
-  }
+
+export interface Filter {
+  from: number;
+  to: number;
+  source?: string;
+  provider?: string;
+  model?: string;
+  granularity?: string;
+  includeUnknownTime?: boolean;
+  bucket?: string;
+  offsetMinutes?: number;
+}
+
+export function formatTokens(value: number, unknownCount: number): string {
+  if (value === 0 && unknownCount > 0) return "未知";
+  const suffix = unknownCount > 0 ? "（部分缺失）" : "";
+  return `${value.toLocaleString()}${suffix}`;
+}
+
+export function formatCost(estimates: CurrencyTotal[]): string {
+  if (estimates.length === 0) return "未定价";
+  return estimates
+    .map(
+      (e) =>
+        `${e.currency} ${Number(e.cost) > 0 && Number(e.cost) < 0.0001 ? "<0.0001" : Number(e.cost).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`,
+    )
+    .join(" · ");
+}
+
+export function tokenTotal(tokens: TokenTotals): number {
   return (
-    [...sums]
-      .map(([currency, value]) =>
-        `${currency} ${value / 10n ** 12n}.${(value % 10n ** 12n).toString().padStart(12, "0")}`
-          .replace(/0+$/, "")
-          .replace(/\.$/, ""),
-      )
-      .join(" · ") || "未定价"
+    tokens.input +
+    tokens.cacheRead +
+    tokens.cacheWrite +
+    tokens.output +
+    tokens.thinking
   );
 }
-export function csv(rows: UsageEvent[]) {
+
+export function csv(records: RecordRow[]) {
   const cell = (value: unknown) => {
     let s = value === null || value === undefined ? "未知" : String(value);
     if (/^[\s]*[=+\-@]/.test(s) || /^[\t\r]/.test(s)) s = "'" + s;
@@ -67,39 +200,44 @@ export function csv(rows: UsageEvent[]) {
     "时间",
     "来源",
     "供应商",
-    "模型",
+    "API模型",
+    "Droid选择器",
     "普通输入",
     "缓存读",
     "缓存写",
     "输出",
-    "官方积分",
+    "思考",
     "估算费用",
     "币种",
-    "记录类型",
+    "粒度",
+    "时间置信度",
   ];
   return (
     "\ufeff" +
     [
       fields,
-      ...rows.map((r) => [
+      ...records.map((r) => [
         new Date(r.occurredAt * 1000).toISOString(),
         r.source,
-        r.provider,
-        r.model,
+        r.providerLabel || "未知",
+        r.apiModel,
+        r.selector,
         r.input,
         r.cacheRead,
         r.cacheWrite,
         r.output,
-        r.credits,
+        r.thinking,
         r.cost,
         r.currency,
-        r.kind,
+        r.granularity,
+        r.timeConfidence,
       ]),
     ]
       .map((row) => row.map(cell).join(","))
       .join("\r\n")
   );
 }
+
 export function download(text: string, name: string, type: string) {
   const url = URL.createObjectURL(new Blob([text], { type }));
   const a = document.createElement("a");

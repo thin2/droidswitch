@@ -72,6 +72,7 @@ pub fn parse(line: &str) -> Result<Option<Record>, String> {
                 cache_read: u.get("cacheReadTokens").and_then(Value::as_u64),
                 cache_write: u.get("cacheCreationTokens").and_then(Value::as_u64),
                 output: u.get("outputTokens").and_then(Value::as_u64),
+                thinking: u.get("thinkingTokens").and_then(Value::as_u64),
             },
             input_semantics: "unknown".into(),
             official_credits: u.get("factoryCredits").and_then(Value::as_f64),
@@ -247,6 +248,7 @@ pub fn scan(db: &mut Connection, path: &Path, cutoff: i64) -> Result<ScanReport,
                     cache_read: delta(tokens.cache_read, old.cache_read),
                     cache_write: delta(tokens.cache_write, old.cache_write),
                     output: delta(tokens.output, old.output),
+                    thinking: delta(tokens.thinking, old.thinking),
                 };
                 credits = credits
                     .zip(state.get("credits").and_then(Value::as_f64))
@@ -259,19 +261,30 @@ pub fn scan(db: &mut Connection, path: &Path, cutoff: i64) -> Result<ScanReport,
             _ => "unknown",
         };
         let price: Option<(String, String, super::cost::Price)> = if source == "api" {
-            super::commands::price_at(&tx, r.model.as_deref(), r.occurred_at)?
+            super::pricing::price_at(
+                &tx,
+                r.provider.as_deref(),
+                r.model.as_deref().unwrap_or(""),
+                r.occurred_at,
+            )?
         } else {
             None
         };
-        let (estimated, currency, price_id) = match price {
-            Some((id, currency, p)) => (
-                super::cost::estimate(&tokens, &p)?,
-                Some(currency),
-                Some(id),
-            ),
-            None => (None, None, None),
+        let (estimated, currency, price_id, complete, snapshot) = match price {
+            Some((id, currency, p)) => {
+                let estimate = super::cost::estimate(&tokens, &p)?;
+                (
+                    estimate.cost,
+                    Some(currency),
+                    Some(id),
+                    estimate.complete,
+                    serde_json::to_string(&p).ok(),
+                )
+            }
+            None => (None, None, None, false, None),
         };
-        tx.execute("INSERT INTO usage_events(id,source_file,event_key,session_id,occurred_at,source,provider_id_at_event,model_id_at_event,input_tokens,cache_read_tokens,cache_write_tokens,output_tokens,official_credits,estimated_cost,currency,price_id_at_event) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16)",rusqlite::params![id,file,format!("{}:{id}",r.scope),r.session_id,r.occurred_at,source,r.provider,r.model,tokens.input.map(|n|n as i64),tokens.cache_read.map(|n|n as i64),tokens.cache_write.map(|n|n as i64),tokens.output.map(|n|n as i64),credits,estimated,currency,price_id]).map_err(|_|"保存用量事件失败")?;
+        let cost_units = estimated.as_deref().and_then(super::cost::parse_cost);
+        tx.execute("INSERT INTO usage_events(id,source_file,event_key,session_id,occurred_at,source,provider_id_at_event,model_id_at_event,input_tokens,cache_read_tokens,cache_write_tokens,output_tokens,official_credits,estimated_cost,currency,price_id_at_event,cost_units,cost_complete,price_snapshot,api_model_id,thinking_tokens,granularity) VALUES (?1,?2,?3,?4,?5,?6,?7,?8,?9,?10,?11,?12,?13,?14,?15,?16,?17,?18,?19,?20,?21,?22)",rusqlite::params![id,file,format!("{}:{id}",r.scope),r.session_id,r.occurred_at,source,r.provider,r.model,tokens.input.map(|n|n as i64),tokens.cache_read.map(|n|n as i64),tokens.cache_write.map(|n|n as i64),tokens.output.map(|n|n as i64),credits,estimated,currency,price_id,cost_units.map(i64::try_from).transpose().map_err(|_|"费用超出存储范围")?,complete,snapshot,r.model,tokens.thinking.map(|n|n as i64),if r.scope=="cumulative" {"legacy_cumulative"} else {"request"}]).map_err(|_|"保存用量事件失败")?;
         let raw = normalize(r.tokens, &r.input_semantics);
         let state =
             json!({"scope":r.scope,"tokens":raw,"time":r.occurred_at,"credits":r.official_credits});

@@ -19,13 +19,13 @@ export const SwitchConfirmDialog: React.FC<SwitchConfirmDialogProps> = ({
     <div style={styles.overlay} onClick={onCancel}>
       <div style={styles.dialog} onClick={(e) => e.stopPropagation()}>
         <h3 style={styles.title}>
-          即将切换到{isToOfficial ? '官方订阅' : '自定义 API'}
+          即将切换到{isToOfficial ? 'Factory 订阅' : '自定义 API'}
         </h3>
 
         <p style={styles.message}>
           {isToOfficial
             ? `您的自定义 API 配置（${customModelCount} 个模型）将被保留，不会被删除。新会话将默认使用官方模型。`
-            : `您的官方订阅配置将被保留。新会话将默认使用自定义 API 模型。`}
+            : `您的Factory 订阅配置将被保留。新会话将默认使用自定义 API 模型。`}
         </p>
 
         <div style={styles.unchanged}>
@@ -34,7 +34,7 @@ export const SwitchConfirmDialog: React.FC<SwitchConfirmDialogProps> = ({
             <li style={styles.listItem}>
               {isToOfficial
                 ? `自定义 API 模型 (${customModelCount} 个)`
-                : '官方订阅模型选择'}
+                : 'Factory 订阅模型选择'}
             </li>
             <li style={styles.listItem}>Factory 登录凭据</li>
             <li style={styles.listItem}>项目级覆盖设置</li>

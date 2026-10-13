@@ -1,3 +1,10 @@
+pub mod aggregate;
 pub mod commands;
 pub mod cost;
+pub mod identity;
+pub mod ingest;
+pub mod logs;
+pub mod native;
+pub mod pricing;
+pub mod reference;
 pub mod scanner;

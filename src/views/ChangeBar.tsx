@@ -48,35 +48,39 @@ export function ChangeBar() {
             {workspace.baseline ? "已读取目标文件" : "尚未读取目标文件"}
           </small>
         </span>
-        <button
-          disabled={busy || loading}
-          onClick={() => void mutate("reload_configuration")}
-        >
-          重新载入配置
-        </button>
-        <button
-          disabled={busy || loading || !changed}
-          onClick={() => setDiscard(true)}
-        >
-          放弃草稿
-        </button>
-        <button
-          className="primary"
-          disabled={busy || loading || !workspace.baseline}
-          onClick={async () => {
-            setLoading(true);
-            setError("");
-            try {
-              setPreview(await request<Preview>("preview_configuration"));
-            } catch (e) {
-              setError(errorText(e));
-            } finally {
-              setLoading(false);
-            }
-          }}
-        >
-          {loading ? "正在检查…" : "预览并应用"}
-        </button>
+        <div className="change-bar-actions">
+          <div className="change-bar-secondary">
+            <button
+              disabled={busy || loading}
+              onClick={() => void mutate("reload_configuration")}
+            >
+              重新载入配置
+            </button>
+            <button
+              disabled={busy || loading || !changed}
+              onClick={() => setDiscard(true)}
+            >
+              放弃草稿
+            </button>
+          </div>
+          <button
+            className="primary"
+            disabled={busy || loading || !workspace.baseline}
+            onClick={async () => {
+              setLoading(true);
+              setError("");
+              try {
+                setPreview(await request<Preview>("preview_configuration"));
+              } catch (e) {
+                setError(errorText(e));
+              } finally {
+                setLoading(false);
+              }
+            }}
+          >
+            {loading ? "正在检查…" : "预览并应用"}
+          </button>
+        </div>
       </div>
       {error && (
         <div className="error-banner" role="alert">

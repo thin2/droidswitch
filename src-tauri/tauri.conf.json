@@ -51,6 +51,9 @@
         "displayLanguageSelector": true,
         "installerIcon": "icons/icon.ico"
       }
-    }
+    },
+    "resources": [
+      "resources/codex/*"
+    ]
   }
 }

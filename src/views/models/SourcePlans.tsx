@@ -47,7 +47,7 @@ export function SourcePlans({
   }
   const sourceLabel = (source: string | null | undefined) =>
     source === "official"
-      ? "官方订阅"
+      ? "Factory 订阅"
       : source === "api"
         ? "自定义 API"
         : "未设置";
@@ -81,7 +81,7 @@ export function SourcePlans({
           aria-pressed={browse === "official"}
           onClick={() => onBrowse("official")}
         >
-          官方订阅
+          Factory 订阅
         </button>
         <button aria-pressed={browse === "api"} onClick={() => onBrowse("api")}>
           自定义 API

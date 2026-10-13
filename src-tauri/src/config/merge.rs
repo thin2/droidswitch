@@ -33,7 +33,7 @@ const FIELDS: &[&str] = &[
 ];
 // Droid can add bookkeeping fields when it saves a custom model. Only accept
 // newly added, well-typed metadata; changes to existing fields remain conflicts.
-fn matches_original(current: &Value, original: &Value) -> bool {
+pub(crate) fn matches_original(current: &Value, original: &Value) -> bool {
     if current == original {
         return true;
     }
@@ -101,7 +101,10 @@ pub fn merge(
             .map(|(i, _)| i)
             .collect();
         if matches.len() != 1 || !consumed.insert(matches[0]) {
-            return Err("已管理条目发生变化或出现歧义，请重新载入并确认接管关系".into());
+            return Err(
+                "已管理条目发生变化或出现歧义，请在设置页重新载入并查看冲突字段、选择恢复方式"
+                    .into(),
+            );
         }
         let index = matches[0];
         let model = catalog.models.iter().find(|m| m.id == binding.model_id);

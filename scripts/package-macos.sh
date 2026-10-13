@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH="$HOME/.cargo/bin:$PATH"
+python3 scripts/prepare-codex-proxy.py
 npm run tauri build -- --bundles app
 bundle_root="$PWD/src-tauri/target/release/bundle"
 package_stage="$(mktemp -d "${TMPDIR:-/tmp}/droid-switch-package.XXXXXX")"

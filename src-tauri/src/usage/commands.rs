@@ -1,59 +1,95 @@
-use super::{
-    cost::Price,
-    scanner::{self, ScanReport},
-};
+use super::{aggregate, ingest, ingest::ScanReport, pricing, scanner};
 use crate::workspace::{Store, Workspace};
-use rusqlite::{Connection, OptionalExtension};
+use rusqlite::OptionalExtension;
 use serde::{Deserialize, Serialize};
-#[derive(Clone, Serialize, Deserialize)]
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
+
+/// The path early builds shipped. It is not a real Droid directory, so a stored
+/// value equal to it is migrated once the real default exists.
+pub const LEGACY_DEFAULT_PATH: &str = "~/.factory/projects";
+pub const DEFAULT_SESSIONS: &str = "~/.factory/sessions";
+pub const DEFAULT_LOGS: &str = "~/.factory/logs";
+
+fn default_sessions() -> String {
+    DEFAULT_SESSIONS.into()
+}
+fn default_logs() -> String {
+    DEFAULT_LOGS.into()
+}
+fn default_retention() -> u32 {
+    90
+}
+fn yes() -> bool {
+    true
+}
+
+#[derive(Clone, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct UsageSettings {
+    #[serde(default = "default_sessions")]
     pub path: String,
+    #[serde(default = "default_logs")]
+    pub logs_path: String,
+    /// Optional directory of explicit exports (`droid-switch-usage-v1` or SDK).
+    #[serde(default)]
+    pub exports_path: String,
+    #[serde(default = "default_retention")]
     pub retention_days: u32,
+    #[serde(default = "yes")]
+    pub auto_scan: bool,
 }
+
 impl Default for UsageSettings {
     fn default() -> Self {
         Self {
-            path: "~/.factory/projects".into(),
-            retention_days: 90,
+            path: default_sessions(),
+            logs_path: default_logs(),
+            exports_path: String::new(),
+            retention_days: default_retention(),
+            auto_scan: true,
         }
     }
 }
-pub fn price_at(
-    db: &Connection,
-    model: Option<&str>,
-    time: i64,
-) -> Result<Option<(String, String, Price)>, String> {
-    let Some(model) = model else { return Ok(None) };
-    db.query_row("SELECT id,currency,input_per_million,cache_read_per_million,cache_write_per_million,output_per_million,effective_at FROM model_prices WHERE model_id=?1 AND effective_at<=?2 ORDER BY effective_at DESC,id DESC LIMIT 1",rusqlite::params![model,time],|r|{let id:String=r.get(0)?;let currency:String=r.get(1)?;Ok((id,currency.clone(),Price{model:model.into(),currency,input:r.get(2)?,cache_read:r.get(3)?,cache_write:r.get(4)?,output:r.get(5)?,effective_at:r.get(6)?}))}).optional().map_err(|_|"无法读取历史单价".into())
+
+static SCANNING: AtomicBool = AtomicBool::new(false);
+
+fn now() -> i64 {
+    std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs() as i64
 }
-#[tauri::command]
-pub fn save_price(store: tauri::State<'_, Store>, price: Price) -> Result<(), String> {
-    price.validate()?;
-    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
-    db.execute("INSERT INTO model_prices(id,model_id,currency,input_per_million,cache_read_per_million,cache_write_per_million,output_per_million,source,effective_at) VALUES (?1,?2,?3,?4,?5,?6,?7,'manual',?8)",rusqlite::params![uuid::Uuid::new_v4().to_string(),price.model,price.currency,price.input,price.cache_read,price.cache_write,price.output,price.effective_at]).map_err(|_|"单价保存失败，同一模型/币种/生效时间不能重复")?;
-    Ok(())
-}
-#[tauri::command]
-pub fn save_usage_settings(
-    store: tauri::State<'_, Store>,
-    settings: UsageSettings,
-    revision: u64,
-) -> Result<Workspace, String> {
-    if !(1..=3650).contains(&settings.retention_days) {
-        return Err("保留期需为 1 至 3650 天".into());
+
+fn optional_path(value: &str) -> Result<Option<PathBuf>, String> {
+    match value.trim().is_empty() {
+        true => Ok(None),
+        false => crate::config::path::resolve(value).map(Some),
     }
-    crate::config::path::resolve(&settings.path)?;
-    store.edit(revision, |w| {
-        w.usage_settings = settings;
-        Ok(())
-    })
 }
-#[tauri::command]
-pub async fn scan_usage(store: tauri::State<'_, Store>) -> Result<ScanReport, String> {
-    let settings = store.load()?.usage_settings;
-    let path = crate::config::path::resolve(&settings.path)?;
-    let mut db = store.db.lock().map_err(|_| "数据库繁忙")?;
+
+/// Stored settings plus a one-time migration notice for the legacy default.
+fn effective_settings(store: &Store) -> Result<(UsageSettings, Option<String>), String> {
+    let mut settings = store.load()?.usage_settings;
+    let mut notice = None;
+    if settings.path == LEGACY_DEFAULT_PATH {
+        let exists = crate::config::path::resolve(LEGACY_DEFAULT_PATH)
+            .map(|path| path.exists())
+            .unwrap_or(false);
+        if !exists {
+            settings.path = default_sessions();
+            notice = Some(format!(
+                "原默认采集路径 {LEGACY_DEFAULT_PATH} 不存在，本次使用 {DEFAULT_SESSIONS}"
+            ));
+        }
+    }
+    if settings.logs_path.trim().is_empty() {
+        settings.logs_path = default_logs();
+    }
+    Ok((settings, notice))
+}
+
+fn cutoff_for(db: &rusqlite::Connection, retention_days: u32) -> Result<i64, String> {
     let removed: Option<i64> = db
         .query_row(
             "SELECT byte_offset FROM sync_cursors WHERE source_file='usage-cleanup-cutoff'",
@@ -62,121 +98,320 @@ pub async fn scan_usage(store: tauri::State<'_, Store>) -> Result<ScanReport, St
         )
         .optional()
         .map_err(|_| "无法读取清理边界")?;
-    let cutoff = (now() - i64::from(settings.retention_days) * 86400).max(removed.unwrap_or(0));
-    let report = scanner::scan(&mut db, &path, cutoff)?;
-    db.execute("INSERT INTO sync_cursors(source_file,file_identity,byte_offset,state,updated_at) VALUES ('usage-last-scan','usage-report',0,?1,unixepoch()) ON CONFLICT(source_file) DO UPDATE SET state=excluded.state,updated_at=excluded.updated_at",[serde_json::to_string(&report).map_err(|_|"报告序列化失败")?]).map_err(|_|"保存采集报告失败")?;
+    Ok((now() - i64::from(retention_days) * 86400).max(removed.unwrap_or(0)))
+}
+
+async fn scan_once(store: &Store) -> Result<ScanReport, String> {
+    let (settings, _) = effective_settings(store)?;
+    let sessions = optional_path(&settings.path)?;
+    let logs = optional_path(&settings.logs_path)?;
+    let exports = optional_path(&settings.exports_path)?;
+    let mut offsets = {
+        let db = store.db.lock().map_err(|_| "数据库繁忙")?;
+        ingest::load_offsets(&db)?
+    };
+    // File discovery, reading and parsing never hold the database lock and never
+    // run on the async runtime thread.
+    let (inputs, offsets) = tauri::async_runtime::spawn_blocking(move || {
+        let inputs = ingest::collect(sessions.as_deref(), logs.as_deref(), &mut offsets);
+        (inputs, offsets)
+    })
+    .await
+    .map_err(|_| "采集任务失败")?;
+    let mut db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    let cutoff = cutoff_for(&db, settings.retention_days)?;
+    let applied = ingest::apply(&mut db, inputs, &offsets, cutoff)?;
+    let mut report = applied.report;
+    if let Some(exports) = exports.as_deref() {
+        match scanner::scan(&mut db, exports, cutoff) {
+            Ok(legacy) => {
+                report.imported += legacy.imported;
+                report.duplicates += legacy.duplicates;
+                report.unsupported += legacy.unsupported;
+                report.malformed += legacy.malformed;
+                report.unreadable += legacy.unreadable;
+                report.counter_resets += legacy.skipped_streams;
+            }
+            Err(message) => {
+                report.unreadable += 1;
+                let _ = message;
+            }
+        }
+    }
     db.execute("DELETE FROM usage_events WHERE occurred_at<?1", [cutoff])
         .map_err(|_| "清理过期统计失败")?;
+    db.execute(
+        "INSERT INTO sync_cursors(source_file,file_identity,byte_offset,state,updated_at) VALUES ('usage-last-scan','usage-report',0,?1,unixepoch()) ON CONFLICT(source_file) DO UPDATE SET state=excluded.state,updated_at=excluded.updated_at",
+        [serde_json::to_string(&report).map_err(|_| "报告序列化失败")?],
+    )
+    .map_err(|_| "保存采集报告失败")?;
     Ok(report)
 }
-fn now() -> i64 {
-    std::time::SystemTime::now()
-        .duration_since(std::time::UNIX_EPOCH)
-        .unwrap_or_default()
-        .as_secs() as i64
+
+#[tauri::command]
+pub async fn scan_usage(store: tauri::State<'_, Store>) -> Result<ScanReport, String> {
+    run_scan(&store).await
 }
+
+async fn run_scan(store: &Store) -> Result<ScanReport, String> {
+    if SCANNING.swap(true, Ordering::SeqCst) {
+        return Err("已有采集任务在进行中".into());
+    }
+    let _guard = ScanGuard;
+    scan_once(store).await
+}
+
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct UsageEvent {
-    pub id: String,
-    pub session: String,
-    pub occurred_at: i64,
-    pub source: String,
-    pub provider: Option<String>,
-    pub model: Option<String>,
-    pub input: Option<i64>,
-    pub cache_read: Option<i64>,
-    pub cache_write: Option<i64>,
-    pub output: Option<i64>,
-    pub credits: Option<f64>,
-    pub cost: Option<String>,
-    pub currency: Option<String>,
-    pub kind: String,
-}
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct UsageData {
-    pub events: Vec<UsageEvent>,
+pub struct UsagePayload {
+    pub settings: UsageSettings,
+    pub notice: Option<String>,
     pub report: Option<ScanReport>,
-    pub truncated: bool,
+    pub page: aggregate::Page,
+    pub scanning: bool,
 }
+
 #[tauri::command]
 pub async fn load_usage(
     store: tauri::State<'_, Store>,
-    from: i64,
-    to: i64,
-) -> Result<UsageData, String> {
-    if to < from {
-        return Err("时间范围无效".into());
-    }
-    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
-    let mut statement=db.prepare("SELECT id,session_id,occurred_at,source,provider_id_at_event,model_id_at_event,input_tokens,cache_read_tokens,cache_write_tokens,output_tokens,official_credits,estimated_cost,currency,event_key FROM usage_events WHERE occurred_at>=?1 AND occurred_at<?2 ORDER BY occurred_at DESC LIMIT 50001").map_err(|_|"无法读取统计")?;
-    let rows = statement
-        .query_map(rusqlite::params![from, to], |r| {
-            let key: String = r.get(13)?;
-            Ok(UsageEvent {
-                id: r.get(0)?,
-                session: r.get(1)?,
-                occurred_at: r.get(2)?,
-                source: r.get(3)?,
-                provider: r.get(4)?,
-                model: r.get(5)?,
-                input: r.get(6)?,
-                cache_read: r.get(7)?,
-                cache_write: r.get(8)?,
-                output: r.get(9)?,
-                credits: r.get(10)?,
-                cost: r.get(11)?,
-                currency: r.get(12)?,
-                kind: if key.starts_with("cumulative:") {
-                    "累计差额"
-                } else {
-                    "回合汇总"
-                }
-                .into(),
-            })
-        })
-        .map_err(|_| "读取统计失败")?;
-    let mut events: Vec<_> = rows
-        .collect::<Result<_, _>>()
-        .map_err(|_| "用量记录结构无效")?;
-    let truncated = events.len() > 50000;
-    events.truncate(50000);
-    let report: Option<String> = db
-        .query_row(
-            "SELECT state FROM sync_cursors WHERE source_file='usage-last-scan'",
-            [],
-            |r| r.get(0),
-        )
-        .optional()
-        .map_err(|_| "读取采集报告失败")?;
-    Ok(UsageData {
-        events,
-        report: report
-            .map(|s| serde_json::from_str(&s))
-            .transpose()
-            .map_err(|_| "采集报告结构无效")?,
-        truncated,
+    filter: aggregate::Filter,
+    limit: i64,
+    offset: i64,
+) -> Result<UsagePayload, String> {
+    let (settings, notice) = effective_settings(&store)?;
+    let mut db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    super::reference::fill_unpriced(&mut db)?;
+    let page = aggregate::page(&db, &filter, limit, offset)?;
+    let report = ingest::last_report(&db)?;
+    Ok(UsagePayload {
+        settings,
+        notice,
+        report,
+        page,
+        scanning: SCANNING.load(Ordering::SeqCst),
     })
 }
+
+fn validate_settings(settings: &UsageSettings) -> Result<(), String> {
+    if !(1..=3650).contains(&settings.retention_days) {
+        return Err("保留期需为 1 至 3650 天".into());
+    }
+    if settings.path.trim().is_empty() {
+        return Err("会话目录不能为空".into());
+    }
+    crate::config::path::resolve(&settings.path)?;
+    if !settings.logs_path.trim().is_empty() {
+        crate::config::path::resolve(&settings.logs_path)?;
+    }
+    if !settings.exports_path.trim().is_empty() {
+        crate::config::path::resolve(&settings.exports_path)?;
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn save_usage_settings(
+    store: tauri::State<'_, Store>,
+    settings: UsageSettings,
+    revision: u64,
+) -> Result<Workspace, String> {
+    validate_settings(&settings)?;
+    store.edit(revision, |w| {
+        w.usage_settings = settings;
+        Ok(())
+    })
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ClearResult {
+    pub removed: usize,
+    pub boundary: i64,
+}
+
+/// Deletes derived statistics before a boundary. The ledger keeps its cumulative
+/// baseline so a later scan only counts new consumption, and the recorded
+/// boundary stops cleared history from being imported again.
+fn clear_before(store: &Store, before: i64) -> Result<usize, String> {
+    let mut db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    let tx = db.transaction().map_err(|_| "无法开始清理事务")?;
+    let removed = tx
+        .execute("DELETE FROM usage_events WHERE occurred_at<?1", [before])
+        .map_err(|_| "清理统计失败")?;
+    tx.execute("INSERT INTO sync_cursors(source_file,file_identity,byte_offset,state,updated_at) VALUES ('usage-cleanup-cutoff','retention',?1,'{}',unixepoch()) ON CONFLICT(source_file) DO UPDATE SET byte_offset=max(byte_offset,excluded.byte_offset)",[before]).map_err(|_|"保存清理边界失败")?;
+    tx.commit().map_err(|_| "提交清理失败")?;
+    Ok(removed)
+}
+
 #[tauri::command]
 pub fn clear_usage(
     store: tauri::State<'_, Store>,
     before: i64,
     confirmed: bool,
-) -> Result<usize, String> {
+) -> Result<ClearResult, String> {
     if !confirmed {
         return Err("清理统计需要确认".into());
     }
     if before > now() {
         return Err("清理截止时间不能晚于当前时间".into());
     }
-    let mut db = store.db.lock().map_err(|_| "数据库繁忙")?;
-    let tx = db.transaction().map_err(|_| "无法开始清理事务")?;
-    let count = tx
-        .execute("DELETE FROM usage_events WHERE occurred_at<?1", [before])
-        .map_err(|_| "清理统计失败")?;
-    tx.execute("INSERT INTO sync_cursors(source_file,file_identity,byte_offset,state,updated_at) VALUES ('usage-cleanup-cutoff','retention',?1,'{}',unixepoch()) ON CONFLICT(source_file) DO UPDATE SET byte_offset=max(byte_offset,excluded.byte_offset)",[before]).map_err(|_|"保存清理边界失败")?;
-    tx.commit().map_err(|_| "提交清理失败")?;
-    Ok(count)
+    Ok(ClearResult {
+        removed: clear_before(&store, before)?,
+        boundary: before,
+    })
+}
+
+#[tauri::command]
+pub fn export_usage(
+    store: tauri::State<'_, Store>,
+    filter: aggregate::Filter,
+) -> Result<aggregate::Export, String> {
+    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    aggregate::export_csv(&db, &filter)
+}
+
+#[tauri::command]
+pub fn delete_price(store: tauri::State<'_, Store>, id: String) -> Result<(), String> {
+    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    let removed = db
+        .execute("DELETE FROM usage_prices WHERE id=?1", [id])
+        .map_err(|_| "删除单价失败")?;
+    if removed == 0 {
+        return Err("单价不存在".into());
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub fn usage_prices(store: tauri::State<'_, Store>) -> Result<Vec<pricing::StoredPrice>, String> {
+    let db = store.db.lock().map_err(|_| "数据库繁忙")?;
+    pricing::list_prices(&db)
+}
+
+struct ScanGuard;
+impl Drop for ScanGuard {
+    fn drop(&mut self) {
+        SCANNING.store(false, Ordering::SeqCst);
+    }
+}
+
+/// The worker is tied to the desktop process, not to the usage page being open.
+pub fn start_auto_scan(app: tauri::AppHandle) {
+    use tauri::{Emitter, Manager};
+    std::thread::spawn(move || loop {
+        let store = app.state::<Store>();
+        if store.load().is_ok_and(|w| w.usage_settings.auto_scan) {
+            let result = tauri::async_runtime::block_on(run_scan(&store));
+            let _ = app.emit("usage-scan-finished", result.as_ref().err().cloned());
+        }
+        std::thread::sleep(std::time::Duration::from_secs(60));
+    });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::workspace::Store;
+
+    fn store(dir: &std::path::Path) -> Store {
+        Store::open(dir).unwrap()
+    }
+
+    #[test]
+    fn legacy_default_path_is_replaced_only_when_it_is_missing() {
+        let dir = tempfile::tempdir().unwrap();
+        let store = store(dir.path());
+        store
+            .edit(0, |w| {
+                w.usage_settings.path = LEGACY_DEFAULT_PATH.into();
+                Ok(())
+            })
+            .unwrap();
+        let (settings, notice) = effective_settings(&store).unwrap();
+        assert_eq!(settings.path, DEFAULT_SESSIONS);
+        assert!(notice.is_some());
+        // A stored custom path is respected.
+        store
+            .edit(1, |w| {
+                w.usage_settings.path = dir.path().to_string_lossy().into();
+                Ok(())
+            })
+            .unwrap();
+        let (settings, notice) = effective_settings(&store).unwrap();
+        assert_eq!(settings.path, dir.path().to_string_lossy());
+        assert!(notice.is_none());
+    }
+
+    #[test]
+    fn settings_validation_rejects_impossible_values() {
+        let dir = tempfile::tempdir().unwrap();
+        let store = store(dir.path());
+        let settings = UsageSettings {
+            retention_days: 0,
+            ..Default::default()
+        };
+        assert!(validate_settings(&settings).is_err());
+        let settings = UsageSettings {
+            path: "  ".into(),
+            ..Default::default()
+        };
+        assert!(validate_settings(&settings).is_err());
+        let settings = UsageSettings::default();
+        assert!(validate_settings(&settings).is_ok());
+        save_usage_settings_inner(&store, settings, 0).unwrap();
+        assert_eq!(store.load().unwrap().usage_settings.path, DEFAULT_SESSIONS);
+    }
+
+    #[test]
+    fn clearing_records_a_boundary_and_removes_only_older_records() {
+        let dir = tempfile::tempdir().unwrap();
+        let store = store(dir.path());
+        {
+            let db = store.db.lock().unwrap();
+            db.execute("INSERT INTO usage_events(id,source_file,event_key,session_id,occurred_at,source,input_tokens) VALUES ('a','log','k','s',10,'api',5)", []).unwrap();
+            db.execute("INSERT INTO usage_events(id,source_file,event_key,session_id,occurred_at,source,input_tokens) VALUES ('b','log','k2','s',100,'api',7)", []).unwrap();
+        }
+        assert_eq!(clear_before(&store, 50).unwrap(), 1);
+        let db = store.db.lock().unwrap();
+        assert_eq!(
+            db.query_row("SELECT count(*) FROM usage_events", [], |r| r
+                .get::<_, i64>(0))
+                .unwrap(),
+            1
+        );
+        assert_eq!(
+            db.query_row(
+                "SELECT byte_offset FROM sync_cursors WHERE source_file='usage-cleanup-cutoff'",
+                [],
+                |r| r.get::<_, i64>(0)
+            )
+            .unwrap(),
+            50
+        );
+        drop(db);
+        assert_eq!(clear_before(&store, 10).unwrap(), 0);
+        let db = store.db.lock().unwrap();
+        assert_eq!(
+            db.query_row(
+                "SELECT byte_offset FROM sync_cursors WHERE source_file='usage-cleanup-cutoff'",
+                [],
+                |r| r.get::<_, i64>(0)
+            )
+            .unwrap(),
+            50,
+            "an earlier boundary must not move the cutoff backwards"
+        );
+    }
+
+    fn save_usage_settings_inner(
+        store: &Store,
+        settings: UsageSettings,
+        revision: u64,
+    ) -> Result<Workspace, String> {
+        validate_settings(&settings)?;
+        store.edit(revision, |w| {
+            w.usage_settings = settings;
+            Ok(())
+        })
+    }
 }

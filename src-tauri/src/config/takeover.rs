@@ -1,4 +1,4 @@
-use super::{merge::Binding, pipeline::read};
+use super::merge::Binding;
 use crate::{
     model::{
         entry::ModelEntry,
@@ -8,7 +8,6 @@ use crate::{
     workspace::{Store, Workspace},
 };
 use serde_json::Value;
-use std::path::Path;
 fn required(value: &Value, key: &str) -> Result<String, String> {
     value
         .get(key)
@@ -17,22 +16,11 @@ fn required(value: &Value, key: &str) -> Result<String, String> {
         .map(str::to_owned)
         .ok_or_else(|| format!("外部条目缺少支持的 {key} 字段，无法接管"))
 }
-pub fn adopt(w: &mut Workspace, index: usize, allow_plaintext: bool) -> Result<(), String> {
-    let baseline = w.baseline.as_ref().ok_or("请先载入配置")?;
-    if read(Path::new(&w.target_path))?.fingerprint != baseline.fingerprint {
-        return Err("外部配置已变化，请重新载入".into());
-    }
-    let item = baseline
-        .document
-        .get("customModels")
-        .and_then(Value::as_array)
-        .and_then(|a| a.get(index))
-        .ok_or("外部条目不存在")?
-        .clone();
-    if w.bindings.iter().any(|b| b.original == item) {
-        return Err("条目已接管".into());
-    }
-    let key = required(&item, "apiKey")?;
+pub(super) fn parse_item(
+    item: &Value,
+    allow_plaintext: bool,
+) -> Result<(ProviderConnection, ModelEntry), String> {
+    let key = required(item, "apiKey")?;
     let credential = if let Some(name) = key.strip_prefix("${").and_then(|v| v.strip_suffix('}')) {
         Credential {
             mode: CredentialMode::Environment,
@@ -47,7 +35,7 @@ pub fn adopt(w: &mut Workspace, index: usize, allow_plaintext: bool) -> Result<(
             value: key,
         }
     };
-    let api = required(&item, "model")?;
+    let api = required(item, "model")?;
     let name = item
         .get("displayName")
         .and_then(Value::as_str)
@@ -56,7 +44,7 @@ pub fn adopt(w: &mut Workspace, index: usize, allow_plaintext: bool) -> Result<(
     let p = ProviderConnection {
         id: InternalId::new(),
         name: format!("导入 · {name}"),
-        base_url: required(&item, "baseUrl")?,
+        base_url: required(item, "baseUrl")?,
         protocol: serde_json::from_value(
             item.get("provider").cloned().ok_or("缺少 provider 协议")?,
         )
@@ -88,25 +76,65 @@ pub fn adopt(w: &mut Workspace, index: usize, allow_plaintext: bool) -> Result<(
         None => Default::default(),
         Some(v) => v.as_object().cloned().ok_or("extraArgs 必须为对象")?,
     };
+    Ok((p, m))
+}
+
+pub fn adopt(w: &mut Workspace, index: usize, allow_plaintext: bool) -> Result<(), String> {
+    adopt_linked(w, index, allow_plaintext, None, false)
+}
+
+pub fn adopt_linked(
+    w: &mut Workspace,
+    index: usize,
+    allow_plaintext: bool,
+    existing_model_id: Option<InternalId>,
+    create_separate: bool,
+) -> Result<(), String> {
+    let item = super::reconcile::available_item(w, index, None)?;
+    let candidates = super::reconcile::association_candidates(w, &item);
+    if let Some(id) = existing_model_id {
+        if !candidates.contains(&id) || w.bindings.iter().any(|b| b.model_id == id) {
+            return Err("只能关联同接口、同协议、同 API 模型且尚未接管的记录".into());
+        }
+    } else if !candidates.is_empty() && !create_separate {
+        return Err("已有相同接口的模型，请明确关联已有记录；已接管的记录请先处理冲突".into());
+    }
+    let (provider, mut model) = parse_item(&item, allow_plaintext)?;
+    if let Some(id) = existing_model_id {
+        model.id = id;
+        model.manufacturer = w
+            .catalog
+            .models
+            .iter()
+            .find(|m| m.id == id)
+            .and_then(|m| m.manufacturer.clone());
+    }
+    super::reconcile::accept_file_model(w, provider, model.clone(), true)?;
     w.bindings.push(Binding {
-        model_id: m.id,
+        model_id: model.id,
         original: item,
     });
-    w.catalog.providers.push(p.clone());
-    w.catalog.models.push(m.clone());
-    // Taking ownership itself is the baseline; discard reverts subsequent edits only.
-    w.applied_catalog.providers.push(p);
-    w.applied_catalog.models.push(m);
     Ok(())
 }
+
 #[tauri::command]
 pub fn takeover_model(
     store: tauri::State<'_, Store>,
     index: usize,
     allow_plaintext: bool,
+    existing_model_id: Option<InternalId>,
+    create_separate: Option<bool>,
     revision: u64,
 ) -> Result<Workspace, String> {
-    store.edit(revision, |w| adopt(w, index, allow_plaintext))
+    store.edit(revision, |w| {
+        adopt_linked(
+            w,
+            index,
+            allow_plaintext,
+            existing_model_id,
+            create_separate.unwrap_or(false),
+        )
+    })
 }
 #[tauri::command]
 pub fn release_binding(
@@ -124,6 +152,7 @@ pub fn release_binding(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::config::pipeline::read;
     use serde_json::json;
     #[test]
     fn takeover_requires_plaintext_consent_and_preserves_unknown() {

@@ -1,3 +1,4 @@
+pub mod codex;
 pub mod config;
 pub mod import;
 pub mod switch;
@@ -20,14 +21,34 @@ pub fn run() {
             let data_dir = app.path().app_data_dir()?;
             let store = workspace::Store::open(&data_dir).map_err(std::io::Error::other)?;
             let _ = config::pipeline::recover(&store);
+            let binary = app
+                .path()
+                .resource_dir()?
+                .join("resources/codex/cli-proxy-api");
+            #[cfg(debug_assertions)]
+            let binary = if binary.exists() {
+                binary
+            } else {
+                std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .join("resources/codex/cli-proxy-api")
+            };
+            app.manage(codex::CodexService::new(
+                data_dir.join("codex-proxy"),
+                binary,
+            ));
             app.manage(store);
+            codex::monitor(app.handle().clone());
+            usage::commands::start_auto_scan(app.handle().clone());
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            codex::codex_action,
             workspace::load_workspace,
             workspace::save_provider,
             workspace::copy_provider,
             workspace::delete_provider,
+            model::naming::suggest_model_names,
+            model::naming::apply_model_names,
             model::commands::save_model,
             model::commands::delete_model,
             model::commands::import_models,
@@ -43,6 +64,8 @@ pub fn run() {
             config::pipeline::discard_draft,
             config::pipeline::export_draft,
             config::pipeline::resolve_recovery,
+            config::reconcile::inspect_configuration,
+            config::reconcile::resolve_binding,
             config::takeover::takeover_model,
             config::takeover::release_binding,
             config::backups::list_backups,
@@ -56,12 +79,23 @@ pub fn run() {
             switch::catalog::open_factory_login,
             import::mapping::preview_ccswitch,
             import::mapping::import_ccswitch,
-            usage::commands::save_price,
+            usage::pricing::save_price,
+            usage::pricing::preview_usage_reprice,
+            usage::pricing::apply_usage_reprice,
             usage::commands::save_usage_settings,
             usage::commands::scan_usage,
             usage::commands::load_usage,
-            usage::commands::clear_usage
+            usage::commands::export_usage,
+            usage::commands::clear_usage,
+            usage::commands::delete_price,
+            usage::commands::usage_prices,
+            codex::quota::codex_quota
         ])
-        .run(tauri::generate_context!())
-        .expect("Droid Switch failed to start");
+        .build(tauri::generate_context!())
+        .expect("Droid Switch failed to start")
+        .run(|app, event| {
+            if matches!(event, tauri::RunEvent::Exit) {
+                app.state::<codex::CodexService>().shutdown();
+            }
+        });
 }

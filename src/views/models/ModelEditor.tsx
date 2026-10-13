@@ -5,10 +5,14 @@ export function ModelEditor({
   model,
   onClose,
   inline = false,
+  formId,
+  hideActions = false,
 }: {
   model: ModelEntry;
   onClose: () => void;
   inline?: boolean;
+  formId?: string;
+  hideActions?: boolean;
 }) {
   const { workspace, busy, mutate } = useWorkspace();
   const [draft, setDraft] = useState(model),
@@ -38,8 +42,10 @@ export function ModelEditor({
         aria-labelledby={inline ? undefined : "model-title"}
         className={inline ? "" : "modal"}
       >
-        <form onSubmit={submit}>
-          <h2 id={inline ? undefined : "model-title"}>模型配置</h2>
+        <form id={formId} onSubmit={submit}>
+          {!hideActions && (
+            <h2 id={inline ? undefined : "model-title"}>模型配置</h2>
+          )}
           <label>
             供应商
             <select
@@ -141,14 +147,16 @@ export function ModelEditor({
           </label>
           {error && <p role="alert">{error}</p>}
           <p className="muted">保存为本地草稿，应用前不会更改 Droid 配置。</p>
-          <footer>
-            <button type="button" onClick={onClose}>
-              取消
-            </button>
-            <button className="primary" disabled={busy}>
-              保存草稿
-            </button>
-          </footer>
+          {!hideActions && (
+            <footer>
+              <button type="button" onClick={onClose}>
+                取消
+              </button>
+              <button className="primary" disabled={busy}>
+                保存草稿
+              </button>
+            </footer>
+          )}
         </form>
       </section>
     </div>

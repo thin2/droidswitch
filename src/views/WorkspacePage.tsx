@@ -1,6 +1,7 @@
 import type { Page } from "../App";
 
 const content: Record<Page, { title: string; description: string }> = {
+  codex: { title: "Codex 授权", description: "连接 ChatGPT 账号。" },
   models: {
     title: "模型库尚未连接",
     description: "模型读取与草稿存储接入后，可在这里管理 API 模型。",

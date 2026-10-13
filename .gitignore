@@ -36,3 +36,7 @@ docs/
 /credentials.json
 /.factory/
 /.cc-switch/
+/.serena/
+
+# Downloaded, checksum-pinned optional proxy binary
+src-tauri/resources/codex/cli-proxy-api
