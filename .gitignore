@@ -20,6 +20,7 @@ releases/
 *.docx
 planning/
 docs/
+!docs/screenshots/
 .dual-ai-collab/
 
 # Local credentials and runtime data
