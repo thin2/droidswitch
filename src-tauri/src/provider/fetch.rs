@@ -32,6 +32,9 @@ pub fn headers(
                 .entry("anthropic-version".into())
                 .or_insert("2023-06-01".into());
         }
+        Protocol::GoogleGemini => {
+            headers.insert("x-goog-api-key".into(), secret);
+        }
         _ => {
             headers.insert("authorization".into(), format!("Bearer {secret}"));
         }
@@ -62,32 +65,64 @@ pub struct RemoteModels {
     pub elapsed_ms: u64,
     pub incomplete: bool,
 }
-pub fn parse_models(body: &str) -> Result<(Vec<ApiModelId>, bool), String> {
+pub fn parse_models(body: &str, protocol: Protocol) -> Result<(Vec<ApiModelId>, bool), String> {
     let value: serde_json::Value =
         serde_json::from_str(body).map_err(|_| "模型列表不是有效 JSON")?;
-    let data = value
-        .get("data")
-        .and_then(|v| v.as_array())
-        .ok_or("模型列表缺少 data 数组，请手动添加模型")?;
-    let mut seen = HashSet::new();
-    let mut ids = vec![];
-    for item in data {
-        let raw = item
-            .get("id")
-            .and_then(|v| v.as_str())
-            .ok_or("模型列表含无效 ID")?;
-        let id = ApiModelId::try_from(raw.to_owned()).map_err(|_| "模型列表含空 ID")?;
-        if seen.insert(id.clone()) {
-            ids.push(id);
+    
+    match protocol {
+        Protocol::GoogleGemini => {
+            // Gemini: {"models": [{"name": "models/gemini-3.8-flash", ...}]}
+            let models = value
+                .get("models")
+                .and_then(|v| v.as_array())
+                .ok_or("模型列表缺少 models 数组")?;
+            
+            let mut seen = HashSet::new();
+            let mut ids = vec![];
+            for item in models {
+                let raw = item
+                    .get("name")
+                    .and_then(|v| v.as_str())
+                    .ok_or("模型列表含无效 name")?;
+                
+                // Strip "models/" prefix if present
+                let id_str = raw.strip_prefix("models/").unwrap_or(raw);
+                let id = ApiModelId::try_from(id_str.to_owned())
+                    .map_err(|_| "模型列表含空 ID")?;
+                
+                if seen.insert(id.clone()) {
+                    ids.push(id);
+                }
+            }
+            Ok((ids, false))  // Gemini does not use pagination
+        }
+        _ => {
+            // OpenAI-compatible format
+            let data = value
+                .get("data")
+                .and_then(|v| v.as_array())
+                .ok_or("模型列表缺少 data 数组，请手动添加模型")?;
+            let mut seen = HashSet::new();
+            let mut ids = vec![];
+            for item in data {
+                let raw = item
+                    .get("id")
+                    .and_then(|v| v.as_str())
+                    .ok_or("模型列表含无效 ID")?;
+                let id = ApiModelId::try_from(raw.to_owned()).map_err(|_| "模型列表含空 ID")?;
+                if seen.insert(id.clone()) {
+                    ids.push(id);
+                }
+            }
+            Ok((
+                ids,
+                value
+                    .get("has_more")
+                    .and_then(|v| v.as_bool())
+                    .unwrap_or(false),
+            ))
         }
     }
-    Ok((
-        ids,
-        value
-            .get("has_more")
-            .and_then(|v| v.as_bool())
-            .unwrap_or(false),
-    ))
 }
 #[tauri::command]
 pub async fn fetch_models(
@@ -112,7 +147,7 @@ pub async fn fetch_models(
     if !(200..300).contains(&r.status) {
         return Err(status_error(r.status));
     }
-    let (ids, incomplete) = parse_models(&r.body)?;
+    let (ids, incomplete) = parse_models(&r.body, p.protocol)?;
     Ok(RemoteModels {
         ids,
         elapsed_ms: r.elapsed_ms,
@@ -126,13 +161,14 @@ mod tests {
     fn fetch_preserves_exact_ids_deduplicates_and_reports_pagination() {
         let (ids, more) = parse_models(
             r#"{"data":[{"id":"a/b:1"},{"id":"a/b:1"},{"id":" A "}],"has_more":true}"#,
+            Protocol::OpenAiResponses,
         )
         .unwrap();
         assert_eq!(ids.len(), 2);
         assert_eq!(ids[1].as_str(), " A ");
         assert!(more);
-        assert!(parse_models("{}").is_err());
-        assert!(parse_models(r#"{"data":[{"id":3}]}"#).is_err());
+        assert!(parse_models("{}", Protocol::OpenAiResponses).is_err());
+        assert!(parse_models(r#"{"data":[{"id":3}]}"#, Protocol::OpenAiResponses).is_err());
     }
     #[test]
     fn fetch_endpoint_keeps_custom_path_and_query() {
@@ -140,5 +176,27 @@ mod tests {
             endpoint("https://example.com/custom/v2/?region=a", "models").unwrap(),
             "https://example.com/custom/v2/models?region=a"
         );
+    }
+    #[test]
+    fn fetch_gemini_models() {
+        let (ids, more) = parse_models(
+            r#"{"models":[{"name":"models/gemini-3.8-flash"},{"name":"models/gemini-3.1-pro"}]}"#,
+            Protocol::GoogleGemini,
+        )
+        .unwrap();
+        assert_eq!(ids.len(), 2);
+        assert_eq!(ids[0].as_str(), "gemini-3.8-flash");
+        assert_eq!(ids[1].as_str(), "gemini-3.1-pro");
+        assert!(!more);
+    }
+    #[test]
+    fn fetch_gemini_strips_models_prefix() {
+        let (ids, _) = parse_models(
+            r#"{"models":[{"name":"models/gemini-test"},{"name":"no-prefix"}]}"#,
+            Protocol::GoogleGemini,
+        )
+        .unwrap();
+        assert_eq!(ids[0].as_str(), "gemini-test");
+        assert_eq!(ids[1].as_str(), "no-prefix");
     }
 }

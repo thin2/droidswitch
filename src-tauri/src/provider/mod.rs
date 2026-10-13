@@ -1,5 +1,6 @@
 pub mod connection;
 pub mod fetch;
+pub mod google;
 use crate::model::{
     entry::{ModelEntry, Protocol},
     ids::InternalId,

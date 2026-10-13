@@ -10,6 +10,8 @@ pub enum Protocol {
     OpenAiResponses,
     #[serde(rename = "generic-chat-completion-api")]
     OpenAiChatCompletions,
+    #[serde(rename = "google-gemini")]
+    GoogleGemini,
 }
 
 /// Local management representation, never serialize directly into customModels.

@@ -44,6 +44,10 @@ pub fn test_request(
             "chat/completions",
             json!({"model":id,"max_tokens":32,"messages":[{"role":"user","content":"Reply OK."}]}),
         ),
+        Protocol::GoogleGemini => (
+            "interactions",
+            json!({"model":id,"input":"Reply OK.","generationConfig":{"maxOutputTokens":32}}),
+        ),
     };
     Ok(net::HttpRequest {
         url: endpoint(&p.base_url, suffix)?,
@@ -78,6 +82,10 @@ pub fn response_valid(body: &str, protocol: Protocol) -> bool {
                 a.iter()
                     .any(|c| c.get("message").is_some_and(Value::is_object))
             })
+        }
+        Protocol::GoogleGemini => {
+            v.get("id").is_some()
+                && v.get("steps").and_then(Value::as_array).is_some()
         }
     }
 }
@@ -140,6 +148,7 @@ mod tests {
             Protocol::AnthropicMessages,
             Protocol::OpenAiResponses,
             Protocol::OpenAiChatCompletions,
+            Protocol::GoogleGemini,
         ] {
             m.protocol_override = Some(protocol);
             let r = test_request(&p, &m, true).unwrap();
@@ -161,6 +170,25 @@ mod tests {
         assert!(response_valid(
             r#"{"object":"response","status":"incomplete","output":[]}"#,
             Protocol::OpenAiResponses
+        ));
+    }
+    #[test]
+    fn gemini_response_validation() {
+        assert!(response_valid(
+            r#"{"id":"int-123","steps":[{"type":"model_output","content":[{"type":"text","text":"Hi"}]}]}"#,
+            Protocol::GoogleGemini
+        ));
+        assert!(!response_valid(
+            r#"{"error":{"message":"Invalid key"}}"#,
+            Protocol::GoogleGemini
+        ));
+        assert!(!response_valid(
+            r#"{"id":"int-123"}"#,
+            Protocol::GoogleGemini
+        ));
+        assert!(!response_valid(
+            r#"{"steps":[]}"#,
+            Protocol::GoogleGemini
         ));
     }
 }

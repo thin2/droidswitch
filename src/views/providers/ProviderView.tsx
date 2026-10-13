@@ -165,13 +165,35 @@ export function ProviderView() {
                 <input
                   required
                   type="url"
-                  placeholder="https://api.example.com/v1"
+                  placeholder={
+                    edit.protocol === "google-gemini"
+                      ? "https://generativelanguage.googleapis.com/v1beta"
+                      : "https://api.example.com/v1"
+                  }
                   value={edit.baseUrl}
                   onChange={(e) =>
                     setEdit({ ...edit, baseUrl: e.target.value })
                   }
                 />
                 <small>按服务商要求填写，地址不会自动补删 /v1。</small>
+                {edit.protocol === "google-gemini" && (
+                  <div className="hint" style={{ marginTop: "8px", padding: "12px", background: "#f8f9fa", borderRadius: "4px", fontSize: "13px" }}>
+                    <strong>Google Gemini API 配置:</strong>
+                    <ul style={{ marginTop: "8px", marginBottom: "0", paddingLeft: "20px" }}>
+                      <li>默认端点: https://generativelanguage.googleapis.com/v1beta</li>
+                      <li>从 <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">AI Studio</a> 获取 API Key</li>
+                      <li>支持模型: gemini-2.0-flash, gemini-1.5-pro 等</li>
+                    </ul>
+                    <a 
+                      href="https://ai.google.dev/gemini-api/docs" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      style={{ fontSize: "12px", marginTop: "8px", display: "inline-block" }}
+                    >
+                      查看 Gemini API 文档 →
+                    </a>
+                  </div>
+                )}
               </label>
               <label>
                 默认 API 协议
@@ -231,10 +253,17 @@ export function ProviderView() {
                 />
               </label>
               {edit.credential.mode === "environment" ? (
-                <p className="hint">
-                  Droid
-                  必须由能读取该变量的终端启动。软件自身能读取变量，不代表其他终端也可以。
-                </p>
+                <>
+                  <p className="hint">
+                    Droid
+                    必须由能读取该变量的终端启动。软件自身能读取变量，不代表其他终端也可以。
+                  </p>
+                  {edit.protocol === "google-gemini" && (
+                    <p className="hint" style={{ fontSize: "12px", marginTop: "4px" }}>
+                      推荐变量名: GOOGLE_API_KEY 或 GEMINI_API_KEY
+                    </p>
+                  )}
+                </>
               ) : (
                 <label className="check warning">
                   <input

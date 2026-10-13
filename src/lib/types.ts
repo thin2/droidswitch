@@ -1,8 +1,14 @@
-export type Protocol = "anthropic" | "openai" | "generic-chat-completion-api";
+export type Protocol = 
+  | "anthropic" 
+  | "openai" 
+  | "generic-chat-completion-api"
+  | "google-gemini";
+
 export const protocols: Record<Protocol, string> = {
   anthropic: "Anthropic Messages",
   openai: "OpenAI Responses",
   "generic-chat-completion-api": "Chat Completions",
+  "google-gemini": "Google Gemini",
 };
 export interface Provider {
   id: string;
