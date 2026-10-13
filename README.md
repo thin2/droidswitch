@@ -168,3 +168,10 @@ macOS Apple Silicon 版内置固定的 CLIProxyAPI 8.0.27。在侧栏“Codex �
 打包前运行 `python3 scripts/prepare-codex-proxy.py`（`npm run package:mac` 已包含此步）。下载固定官方发布资产并核验两级 SHA-256；不跟随 latest。原始二进制不提交 Git，版本、摘要与 MIT 许可在 `src-tauri/resources/codex/`。完整组件约 61.4 MiB，尚未裁剪其他代理实现。
 
 授权适配器测试：`cargo test --manifest-path src-tauri/Cargo.toml codex --lib`；实际代理生命周期测试需本地监听权限：`cargo test --manifest-path src-tauri/Cargo.toml codex_real_sidecar_lifecycle --lib -- --ignored`。此测试生成并取消空授权会话，不打开浏览器、不使用真实账号或推理额度。
+
+## 许可证与致谢
+
+本仓库目前未附开源许可证；代码公开可见不代表授予任意使用、修改或再分发的许可。
+
+**第三方组件**：
+- [CLIProxyAPI](https://github.com/Router-For-ME/CLIProxyAPI) (MIT License) - 用于 Codex / ChatGPT 本地授权功能。该组件的原始许可证保留在 `src-tauri/resources/codex/LICENSE`。我们使用固定版本 8.0.27，遵循其 MIT 许可证条款，包括在所有副本中保留版权声明和许可声明。
