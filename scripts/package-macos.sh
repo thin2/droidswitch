@@ -2,6 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH="$HOME/.cargo/bin:$PATH"
+# Avoid embedding the local builder's home directory in Rust diagnostics.
+export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }--remap-path-prefix=$HOME=/build"
 python3 scripts/prepare-codex-proxy.py
 npm run tauri build -- --bundles app
 bundle_root="$PWD/src-tauri/target/release/bundle"
@@ -11,5 +13,6 @@ trap 'rm -rf "$package_stage"' EXIT
 ln -s /Applications "$package_stage/Applications"
 mkdir -p "$bundle_root/dmg"
 package_arch="$(uname -m)"
-hdiutil create -volname 'Droid Switch' -srcfolder "$package_stage" -ov -format UDZO "$bundle_root/dmg/Droid_Switch_0.1.0_${package_arch}.dmg"
+package_version="$(node -p 'JSON.parse(require("fs").readFileSync("src-tauri/tauri.conf.json", "utf8")).version')"
+hdiutil create -volname 'Droid Switch' -srcfolder "$package_stage" -ov -format UDZO "$bundle_root/dmg/Droid_Switch_${package_version}_${package_arch}.dmg"
 codesign --verify --deep --strict "$bundle_root/macos/Droid Switch.app"

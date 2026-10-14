@@ -84,8 +84,7 @@ pub fn response_valid(body: &str, protocol: Protocol) -> bool {
             })
         }
         Protocol::GoogleGemini => {
-            v.get("id").is_some()
-                && v.get("steps").and_then(Value::as_array).is_some()
+            v.get("id").is_some() && v.get("steps").and_then(Value::as_array).is_some()
         }
     }
 }
@@ -186,10 +185,7 @@ mod tests {
             r#"{"id":"int-123"}"#,
             Protocol::GoogleGemini
         ));
-        assert!(!response_valid(
-            r#"{"steps":[]}"#,
-            Protocol::GoogleGemini
-        ));
+        assert!(!response_valid(r#"{"steps":[]}"#, Protocol::GoogleGemini));
     }
 }
 #[tauri::command]

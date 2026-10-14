@@ -325,13 +325,46 @@ fn apply_direct_version(
 #[tauri::command]
 pub async fn apply_configuration(
     store: tauri::State<'_, Store>,
+    registry: tauri::State<'_, crate::proxy::ProxyRegistry>,
     revision: u64,
     token: String,
 ) -> Result<Workspace, String> {
     let version = tauri::async_runtime::spawn_blocking(super::cli::version)
         .await
         .map_err(|_| "CLI 检测失败")??;
-    apply(&store, revision, &token, &version)
+    let pending = store.load()?;
+    if pending.catalog.models.iter().any(|m| {
+        m.enabled
+            && pending.catalog.provider(m.provider_id).is_ok_and(|p| {
+                m.effective_protocol(p.protocol) == crate::model::entry::Protocol::GoogleGemini
+            })
+    }) && !registry.is_running()
+    {
+        return Err(
+            "Gemini 本地代理未启动：请检查 127.0.0.1:18318 端口占用后重启应用；未写入配置".into(),
+        );
+    }
+    for model in pending.catalog.models.iter().filter(|m| m.enabled) {
+        let provider = pending.catalog.provider(model.provider_id)?;
+        if model.effective_protocol(provider.protocol)
+            == crate::model::entry::Protocol::GoogleGemini
+        {
+            provider
+                .credential
+                .resolve()
+                .map_err(|_| "Gemini 凭据不可用：应用进程必须能读取环境变量；未写入配置")?;
+            crate::proxy::handler::endpoint(&provider.base_url, model.api_model_id.as_str())
+                .map_err(|_| "Gemini 原生端点或模型 ID 无效；未写入配置")?;
+        }
+    }
+    let result = apply(&store, revision, &token, &version)?;
+
+    // Refresh proxy registry after successful apply
+    if let Err(e) = registry.refresh(&result) {
+        eprintln!("代理注册表刷新失败: {}", e);
+    }
+
+    Ok(result)
 }
 #[tauri::command]
 pub fn discard_draft(store: tauri::State<'_, Store>, revision: u64) -> Result<Workspace, String> {

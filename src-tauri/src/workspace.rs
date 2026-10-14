@@ -36,6 +36,7 @@ pub struct Workspace {
     pub baseline: Option<crate::config::pipeline::Baseline>,
 }
 pub struct Store {
+    pub proxy_registry: crate::proxy::ProxyRegistry,
     pub db: Mutex<Connection>,
     pub data_dir: PathBuf,
 }
@@ -46,7 +47,10 @@ impl Store {
             .map_err(|_| "Cannot protect the application data directory")?;
         let db = db::open(&data_dir.join("droid-switch.db"))
             .map_err(|_| "无法打开管理数据库，请检查权限或数据库版本")?;
+        let proxy_registry = crate::proxy::ProxyRegistry::new();
+        let _ = proxy_registry.load_from_workspace(&load(&db)?);
         Ok(Self {
+            proxy_registry,
             db: Mutex::new(db),
             data_dir: data_dir.into(),
         })
@@ -93,6 +97,9 @@ impl Store {
         let payload = serde_json::to_string(&workspace).map_err(|_| "草稿序列化失败")?;
         tx.execute("INSERT INTO drafts(id,target_path,payload,revision,updated_at) VALUES ('workspace',?1,?2,?3,unixepoch()) ON CONFLICT(id) DO UPDATE SET target_path=excluded.target_path,payload=excluded.payload,revision=excluded.revision,updated_at=excluded.updated_at",rusqlite::params![workspace.target_path,payload,workspace.revision as i64]).map_err(|_|"保存草稿失败")?;
         tx.commit().map_err(|_| "保存草稿失败")?;
+        // All committed edits (apply, direct apply, restore, recovery) refresh
+        // exclusively from the applied snapshot, never pending drafts.
+        let _ = self.proxy_registry.refresh(&workspace);
         Ok(workspace)
     }
 }

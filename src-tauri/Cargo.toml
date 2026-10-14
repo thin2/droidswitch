@@ -1,6 +1,6 @@
 [package]
 name = "droid-switch"
-version = "0.1.0"
+version = "0.2.1"
 description = "Local model configuration manager for Droid"
 edition = "2021"
 rust-version = "1.90"
@@ -25,6 +25,10 @@ uuid = { version = "1.28.0", features = ["v4", "serde"] }
 
 toml = "1.1.8"
 chrono = { version = "0.4", default-features = false, features = ["std"] }
+
+# Proxy server dependencies
+axum = "0.7"
+tokio = { version = "1.53.2", features = ["net", "rt", "time"] }
 
 [dev-dependencies]
 tokio = { version = "1.53.2", features = ["macros", "rt-multi-thread"] }

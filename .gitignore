@@ -42,3 +42,6 @@ docs/
 # Downloaded, checksum-pinned optional proxy binary
 src-tauri/resources/codex/cli-proxy-api
 droid-switch-*.tar.gz
+
+# Local experimental proxy (not part of the embedded proxy release)
+/gemini-proxy/

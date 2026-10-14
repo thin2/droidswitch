@@ -68,7 +68,7 @@ pub struct RemoteModels {
 pub fn parse_models(body: &str, protocol: Protocol) -> Result<(Vec<ApiModelId>, bool), String> {
     let value: serde_json::Value =
         serde_json::from_str(body).map_err(|_| "模型列表不是有效 JSON")?;
-    
+
     match protocol {
         Protocol::GoogleGemini => {
             // Gemini: {"models": [{"name": "models/gemini-3.8-flash", ...}]}
@@ -76,7 +76,7 @@ pub fn parse_models(body: &str, protocol: Protocol) -> Result<(Vec<ApiModelId>, 
                 .get("models")
                 .and_then(|v| v.as_array())
                 .ok_or("模型列表缺少 models 数组")?;
-            
+
             let mut seen = HashSet::new();
             let mut ids = vec![];
             for item in models {
@@ -84,17 +84,16 @@ pub fn parse_models(body: &str, protocol: Protocol) -> Result<(Vec<ApiModelId>, 
                     .get("name")
                     .and_then(|v| v.as_str())
                     .ok_or("模型列表含无效 name")?;
-                
+
                 // Strip "models/" prefix if present
                 let id_str = raw.strip_prefix("models/").unwrap_or(raw);
-                let id = ApiModelId::try_from(id_str.to_owned())
-                    .map_err(|_| "模型列表含空 ID")?;
-                
+                let id = ApiModelId::try_from(id_str.to_owned()).map_err(|_| "模型列表含空 ID")?;
+
                 if seen.insert(id.clone()) {
                     ids.push(id);
                 }
             }
-            Ok((ids, false))  // Gemini does not use pagination
+            Ok((ids, false)) // Gemini does not use pagination
         }
         _ => {
             // OpenAI-compatible format

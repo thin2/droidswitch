@@ -68,7 +68,7 @@ pub fn extract_output_text(response: &InteractionsResponse) -> Option<String> {
     if let Some(text) = &response.output_text {
         return Some(text.clone());
     }
-    
+
     // Otherwise traverse steps in reverse to find the last model_output
     for step in response.steps.iter().rev() {
         if let Step::ModelOutput { content } = step {
@@ -146,7 +146,10 @@ mod tests {
         let response: ModelsResponse = serde_json::from_str(json).unwrap();
         assert_eq!(response.models.len(), 2);
         assert_eq!(response.models[0].name, "models/gemini-3.8-flash");
-        assert_eq!(response.models[0].display_name, Some("Gemini 3.8 Flash".to_string()));
+        assert_eq!(
+            response.models[0].display_name,
+            Some("Gemini 3.8 Flash".to_string())
+        );
     }
 
     #[test]
@@ -163,11 +166,11 @@ mod tests {
     fn extract_output_from_steps() {
         let response = InteractionsResponse {
             id: "test-123".into(),
-            steps: vec![
-                Step::ModelOutput {
-                    content: vec![Content::Text { text: "Hi there!".into() }],
-                },
-            ],
+            steps: vec![Step::ModelOutput {
+                content: vec![Content::Text {
+                    text: "Hi there!".into(),
+                }],
+            }],
             output_text: None,
         };
         assert_eq!(extract_output_text(&response), Some("Hi there!".into()));

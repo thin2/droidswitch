@@ -12,14 +12,33 @@ pub fn custom_model(
     if model.provider_id != provider.id {
         return Err("模型与供应商关联不匹配".into());
     }
-    let mut output = json!({"model":model.api_model_id.as_str(),"displayName":model.display_name,"baseUrl":provider.base_url,"provider":model.effective_protocol(provider.protocol),"apiKey":provider.credential.settings_value(),"noImageSupport":!model.image_input});
+
+    // Native Gemini is bridged through Droid Chat Completions, never Responses.
+    let effective_protocol = model.effective_protocol(provider.protocol);
+    let droid_protocol = match effective_protocol {
+        crate::model::entry::Protocol::GoogleGemini => "generic-chat-completion-api",
+        crate::model::entry::Protocol::AnthropicMessages => "anthropic",
+        crate::model::entry::Protocol::OpenAiResponses => "openai",
+        crate::model::entry::Protocol::OpenAiChatCompletions => "generic-chat-completion-api",
+    };
+
+    // Rewrite baseUrl for GoogleGemini to point to local proxy
+    let base_url = if effective_protocol == crate::model::entry::Protocol::GoogleGemini {
+        format!("http://127.0.0.1:18318/proxy/{}/v1", provider.id)
+    } else {
+        provider.base_url.clone()
+    };
+
+    let mut output = json!({"model":model.api_model_id.as_str(),"displayName":model.display_name,"baseUrl":base_url,"provider":droid_protocol,"apiKey":provider.credential.settings_value(),"noImageSupport":!model.image_input});
     if let Some(max) = model.max_output_tokens {
         output["maxOutputTokens"] = json!(max.get());
     }
     if !model.extra_args.is_empty() {
         output["extraArgs"] = json!(model.extra_args);
     }
-    if !provider.extra_headers.is_empty() {
+    if effective_protocol != crate::model::entry::Protocol::GoogleGemini
+        && !provider.extra_headers.is_empty()
+    {
         output["extraHeaders"] = json!(provider.extra_headers);
     }
     Ok(output)

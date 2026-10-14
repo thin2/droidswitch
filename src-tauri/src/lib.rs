@@ -12,6 +12,7 @@ pub mod model;
 pub mod net;
 pub mod permissions;
 pub mod provider;
+pub mod proxy;
 pub mod workspace;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -21,6 +22,17 @@ pub fn run() {
             let data_dir = app.path().app_data_dir()?;
             let store = workspace::Store::open(&data_dir).map_err(std::io::Error::other)?;
             let _ = config::pipeline::recover(&store);
+
+            // Initialize and start proxy server
+            let registry = store.proxy_registry.clone();
+            if let Ok(workspace) = store.load() {
+                if let Err(e) = registry.load_from_workspace(&workspace) {
+                    eprintln!("代理注册表加载失败: {}", e);
+                }
+            }
+            proxy::start_proxy_server(registry.clone());
+            app.manage(registry);
+
             let binary = app
                 .path()
                 .resource_dir()?
