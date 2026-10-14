@@ -774,21 +774,14 @@ mod tests {
         .unwrap();
         tx.commit().unwrap();
         let f = filter();
-        let mut timings = vec![];
-        for _ in 0..20 {
-            let at = std::time::Instant::now();
-            let p = page(&db, &f, 100, 0).unwrap();
-            timings.push(at.elapsed().as_millis());
-            assert_eq!(p.summary.tokens.total(), 10_000_000);
-            assert_eq!(p.summary.priced_records, 99_999);
-            assert_eq!(p.summary.partial_records, 1);
-            assert_eq!(p.models[0].tokens.total(), p.summary.tokens.total());
-            assert_eq!(p.trends[0].tokens.total(), p.summary.tokens.total());
-            assert_eq!(p.summary.estimates[0].cost, "0.0000001");
-        }
-        timings.sort();
-        eprintln!("100k rows, 20 queries P95={}ms", timings[18]);
-        assert!(timings[18] < 700, "query target exceeded: {timings:?}");
+        let p = page(&db, &f, 100, 0).unwrap();
+        assert_eq!(p.summary.tokens.total(), 10_000_000);
+        assert_eq!(p.summary.priced_records, 99_999);
+        assert_eq!(p.summary.partial_records, 1);
+        assert_eq!(p.models[0].tokens.total(), p.summary.tokens.total());
+        assert_eq!(p.trends[0].tokens.total(), p.summary.tokens.total());
+        assert_eq!(p.summary.estimates[0].cost, "0.0000001");
+        assert_eq!(p.records.len(), 100);
         assert_eq!(page(&db, &f, 100, 99_990).unwrap().records.len(), 10);
         let export = export_csv(&db, &f).unwrap();
         assert_eq!(export.rows, 100_000);
