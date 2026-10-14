@@ -1,5 +1,6 @@
 //! Read the user's existing macOS proxy; do not modify system networking.
 
+#[cfg(target_os = "macos")]
 fn parse_system_proxy(raw: &str) -> Result<Option<String>, String> {
     let values: std::collections::HashMap<_, _> = raw
         .lines()
