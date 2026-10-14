@@ -188,14 +188,6 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-windows.ps1
 
 产物位于 `src-tauri/target/release/bundle/`。对外分发前，请检查签名、校验值及编译产物中可能嵌入的本机路径。
 
-## 开发状态与反馈
-
-[任务板](planning/codex-tasks.md) 由 dual-ai-planning 管理，`planning/tasks.json` 为状态来源；真实验收结果见 `planning/progress-reports/`。历史 UI 工作记录不代表所有功能已完成实机验收。
-
-欢迎在 [Issues](https://github.com/thin2/droidswitch/issues) 中反馈，建议附上：操作系统与芯片、应用和 Droid 版本、复现步骤、预期结果及脱敏后的错误信息。
-
-仓库目前未附开源许可证；公开可见不代表授予任意使用、修改或再分发的许可。
-
 ### Codex / ChatGPT 本地授权（预览）
 
 macOS Apple Silicon 版内置固定的 CLIProxyAPI 8.0.27。在侧栏“Codex 授权”中登录，在系统浏览器完成授权后自动备份并写入 Droid 配置，接入代理目录中的模型并选定默认模型。新建 Droid 会话即可使用，或在 /model 中切换；页面也可更换默认模型。若存在其他未应用草稿或配置冲突，保留登录并提示处理后重试，不会一并应用无关草稿。CLI 显示名附带 `(ChatGPT)`，与其他供应商区分。模型目录不是权限保证，真实调用取决于账号权限及代理兼容性。
