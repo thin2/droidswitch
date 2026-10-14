@@ -58,7 +58,7 @@ pub(super) fn system_proxy() -> Result<Option<String>, String> {
     }
 }
 
-#[cfg(test)]
+#[cfg(all(test, target_os = "macos"))]
 mod tests {
     use super::*;
     #[test]
