@@ -2,6 +2,7 @@ pub mod codex;
 pub mod config;
 pub mod import;
 pub mod switch;
+pub mod updater;
 pub mod usage;
 use tauri::Manager;
 pub mod adapter;
@@ -33,16 +34,23 @@ pub fn run() {
             proxy::start_proxy_server(registry.clone());
             app.manage(registry);
 
+            let binary_name = if cfg!(windows) {
+                "cli-proxy-api.exe"
+            } else {
+                "cli-proxy-api"
+            };
             let binary = app
                 .path()
                 .resource_dir()?
-                .join("resources/codex/cli-proxy-api");
+                .join("resources/codex")
+                .join(binary_name);
             #[cfg(debug_assertions)]
             let binary = if binary.exists() {
                 binary
             } else {
                 std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                    .join("resources/codex/cli-proxy-api")
+                    .join("resources/codex")
+                    .join(binary_name)
             };
             app.manage(codex::CodexService::new(
                 data_dir.join("codex-proxy"),
@@ -54,6 +62,8 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            updater::check_for_updates,
+            updater::install_update,
             codex::codex_action,
             workspace::load_workspace,
             workspace::save_provider,

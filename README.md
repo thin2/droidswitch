@@ -17,6 +17,24 @@
 - **连接测试与用量统计**：可发起调用测试，查看本地用量数据的聚合分析和成本估算。
 - **CPA 配额查询**（v0.2.0+）：登录 Codex 账号后，手动刷新查看订阅速率限制和重置时间。
 
+
+## 自动更新
+
+应用内置自动更新功能，支持 macOS 和 Windows 平台（Linux 需手动下载）。
+
+### 使用方法
+
+1. 打开应用，点击侧栏的"设置"
+2. 在"软件更新"区域点击"检查更新"
+3. 如有新版本，点击"立即更新"即可自动下载并安装
+4. 安装完成后应用将自动重启
+
+### 更新检查
+
+- 应用不会自动后台检查更新，需要手动触发
+- 更新前会显示版本号、更新说明和发布日期
+- 下载的更新包经过数字签名验证，确保安全性
+- Linux 平台会提供 GitHub Releases 的下载链接
 ## 界面预览
 
 ### 供应商管理
@@ -190,15 +208,15 @@ powershell -ExecutionPolicy Bypass -File .\scripts\build-windows.ps1
 
 ### Codex / ChatGPT 本地授权（预览）
 
-macOS Apple Silicon 版内置固定的 CLIProxyAPI 8.0.27。在侧栏“Codex 授权”中登录，在系统浏览器完成授权后自动备份并写入 Droid 配置，接入代理目录中的模型并选定默认模型。新建 Droid 会话即可使用，或在 /model 中切换；页面也可更换默认模型。若存在其他未应用草稿或配置冲突，保留登录并提示处理后重试，不会一并应用无关草稿。CLI 显示名附带 `(ChatGPT)`，与其他供应商区分。模型目录不是权限保证，真实调用取决于账号权限及代理兼容性。
+支持 macOS (Apple Silicon / Intel)、Windows (x64 / ARM64) 和 Linux (x64 / ARM64) 平台，内置固定的 CLIProxyAPI 8.0.27。在侧栏“Codex 授权”中登录，在系统浏览器完成授权后自动备份并写入 Droid 配置，接入代理目录中的模型并选定默认模型。新建 Droid 会话即可使用，或在 /model 中切换；页面也可更换默认模型。若存在其他未应用草稿或配置冲突，保留登录并提示处理后重试，不会一并应用无关草稿。CLI 显示名附带 `(ChatGPT)`，与其他供应商区分。模型目录不是权限保证，真实调用取决于账号权限及代理兼容性。
 
 - 本机接口固定 `http://127.0.0.1:18317/v1`，授权回调仅监听 `127.0.0.1:1455`；端口冲突会明确失败。
 - 使用模型时须保持本应用及本地服务运行；重新打开应用后手动启动服务。正常退出应用会停止自有代理进程。
 - 首版单账号；退出账号停止代理并删除本应用保存的凭据，不会注销 Codex / CC Switch，也不会撤销服务端所有会话。已有 Droid 模型配置仍保留。
 - 令牌由 CPA 独占刷新，保存在应用数据目录的 `codex-proxy/auth` 中，目录访问权限限当前用户，尚未使用系统钥匙串；只有本地客户端密钥进入草稿及 Droid 配置。
-- 当前是 CPA 兼容路线，不是 Droid Switch 自有的官方 SIWC 客户端。真实登录、令牌续期、多轮工具调用以及 Windows 发布仍需专项验收。订阅用量不能用 API 参考价代表实际账单。
+- 当前是 CPA 兼容路线，不是 Droid Switch 自有的官方 SIWC 客户端。真实登录、令牌续期、多轮工具调用需要在对应平台进行专项验收。订阅用量不能用 API 参考价代表实际账单。
 
-打包前运行 `python3 scripts/prepare-codex-proxy.py`（`npm run package:mac` 已包含此步）。下载固定官方发布资产并核验两级 SHA-256；不跟随 latest。原始二进制不提交 Git，版本、摘要与 MIT 许可在 `src-tauri/resources/codex/`。完整组件约 61.4 MiB，尚未裁剪其他代理实现。
+打包前运行 `python3 scripts/prepare-codex-proxy.py` 会自动检测平台并下载对应版本（macOS 打包脚本 `npm run package:mac` 已包含此步）。下载固定官方发布资产并核验两级 SHA-256；不跟随 latest。原始二进制不提交 Git，版本、摘要与 MIT 许可在 `src-tauri/resources/codex/`。完整组件约 20-22 MiB（视平台而定），尚未裁剪其他代理实现。
 
 授权适配器测试：`cargo test --manifest-path src-tauri/Cargo.toml codex --lib`；实际代理生命周期测试需本地监听权限：`cargo test --manifest-path src-tauri/Cargo.toml codex_real_sidecar_lifecycle --lib -- --ignored`。此测试生成并取消空授权会话，不打开浏览器、不使用真实账号或推理额度。
 

@@ -27,7 +27,25 @@ use tauri::Manager;
 
 pub const PORT: u16 = 18317;
 const BASE: &str = "http://127.0.0.1:18317";
+
+// Platform-specific binary SHA256 hashes
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
 const BINARY_SHA: &str = "23427a5c7907005377e74161db94f7effda67d857ffc05708365a8e20d37f6f0";
+
+#[cfg(all(target_os = "macos", target_arch = "x86_64"))]
+const BINARY_SHA: &str = "";
+
+#[cfg(all(target_os = "windows", target_arch = "x86_64"))]
+const BINARY_SHA: &str = "a3620a7e8d54d0f4257b493ea5fc01b3c59d581fb8c3596df5880976596da162";
+
+#[cfg(all(target_os = "windows", target_arch = "aarch64"))]
+const BINARY_SHA: &str = "57e6bbb0edbf396c53abf4d46e00bf500dbb581efa426b6b99072c2f799fc1c9";
+
+#[cfg(all(target_os = "linux", target_arch = "x86_64"))]
+const BINARY_SHA: &str = "";
+
+#[cfg(all(target_os = "linux", target_arch = "aarch64"))]
+const BINARY_SHA: &str = "";
 #[derive(Serialize, Deserialize)]
 struct Keys {
     client: String,
@@ -345,19 +363,24 @@ impl Runtime {
         if self.alive()? {
             return Ok(());
         }
-        if !cfg!(all(target_os = "macos", target_arch = "aarch64")) {
-            return Err("当前授权组件仅提供 macOS Apple Silicon 构建".into());
+        // Check if binary exists
+        if !self.binary.exists() {
+            return Err("缺少内置 Codex 代理组件，请重新安装完整应用或运行平台对应的准备脚本".into());
         }
         let bytes =
-            fs::read(&self.binary).map_err(|_| "缺少内置 Codex 代理组件，请重新安装完整应用")?;
-        if Sha256::digest(bytes)
-            .iter()
-            .map(|b| format!("{b:02x}"))
-            .collect::<String>()
-            != BINARY_SHA
-        {
-            return Err("内置代理校验失败，请重新安装应用".into());
+            fs::read(&self.binary).map_err(|_| "无法读取 Codex 代理组件")?;
+        
+        // Verify binary checksum if available for this platform
+        if !BINARY_SHA.is_empty() {
+            let hash = Sha256::digest(&bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect::<String>();
+            if hash != BINARY_SHA {
+                return Err("内置代理校验失败，请重新安装应用".into());
+            }
         }
+        
         if port_busy(PORT) {
             return Err("端口 18317 已被占用；请停止冲突程序后重试".into());
         }

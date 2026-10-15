@@ -24,6 +24,16 @@
       "csp": "default-src 'self'; style-src 'self'; img-src 'self' asset: data:; connect-src ipc: http://ipc.localhost"
     }
   },
+  "plugins": {
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://github.com/thin2/droidswitch/releases/latest/download/latest.json"
+      ],
+      "dialog": false,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDlFMEYxRjUzRTNCQkMyOTkKUldSREdVZ0RFcVhMM3g1cEoxc2lKZzBVMmJWdWZ2Q05XclJUd0hvN3ptOXM5ZGZzNVAwKzV0RQo="
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",

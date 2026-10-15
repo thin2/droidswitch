@@ -1,10 +1,44 @@
 {
   "name": "CLIProxyAPI",
   "version": "8.0.27",
-  "platform": "darwin_aarch64",
   "source": "https://github.com/router-for-me/CLIProxyAPI/releases/tag/v8.0.27",
-  "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_darwin_aarch64.tar.gz",
-  "archiveSha256": "d9bf58db6e07d0f587a248abc4a1099178fbec1d659d874c961d8caf3495a09e",
-  "binarySha256": "23427a5c7907005377e74161db94f7effda67d857ffc05708365a8e20d37f6f0",
-  "license": "MIT"
+  "license": "MIT",
+  "platforms": {
+    "darwin-aarch64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_darwin_aarch64.tar.gz",
+      "archiveSha256": "d9bf58db6e07d0f587a248abc4a1099178fbec1d659d874c961d8caf3495a09e",
+      "binarySha256": "23427a5c7907005377e74161db94f7effda67d857ffc05708365a8e20d37f6f0",
+      "binaryName": "cli-proxy-api"
+    },
+    "darwin-x86_64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_darwin_amd64.tar.gz",
+      "archiveSha256": "8ca6317fe7560a0452d2835f296a6360de8bc88099670c68635fd1cf4132c8d5",
+      "binarySha256": "",
+      "binaryName": "cli-proxy-api"
+    },
+    "windows-x86_64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_windows_amd64.zip",
+      "archiveSha256": "ac6867818696aefe299c8bac1730f831cbb127f0854acca1b1aebb0110a5dc53",
+      "binarySha256": "a3620a7e8d54d0f4257b493ea5fc01b3c59d581fb8c3596df5880976596da162",
+      "binaryName": "cli-proxy-api.exe"
+    },
+    "windows-aarch64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_windows_aarch64.zip",
+      "archiveSha256": "2787715038fc75a938f79567523ded1f984e1d75610df9c21830dcd8583bbe41",
+      "binarySha256": "57e6bbb0edbf396c53abf4d46e00bf500dbb581efa426b6b99072c2f799fc1c9",
+      "binaryName": "cli-proxy-api.exe"
+    },
+    "linux-x86_64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_linux_amd64.tar.gz",
+      "archiveSha256": "82d38c89a62a2787f91e244595e0e76e52d6caaf2aa3d1a19b617e554c72b449",
+      "binarySha256": "",
+      "binaryName": "cli-proxy-api"
+    },
+    "linux-aarch64": {
+      "url": "https://github.com/router-for-me/CLIProxyAPI/releases/download/v8.0.27/CLIProxyAPI_8.0.27_linux_aarch64.tar.gz",
+      "archiveSha256": "5ef174b13320d2061dc33cb0ee3db31dbbf2cd947ab2e02edd5b16ac035e8b2a",
+      "binarySha256": "",
+      "binaryName": "cli-proxy-api"
+    }
+  }
 }

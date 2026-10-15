@@ -3,11 +3,14 @@ import { request, errorText } from "../lib/api";
 import { useState } from "react";
 import { ExternalModels } from "./ExternalModels";
 import { useWorkspace } from "../lib/workspace";
+import { UpdateChecker } from "../components/UpdateChecker";
+
 export function Settings() {
   const { workspace, busy, mutate, setNotice } = useWorkspace();
   const [path, setPath] = useState<string | null>(null);
   return (
     <>
+      <UpdateChecker />
       <section className="panel">
         <h2>Droid 配置位置</h2>
         <form
